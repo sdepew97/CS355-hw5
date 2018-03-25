@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <unistd.h>
-#include "mem.h"
+//#include "mem.h"
 
 //helper functions
 size_t roundToPage(int currentSize) {
@@ -17,7 +17,7 @@ size_t roundToPage(int currentSize) {
 }
 
 int main() {
-    printf("Hello, World!.\n");
-    printf("%d\n", roundToPage(12));
+    printf("Hello, World!\n");
+    printf("%d\n", roundToPage(4095));
     return 0;
 }
