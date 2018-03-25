@@ -92,6 +92,7 @@ int Mem_Init(long sizeOfRegion) {
 
     printf("head %p\n", head);
     printf("head free %d\n", head->free);
+    printf("head next available%p\n", head->nextAvailable);
 
     //return the appropriate value
     return SUCCESS;
