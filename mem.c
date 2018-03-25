@@ -90,10 +90,12 @@ void Mem_Dump() {
 
     while(currentNode != NULL) {
         if(currentNode->free == TRUE) {
-            printf("*************************\n*\t Free \t *\n *************************\n");
+            printf("****************\n**\t FREE \t **\n ****************\n");
         } else {
 
         }
+
+        currentNode = currentNode->nextHeader;
     }
 }
 
