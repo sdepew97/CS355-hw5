@@ -11,6 +11,7 @@
 #define ERROR -1
 #define TRUE 1
 #define FALSE 0
+#define SIZEOFHEADER 32
 
 int m_error;
 
@@ -19,24 +20,20 @@ typedef unsigned int boolean;
 
 boolean initialized = FALSE;
 
-typedef struct information {
-    //TODO: determine the type of information needed here :)
-} information;
-
 typedef struct node {
-    struct information *info;
-    struct node *next;
-    struct node *prev;
+    //TODO: determine the type of information needed here :)
+    boolean free;
+    void *nextAvailable;
+    int lengthOfRegion;
+    int amountRequested; //to be returned to the user/what they think they have //TODO: ask Rachel about how to check this??
+    int amountAllocated; //to be used for compaction
+    void *nextHeader;
+    //TODO: ask Rachel what else I could need here?
 } node;
 
-typedef struct linkedList {
-    struct node *head;
-    struct node *tail;
-    unsigned int size;
-} linkedList;
+node *head;
 
-static linkedList *free = NULL;
-static linkedList *occupied = NULL;
+//TODO: clarify data structure, above and discuss implementations with rachel
 
 //helper functions
 size_t roundToPage(int currentSize) {
@@ -86,6 +83,15 @@ int Mem_Init(long sizeOfRegion) {
     printf("%p\n", mapReturn); //printing pointer?
 
     //Attach record keeping pointers to the memory //TODO: figure out how to do this...
+    head = mapReturn;
+    head->free = TRUE;
+    head->nextAvailable = mapReturn[SIZEOFHEADER]; //TODO: clarify with rachel how this is supposed to go...
+    head->amountRequested = sizeOfRegion;
+    head->amountAllocated = roundToPage(sizeOfRegion);
+    head->nextHeader = NULL;
+
+    printf("head %p", head);
+    printf("head free %d", head->free);
 
     //return the appropriate value
     return SUCCESS;
@@ -93,6 +99,32 @@ int Mem_Init(long sizeOfRegion) {
 
 void *Mem_Alloc(long size);
 
-int Mem_Free(void *ptr, int coalesce);
+int Mem_Free(void *ptr, int coalesce) {
+    if(ptr == NULL) {
+        //do nothing
+    } else {
 
-void Mem_Dump();
+        //ptr is not null
+
+        //free memory object ptr points to
+    }
+
+    //check for coalesce, now
+    if(coalesce == FALSE) {
+        //simply can return, now
+    } else {
+        //do something here, now, since we are asked to coalesce
+        //go through the free list and combine memory sections
+    }
+}
+
+void coalesceList(linkedList *head) {
+    //go through free list
+
+    //combine neighboring memory sections
+}
+
+void Mem_Dump() {
+    //TODO: ask about what to do here...
+    //TODO: ask about what if the user requests memory not in an increment of page for sizeOfRegion and how that affects printout here...
+}
