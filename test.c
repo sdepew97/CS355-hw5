@@ -4,6 +4,6 @@
 int main() {
     printf("Hello, World!\n");
     printf("%d\n", roundToPage(4000));
-    Mem_Init(4096);
+    Mem_Init(4000);
     return 0;
 }
