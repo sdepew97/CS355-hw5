@@ -81,6 +81,8 @@ int Mem_Init(long sizeOfRegion) {
         return ERROR;
     }
 
+    printf("%p\n", mapReturn); //printing pointer?
+
     //Attach record keeping pointers to the memory //TODO: figure out how to do this...
 
     //return the appropriate value
