@@ -3,7 +3,6 @@
 
 int main() {
     printf("Hello, World!\n");
-    printf("%d\n", roundToPage(4000));
-    Mem_Init(4000);
+    Mem_Init(1);
     return 0;
 }
