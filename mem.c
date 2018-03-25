@@ -86,6 +86,15 @@ int Mem_Free(void *ptr, int coalesce) {
 void Mem_Dump() {
     //TODO: ask about what to do here...
     //TODO: ask about what if the user requests memory not in an increment of page for sizeOfRegion and how that affects printout here...
+    node *currentNode = head;
+
+    while(currentNode != NULL) {
+        if(currentNode->free == TRUE) {
+            printf("*************************\n*\t Free \t *\n *************************\n");
+        } else {
+
+        }
+    }
 }
 
 //helper functions
