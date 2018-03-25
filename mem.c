@@ -48,7 +48,7 @@ size_t roundToPage(int currentSize) {
     }
 
     //we do not have a multiple of the page size, yet, so we must round
-    ((((currentSize/pageSize)+1)*pageSize)-pageSize) + pageSize;
+    return (size_t) (((((currentSize/pageSize)+1)*pageSize)-pageSize) + pageSize);
 }
 
 int Mem_Init(long sizeOfRegion) {
@@ -75,7 +75,7 @@ int Mem_Init(long sizeOfRegion) {
     //TODO: check on mmap call here and ask what the heck this is doing...
     void *mapReturn = mmap(NULL, roundToPage(sizeOfRegion), PROT_EXEC|PROT_READ|PROT_WRITE, MAP_SHARED|MAP_ANONYMOUS, -1, 0);
 
-    if(mapReturn == ERROR) {
+    if((int) mapReturn == ERROR) {
         m_error = E_BAD_POINTER; //TODO: check this is correct error to be raising
         return ERROR;
     }

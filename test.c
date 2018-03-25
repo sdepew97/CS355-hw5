@@ -6,6 +6,7 @@
 size_t roundToPage(int currentSize) {
     //TODO: implement method that rounds the currentSize to a page size
     int pageSize = getpagesize();
+    printf("%d\n", pageSize);
     if((currentSize/pageSize)*pageSize == currentSize) {
         //we are requesting a multiple of page size bytes
         return (size_t) currentSize;
