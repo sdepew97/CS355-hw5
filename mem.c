@@ -74,9 +74,9 @@ int Mem_Init(long sizeOfRegion) {
     //Request that much memory from mmap
 
     //TODO: check on mmap call here and ask what the heck this is doing...
-//    void *mapReturn = mmap(NULL, roundToPage(sizeOfRegion), PROT_EXEC|PROT_READ|PROT_WRITE, MAP_SHARED|MAP_ANONYMOUS, -1, 0);
+    void *mapReturn = mmap(NULL, roundToPage(sizeOfRegion), PROT_EXEC|PROT_READ|PROT_WRITE, MAP_SHARED|MAP_ANONYMOUS, -1, 0);
 
-    void *mapReturn = mmap(NULL, sizeOfRegion, PROT_EXEC|PROT_READ|PROT_WRITE, MAP_SHARED|MAP_ANONYMOUS, -1, 0);
+//    void *mapReturn = mmap(NULL, sizeOfRegion, PROT_EXEC|PROT_READ|PROT_WRITE, MAP_SHARED|MAP_ANONYMOUS, -1, 0);
 
     if(*((int *) mapReturn) == ERROR) {
         m_error = E_BAD_POINTER; //TODO: check this is correct error to be raising
