@@ -42,13 +42,14 @@ static linkedList *occupied = NULL;
 size_t roundToPage(int currentSize) {
     //TODO: implement method that rounds the currentSize to a page size
     int pageSize = getpagesize();
+    printf("%d\n", pageSize);
     if((currentSize/pageSize)*pageSize == currentSize) {
         //we are requesting a multiple of page size bytes
         return (size_t) currentSize;
     }
 
     //we do not have a multiple of the page size, yet, so we must round
-    return (size_t) (((((currentSize/pageSize)+1)*pageSize)-pageSize) + pageSize);
+    return (size_t) ((((currentSize/pageSize)+1)*pageSize)-pageSize) + pageSize;
 }
 
 int Mem_Init(long sizeOfRegion) {

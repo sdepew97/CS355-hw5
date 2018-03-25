@@ -9,6 +9,8 @@
 
 extern int m_error;
 
+size_t roundToPage(int currentSize); //TODO: remove after testing!
+
 int Mem_Init(long sizeOfRegion);
 
 void *Mem_Alloc(long size);
