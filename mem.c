@@ -78,7 +78,7 @@ int Mem_Init(long sizeOfRegion) {
 
     void *mapReturn = mmap(NULL, sizeOfRegion, PROT_EXEC|PROT_READ|PROT_WRITE, MAP_SHARED|MAP_ANONYMOUS, -1, 0);
 
-    if((int) mapReturn == ERROR) {
+    if(*((int *) mapReturn) == ERROR) {
         m_error = E_BAD_POINTER; //TODO: check this is correct error to be raising
         return ERROR;
     }
