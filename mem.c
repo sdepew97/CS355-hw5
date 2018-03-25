@@ -85,7 +85,7 @@ int Mem_Init(long sizeOfRegion) {
     //Attach record keeping pointers to the memory //TODO: figure out how to do this...
     head = mapReturn;
     head->free = TRUE;
-    head->nextAvailable = mapReturn[SIZEOFHEADER]; //TODO: clarify with rachel how this is supposed to go...
+    head->nextAvailable = (mapReturn + SIZEOFHEADER); //TODO: clarify with rachel how this is supposed to go...
     head->amountRequested = sizeOfRegion;
     head->amountAllocated = roundToPage(sizeOfRegion);
     head->nextHeader = NULL;
@@ -118,7 +118,7 @@ int Mem_Free(void *ptr, int coalesce) {
     }
 }
 
-void coalesceList(linkedList *head) {
+void coalesceList(node *head) {
     //go through free list
 
     //combine neighboring memory sections
