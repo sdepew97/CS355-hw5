@@ -1,7 +1,7 @@
 all: mem test clean
 
 test:
-	gcc -g -ggdb -o test test.c -L. -libmem
+	gcc -g -ggdb -o test test.c -L. -lmem
 
 mem: mem.o
 	gcc -g -ggdb -o libmem.so mem.o -shared
