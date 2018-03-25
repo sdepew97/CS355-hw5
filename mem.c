@@ -90,8 +90,8 @@ int Mem_Init(long sizeOfRegion) {
     head->amountAllocated = roundToPage(sizeOfRegion);
     head->nextHeader = NULL;
 
-    printf("head %p", head);
-    printf("head free %d", head->free);
+    printf("head %p\n", head);
+    printf("head free %d\n", head->free);
 
     //return the appropriate value
     return SUCCESS;
