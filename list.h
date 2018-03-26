@@ -9,8 +9,8 @@
 
 typedef struct node {
     boolean free;
-    node *prevHeader;
-    node *nextHeader;
+    struct node *prevHeader;
+    struct node *nextHeader;
     int sizeOfRegion;
     int amountAllocated; //to be used for compaction
     //TODO: ask Rachel what else I could need here? (Done)

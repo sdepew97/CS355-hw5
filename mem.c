@@ -147,17 +147,17 @@ size_t roundToWord(int currentSize) {
 void *worstFit(node *head) {
     node *currentNode = head;
 
-    if(head == NULL) {
+    if (head == NULL) {
         return NULL;
     }
 
     int sizeOfLargest = 0; //TODO: confirm field used here
     node *headerOfLargest = NULL;
 
-    while(currentNode != NULL) {
-        if(currentNode->free == TRUE) {
+    while (currentNode != NULL) {
+        if (currentNode->free == TRUE) {
             //must be true to check for largest or not
-            if(currentNode->sizeOfRegion > sizeOfLargest) {
+            if (currentNode->sizeOfRegion > sizeOfLargest) {
                 sizeOfLargest = currentNode->sizeOfRegion;
                 headerOfLargest = currentNode;
             }
