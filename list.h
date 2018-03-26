@@ -19,7 +19,7 @@ typedef struct node {
 extern node *head;
 extern node *tail;
 
-void *worstFit(node *head);
+node *worstFit(node *head);
 void coalesceList(node *head);
 
 //go through free list

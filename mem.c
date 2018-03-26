@@ -144,7 +144,7 @@ size_t roundToWord(int currentSize) {
     return (size_t) ((((currentSize / wordSize) + 1) * wordSize) - wordSize) + wordSize;
 }
 
-void *worstFit(node *head) {
+node *worstFit(node *head) {
     node *currentNode = head;
 
     if (head == NULL) {
@@ -166,3 +166,9 @@ void *worstFit(node *head) {
         }
     }
 }
+
+void coalesceList(node *head) {
+    //go through free list
+    // combine neighboring memory sections
+}
+
