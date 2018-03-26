@@ -14,5 +14,6 @@ int main() {
     *tryingWrite2 = 129879807;
     Mem_Dump();
     printf("value of tryingWrite2 %d\n", *tryingWrite2);
+    printf("value of memory locations around tryingWrite %d\n", *(tryingWrite2-32));
     return 0;
 }
