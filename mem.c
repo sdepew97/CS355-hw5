@@ -64,7 +64,7 @@ int Mem_Init(long sizeOfRegion) {
 }
 
 void *Mem_Alloc(long size) {
-
+    
 }
 
 int Mem_Free(void *ptr, int coalesce) {
@@ -88,7 +88,6 @@ int Mem_Free(void *ptr, int coalesce) {
 }
 
 void Mem_Dump() {
-    //TODO: ask about what to do here...
     //TODO: ask about what if the user requests memory not in an increment of page for sizeOfRegion and how that affects printout here...
     node *currentNode = head;
     int location = 0;
@@ -114,7 +113,7 @@ void Mem_Dump() {
 size_t roundToPage(int currentSize) {
     //TODO: implement method that rounds the currentSize to a page size
     int pageSize = getpagesize();
-    printf("%d\n", pageSize);
+    printf("Page Size: %d\n", pageSize);
     if ((currentSize / pageSize) * pageSize == currentSize) {
         //we are requesting a multiple of page size bytes
         return (size_t) currentSize;
@@ -122,4 +121,16 @@ size_t roundToPage(int currentSize) {
 
     //we do not have a multiple of the page size, yet, so we must round
     return (size_t) ((((currentSize / pageSize) + 1) * pageSize) - pageSize) + pageSize;
+}
+
+size_t roundToWord(int currentSize) {
+    int wordSize = SIZEOFWORD;
+    printf("Word Size: %d\n", wordSize);
+    if ((currentSize / wordSize) * wordSize == currentSize) {
+        //we are requesting a multiple of word size bytes
+        return (size_t) currentSize;
+    }
+
+    //we do not have a multiple of the word size, yet, so we must round
+    return (size_t) ((((currentSize / wordSize) + 1) * wordSize) - wordSize) + wordSize;
 }
