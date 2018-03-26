@@ -189,9 +189,8 @@ node *worstFit(node *head) {
                 sizeOfLargest = currentNode->amountAllocated;
                 headerOfLargest = currentNode;
             }
-        } else {
-            currentNode = currentNode->nextHeader;
         }
+        currentNode = currentNode->nextHeader;
     }
 }
 
