@@ -93,7 +93,7 @@ void Mem_Dump() {
     int location = 0;
 
     if(currentNode == NULL) {
-        printf("****************\n*    NO INIT    *\n****************");
+        printf("*****************\n*    NO INIT    *\n*****************");
         return;
     }
 
