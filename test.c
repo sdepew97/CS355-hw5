@@ -4,7 +4,7 @@
 int main() {
     printf("Hello, World!\n");
     Mem_Init(1);
-    Mem_Alloc(4);
+    Mem_Alloc(12);
     Mem_Dump();
     return 0;
 }
