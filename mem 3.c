@@ -93,19 +93,16 @@ void Mem_Dump() {
     node *currentNode = head;
     int location = 0;
 
-    while (currentNode != NULL) {
+    while(currentNode != NULL) {
         //print header and then print occupied or free
         printf("****************\n%d*\tHEADER\t*%d\n****************", location, location + SIZEOFHEADER);
-        location = location + SIZEOFHEADER + 1;
-        if (currentNode->free == TRUE) {
-            printf("****************\n%d*\tFREE\t*%d\n****************\n", location,
-                   location + currentNode->amountAllocated);
-            location = location + currentNode->amountAllocated + 1;
+        location += SIZEOFHEADER; 
+        if(currentNode->free == TRUE) {
+            printf("****************\n*\tFREE\t*\n****************\n");
         } else {
-            printf("****************\n%d*\tALLOCATED\t*%d\n****************\n", location,
-                   location + currentNode->amountAllocated);
-            location = location + currentNode->amountAllocated + 1;
+
         }
+
         currentNode = currentNode->nextHeader;
     }
 }

@@ -17,6 +17,7 @@ typedef struct node {
 } node;
 
 extern node *head;
+extern node *tail;
 
 void coalesceList(node *head) {
     //go through free list
