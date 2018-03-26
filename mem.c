@@ -67,7 +67,28 @@ void *Mem_Alloc(long size) {
     int sizeToWordSize = roundToWord(size);
     int totalSought = sizeToWordSize + SIZEOFHEADER; //We need room for the header AND we need room for the word-aligned memory
 
-    //search through the list to see if this is available
+    //search through the list to get the largest available
+    node *worstFit = worstFit(head);
+
+    //TODO: think through if the fit is perfect, then only need one header, so that's a problem, since could fit exactly! what I need...otherwise need room for a header (think through cases)
+
+    if(worstFit->amountAllocated < sizeToWordSize) {
+        //not enough at all
+    } else if(worstFit->amountAllocated == sizeToWordSize) {
+        //exactly enough, so simply switch free bit to FALSE
+    } else {
+        //worstFit->amountAllocated > totalSought
+
+        //if there is also room for a header, then proceed
+        if(worstFit->amountAllocated > totalSought) {
+
+        }
+        //else there is not enough room to split the memory into the section plus header, so fails!
+        else {
+            //not enough to fit a header AND the memory sought
+        }
+    }
+
 
 }
 
@@ -151,14 +172,14 @@ node *worstFit(node *head) {
         return NULL;
     }
 
-    int sizeOfLargest = 0; //TODO: confirm field used here
+    int sizeOfLargest = 0;
     node *headerOfLargest = NULL;
 
     while (currentNode != NULL) {
         if (currentNode->free == TRUE) {
             //must be true to check for largest or not
-            if (currentNode->sizeOfRegion > sizeOfLargest) {
-                sizeOfLargest = currentNode->sizeOfRegion;
+            if (currentNode->amountAllocated > sizeOfLargest) { //TODO: confirm field used here
+                sizeOfLargest = currentNode->amountAllocated;
                 headerOfLargest = currentNode;
             }
         } else {
@@ -171,4 +192,3 @@ void coalesceList(node *head) {
     //go through free list
     // combine neighboring memory sections
 }
-
