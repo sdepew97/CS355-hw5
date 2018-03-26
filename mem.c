@@ -149,7 +149,7 @@ void Mem_Dump() {
         if(currentNode == head) {
             printf("*****************\n%d*   HEADER   *%d\n*****************", location, location + SIZEOFHEADER);
         } else {
-            printf("\n%d*   HEADER   *%d\n*****************", location, location + SIZEOFHEADER);
+            printf("%d*   HEADER   *%d\n*****************", location, location + SIZEOFHEADER);
         }
         location = location + SIZEOFHEADER;
         if (currentNode->free == TRUE) {
