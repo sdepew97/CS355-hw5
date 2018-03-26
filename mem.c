@@ -100,7 +100,7 @@ void *Mem_Alloc(long size) {
             worstFitReturn->sizeOfRegion = sizeToWordSize + SIZEOFHEADER;
             worstFitReturn->nextHeader = newHeader;
 
-            return (void *) newHeader;
+            return (void *) newHeader + SIZEOFHEADER;
         }
             //else there is not enough room to split the memory into the section plus header, so fails!
         else {
@@ -147,9 +147,9 @@ void Mem_Dump() {
     while (currentNode != NULL) {
         //print header and then print occupied or free
         if(currentNode == head) {
-            printf("*****************\n%d*   HEADER   *%d\n*****************", location, location + SIZEOFHEADER);
+            printf("*****************\n%d*   HEADER   *%d\n*****************", location, currentNode->sizeOfRegion - currentNode->amountAllocated);
         } else {
-            printf("%d*   HEADER   *%d\n*****************", location, location + SIZEOFHEADER);
+            printf("%d*   HEADER   *%d\n*****************", location, currentNode->sizeOfRegion - currentNode->amountAllocated);
         }
         location = location + SIZEOFHEADER;
         if (currentNode->free == TRUE) {
