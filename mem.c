@@ -192,6 +192,8 @@ node *worstFit(node *head) {
         }
         currentNode = currentNode->nextHeader;
     }
+
+    return currentNode;
 }
 
 void coalesceList(node *head) {
