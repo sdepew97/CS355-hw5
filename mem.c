@@ -176,6 +176,7 @@ node *worstFit(node *head) {
     node *currentNode = head;
 
     if (head == NULL) {
+        printf("return here");
         return NULL;
     }
 
