@@ -64,6 +64,10 @@ int Mem_Init(long sizeOfRegion) {
 }
 
 void *Mem_Alloc(long size) {
+    int sizeToWordSize = roundToWord(size);
+    int totalSought = sizeToWordSize + SIZEOFHEADER; //We need room for the header AND we need room for the word-aligned memory
+
+    //search through the list to see if this is available
 
 }
 
@@ -138,4 +142,27 @@ size_t roundToWord(int currentSize) {
 
     //we do not have a multiple of the word size, yet, so we must round
     return (size_t) ((((currentSize / wordSize) + 1) * wordSize) - wordSize) + wordSize;
+}
+
+void *worstFit(node *head) {
+    node *currentNode = head;
+
+    if(head == NULL) {
+        return NULL;
+    }
+
+    int sizeOfLargest = 0; //TODO: confirm field used here
+    node *headerOfLargest = NULL;
+
+    while(currentNode != NULL) {
+        if(currentNode->free == TRUE) {
+            //must be true to check for largest or not
+            if(currentNode->sizeOfRegion > sizeOfLargest) {
+                sizeOfLargest = currentNode->sizeOfRegion;
+                headerOfLargest = currentNode;
+            }
+        } else {
+            currentNode = currentNode->nextHeader;
+        }
+    }
 }

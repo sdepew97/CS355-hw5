@@ -9,8 +9,8 @@
 
 typedef struct node {
     boolean free;
-    void *prevHeader;
-    void *nextHeader;
+    node *prevHeader;
+    node *nextHeader;
     int sizeOfRegion;
     int amountAllocated; //to be used for compaction
     //TODO: ask Rachel what else I could need here? (Done)
@@ -19,10 +19,11 @@ typedef struct node {
 extern node *head;
 extern node *tail;
 
-void coalesceList(node *head) {
-    //go through free list
+void *worstFit(node *head);
+void coalesceList(node *head);
 
-    //combine neighboring memory sections
-}
+//go through free list
+
+//combine neighboring memory sections
 
 #endif //HW5_LIST_H
