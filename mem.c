@@ -100,6 +100,7 @@ void *Mem_Alloc(long size) {
             worstFitReturn->sizeOfRegion = sizeToWordSize + SIZEOFHEADER;
             worstFitReturn->nextHeader = newHeader;
 
+            printf("%p pointer to returned region\n", newHeader + SIZEOFHEADER);
             return (void *) newHeader + SIZEOFHEADER;
         }
             //else there is not enough room to split the memory into the section plus header, so fails!
