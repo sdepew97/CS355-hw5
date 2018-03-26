@@ -98,11 +98,11 @@ void Mem_Dump() {
         printf("****************\n%d*\tHEADER\t*%d\n****************", location, location + SIZEOFHEADER);
         location = location + SIZEOFHEADER + 1;
         if (currentNode->free == TRUE) {
-            printf("****************\n%d*\tFREE\t*%d\n****************\n", location,
+            printf("\n%d*\tFREE\t*%d\n****************\n", location,
                    location + currentNode->amountAllocated);
             location = location + currentNode->amountAllocated + 1;
         } else {
-            printf("****************\n%d*\tALLOCATED\t*%d\n****************\n", location,
+            printf("\n%d*\tALLOCATED\t*%d\n****************\n", location,
                    location + currentNode->amountAllocated);
             location = location + currentNode->amountAllocated + 1;
         }
