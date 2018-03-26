@@ -33,9 +33,9 @@ int Mem_Init(long sizeOfRegion) {
     }
 
     //Request that much memory from mmap
-
+    int newSizeOfRegion = roundToPage(sizeOfRegion);
     //TODO: check on mmap call here and ask what the heck this is doing... (DONE)
-    void *mapReturn = mmap(NULL, roundToPage(sizeOfRegion), PROT_EXEC | PROT_READ | PROT_WRITE,
+    void *mapReturn = mmap(NULL, newSizeOfRegion, PROT_EXEC | PROT_READ | PROT_WRITE,
                            MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 
     if (*((int *) mapReturn) == ERROR) {
@@ -51,8 +51,8 @@ int Mem_Init(long sizeOfRegion) {
     head->free = TRUE;
     head->prevHeader = NULL;
     head->nextHeader = NULL;
-    head->sizeOfRegion = sizeOfRegion;
-    head->amountAllocated = sizeOfRegion - SIZEOFHEADER;
+    head->sizeOfRegion = newSizeOfRegion;
+    head->amountAllocated = newSizeOfRegion - SIZEOFHEADER;
     tail = head;
 
     printf("head %p\n", head);
