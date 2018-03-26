@@ -68,19 +68,19 @@ void *Mem_Alloc(long size) {
     int totalSought = sizeToWordSize + SIZEOFHEADER; //We need room for the header AND we need room for the word-aligned memory
 
     //search through the list to get the largest available
-    node *worstFit = worstFit(head);
+    node *worstFitReturn = worstFit(head);
 
     //TODO: think through if the fit is perfect, then only need one header, so that's a problem, since could fit exactly! what I need...otherwise need room for a header (think through cases)
 
-    if(worstFit->amountAllocated < sizeToWordSize) {
+    if(worstFitReturn->amountAllocated < sizeToWordSize) {
         //not enough at all
-    } else if(worstFit->amountAllocated == sizeToWordSize) {
+    } else if(worstFitReturn->amountAllocated == sizeToWordSize) {
         //exactly enough, so simply switch free bit to FALSE
     } else {
         //worstFit->amountAllocated > totalSought
 
         //if there is also room for a header, then proceed
-        if(worstFit->amountAllocated > totalSought) {
+        if(worstFitReturn->amountAllocated > totalSought) {
 
         }
         //else there is not enough room to split the memory into the section plus header, so fails!
