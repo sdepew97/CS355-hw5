@@ -13,6 +13,6 @@ int main() {
     Mem_Dump();
     *tryingWrite = 12;
     Mem_Dump();
-    printf("value of tryingWrite1 %d\n", *tryingWrite);
+    printf("value of tryingWrite1 %d\n", *tryingWrite2);
     return 0;
 }
