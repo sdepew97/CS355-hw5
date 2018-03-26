@@ -87,6 +87,20 @@ void *Mem_Alloc(long size) {
         //if there is also room for a header, then proceed
         if (worstFitReturn->amountAllocated > totalSought) {
             //add a node here!
+            node *newHeader = worstFitReturn + sizeToWordSize + SIZEOFHEADER; //location of new header
+            newHeader->free = TRUE;
+            newHeader->sizeOfRegion = worstFitReturn->sizeOfRegion - SIZEOFHEADER - sizeToWordSize;
+            newHeader->amountAllocated = newHeader->sizeOfRegion - SIZEOFHEADER;
+            newHeader->nextHeader = worstFitReturn->nextHeader;
+            newHeader->prevHeader = worstFitReturn;
+
+            //make header not free anymore
+            worstFitReturn->free = FALSE;
+            worstFitReturn->amountAllocated = sizeToWordSize;
+            worstFitReturn->sizeOfRegion = sizeToWordSize + SIZEOFHEADER;
+            worstFitReturn->nextHeader = newHeader;
+
+            return (void *) newHeader;
         }
             //else there is not enough room to split the memory into the section plus header, so fails!
         else {
@@ -96,7 +110,8 @@ void *Mem_Alloc(long size) {
         }
     }
 
-
+    //return NULL as a default value
+    return NULL;
 }
 
 int Mem_Free(void *ptr, int coalesce) {
