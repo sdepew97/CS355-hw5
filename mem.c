@@ -64,7 +64,7 @@ int Mem_Init(long sizeOfRegion) {
 }
 
 void *Mem_Alloc(long size) {
-    
+
 }
 
 int Mem_Free(void *ptr, int coalesce) {
@@ -91,6 +91,11 @@ void Mem_Dump() {
     //TODO: ask about what if the user requests memory not in an increment of page for sizeOfRegion and how that affects printout here...
     node *currentNode = head;
     int location = 0;
+
+    if(currentNode == NULL) {
+        printf("****************%d*   NO INIT   *\n****************");
+        return;
+    }
 
     while (currentNode != NULL) {
         //print header and then print occupied or free
