@@ -4,8 +4,6 @@
 int main() {
     printf("Hello, World!\n");
     Mem_Init(1);
-    Mem_Init(1);
-    Mem_Init(1);
     int *tryingWrite = Mem_Alloc(sizeof(int));
     Mem_Dump();
     *tryingWrite = 12;
