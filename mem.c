@@ -12,31 +12,32 @@
 #include "list.h"
 
 int m_error;
-header *headMainList;
-header *headFreeList;
+long howMuchUserRequested;
+header *headMainList = NULL;
+header *headFreeList = NULL;
 
 //TODO: clarify data structure, above and discuss implementations with rachel (Done)
 
 int Mem_Init(long sizeOfRegion) {
-    printf("Size of header %ld\n", sizeof(header));
     //check sizeOfRegion is a valid, non-negative or zero value
     if (sizeOfRegion <= 0) {
         m_error = E_BAD_ARGS;
         return ERROR;
     }
-//
-//    //check that Mem_Init hasn't been called more than once
-//    if (head != NULL) {
-//        //has already been called once, so this should raise an error
-//        m_error = E_BAD_ARGS;
-//        return ERROR;
-//    } else {
-//
-//    }
+
+    //check that Mem_Init hasn't been called more than once
+    if (headMainList != NULL) {
+        //has already been called once, so this should raise an error
+        m_error = E_BAD_ARGS;
+        return ERROR;
+    }
+
+    howMuchUserRequested = sizeOfRegion; //TODO: add error checking to ensure the user doesn't ask for memory beyond this amount
 
     //Request that much memory from mmap
-    int newSizeOfRegion = roundToPage(sizeOfRegion);
-    void *mapReturn = mmap(NULL, newSizeOfRegion, PROT_EXEC | PROT_READ | PROT_WRITE,
+    //TODO: check with Dianna this value tomorrow in OH
+    int amountToMmap = roundToPage((sizeOfRegion * 8) + (sizeOfRegion * sizeof(header)) + sizeof(header)); //worst case what we need to have mmaped to give the user what they requested
+    void *mapReturn = mmap(NULL, amountToMmap, PROT_EXEC | PROT_READ | PROT_WRITE,
                            MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 
     if (*((int *) mapReturn) == ERROR) {

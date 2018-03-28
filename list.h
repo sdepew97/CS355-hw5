@@ -6,15 +6,11 @@
 #define HW5_LIST_H
 
 typedef struct header {
-//    boolean free;
-    //look up type for single bit for free or not... //TODO
-    //TODO: pad to 32 bytes here and then set check sums
-    char firstCheckSum;
-
+    char checkSum; //unique value to check upon reading next area of memory
+    char free; //byte flag of free or not
     struct header *nextHeader; //first linked list
     long amountAllocated; //to be used for compaction
-    struct header *nextFree; //second linked list
-    char free;
+    struct header *nextFree; //second linked list pointers
     //TODO: figure out how to add another check sum here...
 } header;
 
