@@ -18,21 +18,21 @@ header *headFreeList;
 //TODO: clarify data structure, above and discuss implementations with rachel (Done)
 
 int Mem_Init(long sizeOfRegion) {
-    printf("Size of header %d\n", sizeof(header));
+    printf("Size of header %ld\n", sizeof(header));
     //check sizeOfRegion is a valid, non-negative or zero value
     if (sizeOfRegion <= 0) {
         m_error = E_BAD_ARGS;
         return ERROR;
     }
-
-    //check that Mem_Init hasn't been called more than once
-    if (head != NULL) {
-        //has already been called once, so this should raise an error
-        m_error = E_BAD_ARGS;
-        return ERROR;
-    } else {
-
-    }
+//
+//    //check that Mem_Init hasn't been called more than once
+//    if (head != NULL) {
+//        //has already been called once, so this should raise an error
+//        m_error = E_BAD_ARGS;
+//        return ERROR;
+//    } else {
+//
+//    }
 
     //Request that much memory from mmap
     int newSizeOfRegion = roundToPage(sizeOfRegion);
