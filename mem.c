@@ -138,36 +138,36 @@ int Mem_Free(void *ptr, int coalesce) {
     }
 }
 
-void Mem_Dump() {
-    //TODO: ask about what if the user requests memory not in an increment of page for sizeOfRegion and how that affects printout here...
-    node *currentNode = head;
-    int location = 0;
-
-    if(currentNode == NULL) {
-        printf("*****************\n*    NO INIT    *\n*****************");
-        return;
-    }
-
-    while (currentNode != NULL) {
-        //print header and then print occupied or free
-        if(currentNode == head) {
-            printf("*****************\n%d*   HEADER   *%d\n*****************", location, location + currentNode->sizeOfRegion - currentNode->amountAllocated);
-        } else {
-            printf("%d*   HEADER   *%d\n*****************", location, location + currentNode->sizeOfRegion - currentNode->amountAllocated);
-        }
-        location = location + SIZEOFHEADER;
-        if (currentNode->free == TRUE) {
-            printf("\n%d*   FREE   *%d\n*****************\n", location,
-                   location + currentNode->amountAllocated);
-            location = location + currentNode->amountAllocated;
-        } else {
-            printf("\n%d*   ALLOCATED   *%d\n*****************\n", location,
-                   location + currentNode->amountAllocated);
-            location = location + currentNode->amountAllocated;
-        }
-        currentNode = currentNode->nextHeader;
-    }
-}
+void Mem_Dump() {}
+//    //TODO: ask about what if the user requests memory not in an increment of page for sizeOfRegion and how that affects printout here...
+//    node *currentNode = head;
+//    int location = 0;
+//
+//    if(currentNode == NULL) {
+//        printf("*****************\n*    NO INIT    *\n*****************");
+//        return;
+//    }
+//
+//    while (currentNode != NULL) {
+//        //print header and then print occupied or free
+//        if(currentNode == head) {
+//            printf("*****************\n%d*   HEADER   *%d\n*****************", location, location + currentNode->sizeOfRegion - currentNode->amountAllocated);
+//        } else {
+//            printf("%d*   HEADER   *%d\n*****************", location, location + currentNode->sizeOfRegion - currentNode->amountAllocated);
+//        }
+//        location = location + SIZEOFHEADER;
+//        if (currentNode->free == TRUE) {
+//            printf("\n%d*   FREE   *%d\n*****************\n", location,
+//                   location + currentNode->amountAllocated);
+//            location = location + currentNode->amountAllocated;
+//        } else {
+//            printf("\n%d*   ALLOCATED   *%d\n*****************\n", location,
+//                   location + currentNode->amountAllocated);
+//            location = location + currentNode->amountAllocated;
+//        }
+//        currentNode = currentNode->nextHeader;
+//    }
+//}
 
 //helper functions
 size_t roundToPage(int currentSize) {
@@ -193,34 +193,4 @@ size_t roundToWord(int currentSize) {
 
     //we do not have a multiple of the word size, yet, so we must round
     return (size_t) ((((currentSize / wordSize) + 1) * wordSize) - wordSize) + wordSize;
-}
-
-node *worstFit(node *head) {
-    node *currentNode = head;
-
-    if (head == NULL) {
-        printf("return here");
-        return NULL;
-    }
-
-    int sizeOfLargest = 0;
-    node *headerOfLargest = NULL;
-
-    while (currentNode != NULL) {
-        if (currentNode->free == TRUE) {
-            //must be true to check for largest or not
-            if (currentNode->amountAllocated > sizeOfLargest) { //TODO: confirm field used here
-                sizeOfLargest = currentNode->amountAllocated;
-                headerOfLargest = currentNode;
-            }
-        }
-        currentNode = currentNode->nextHeader;
-    }
-
-    return headerOfLargest;
-}
-
-void coalesceList(node *head) {
-    //go through free list
-    // combine neighboring memory sections
 }
