@@ -9,10 +9,10 @@ typedef struct header {
 //    boolean free;
     //look up type for single bit for free or not... //TODO
     //TODO: pad to 32 bytes here and then set check sums
-    char checkSum;
-    char free;
+    char firstCheckSum;
     struct header *nextHeader; //first linked list
     long amountAllocated; //to be used for compaction
+    char free;
     struct header *nextFree; //second linked list
 
     // know what the user has because you round up to nearest multiple of 8
