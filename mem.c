@@ -63,7 +63,7 @@ int Mem_Init(long sizeOfRegion) {
 
 
     printf("head %p\n", headMainList);
-    printf("head free %d\n", headMainList->amountAllocated);
+    printf("head allocated value %ld\n", headMainList->amountAllocated);
 //    printf("head next available%p\n", head->nextHeader);
 
     //return the appropriate value
