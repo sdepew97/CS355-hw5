@@ -65,77 +65,77 @@ int Mem_Init(long sizeOfRegion) {
 }
 
 void *Mem_Alloc(long size) {
-    int sizeToWordSize = roundToWord(size);
-    int totalSought =
-            sizeToWordSize + SIZEOFHEADER; //We need room for the header AND we need room for the word-aligned memory
-
-    //search through the list to get the largest available
-    node *worstFitReturn = worstFit(head);
-
-    //TODO: think through if the fit is perfect, then only need one header, so that's a problem, since could fit exactly! what I need...otherwise need room for a header (think through cases)
-
-    if (worstFitReturn->amountAllocated < sizeToWordSize) {
-        //not enough at all
-        m_error = E_NO_SPACE;
-        return NULL;
-    } else if (worstFitReturn->amountAllocated == sizeToWordSize) {
-        //exactly enough, so simply switch free bit to FALSE
-        worstFitReturn->free = FALSE;
-        return (void *) worstFitReturn + SIZEOFHEADER;
-    } else {
-        //worstFit->amountAllocated > totalSought
-
-        //TODO: header, eight bytes otherwise doesn't make sense
-
-        //if there is also room for a header, then proceed
-        if (worstFitReturn->amountAllocated > totalSought) {
-            //add a node here!
-            node *newHeader = worstFitReturn + sizeToWordSize + SIZEOFHEADER; //location of new header
-            newHeader->free = TRUE;
-            newHeader->sizeOfRegion = worstFitReturn->sizeOfRegion - SIZEOFHEADER - sizeToWordSize;
-            newHeader->amountAllocated = newHeader->sizeOfRegion - SIZEOFHEADER;
-            newHeader->nextHeader = worstFitReturn->nextHeader;
-            newHeader->prevHeader = worstFitReturn;
-
-            //make header not free anymore
-            worstFitReturn->free = FALSE;
-            worstFitReturn->amountAllocated = sizeToWordSize;
-            worstFitReturn->sizeOfRegion = sizeToWordSize + SIZEOFHEADER;
-            worstFitReturn->nextHeader = newHeader;
-
-            printf("%p pointer to returned region\n", worstFitReturn + SIZEOFHEADER);
-            return (void *) worstFitReturn + SIZEOFHEADER; //this is the section where we made room for the memory! :)
-        }
-            //else there is not enough room to split the memory into the section plus header, so fails!
-        else {
-            //not enough to fit a header AND the memory sought
-            m_error = E_NO_SPACE;
-            return NULL;
-        }
-    }
-
-    //return NULL as a default value
-    return NULL;
+//    int sizeToWordSize = roundToWord(size);
+//    int totalSought =
+//            sizeToWordSize + SIZEOFHEADER; //We need room for the header AND we need room for the word-aligned memory
+//
+//    //search through the list to get the largest available
+//    node *worstFitReturn = worstFit(head);
+//
+//    //TODO: think through if the fit is perfect, then only need one header, so that's a problem, since could fit exactly! what I need...otherwise need room for a header (think through cases)
+//
+//    if (worstFitReturn->amountAllocated < sizeToWordSize) {
+//        //not enough at all
+//        m_error = E_NO_SPACE;
+//        return NULL;
+//    } else if (worstFitReturn->amountAllocated == sizeToWordSize) {
+//        //exactly enough, so simply switch free bit to FALSE
+//        worstFitReturn->free = FALSE;
+//        return (void *) worstFitReturn + SIZEOFHEADER;
+//    } else {
+//        //worstFit->amountAllocated > totalSought
+//
+//        //TODO: header, eight bytes otherwise doesn't make sense
+//
+//        //if there is also room for a header, then proceed
+//        if (worstFitReturn->amountAllocated > totalSought) {
+//            //add a node here!
+//            node *newHeader = worstFitReturn + sizeToWordSize + SIZEOFHEADER; //location of new header
+//            newHeader->free = TRUE;
+//            newHeader->sizeOfRegion = worstFitReturn->sizeOfRegion - SIZEOFHEADER - sizeToWordSize;
+//            newHeader->amountAllocated = newHeader->sizeOfRegion - SIZEOFHEADER;
+//            newHeader->nextHeader = worstFitReturn->nextHeader;
+//            newHeader->prevHeader = worstFitReturn;
+//
+//            //make header not free anymore
+//            worstFitReturn->free = FALSE;
+//            worstFitReturn->amountAllocated = sizeToWordSize;
+//            worstFitReturn->sizeOfRegion = sizeToWordSize + SIZEOFHEADER;
+//            worstFitReturn->nextHeader = newHeader;
+//
+//            printf("%p pointer to returned region\n", worstFitReturn + SIZEOFHEADER);
+//            return (void *) worstFitReturn + SIZEOFHEADER; //this is the section where we made room for the memory! :)
+//        }
+//            //else there is not enough room to split the memory into the section plus header, so fails!
+//        else {
+//            //not enough to fit a header AND the memory sought
+//            m_error = E_NO_SPACE;
+//            return NULL;
+//        }
+//    }
+//
+//    //return NULL as a default value
+//    return NULL;
 }
 
 int Mem_Free(void *ptr, int coalesce) {
-    if (ptr == NULL) {
-        //do nothing
-    } else {
-
-        //ptr is not null
-
-        //free memory object ptr points to
-    }
-
-    //check for coalesce, now
-    if (coalesce == FALSE) {
-        //simply can return, now
-    } else {
-        //do something here, now, since we are asked to coalesce
-        //go through the free list and combine memory sections
-        coalesceList(head);
-    }
+//    if (ptr == NULL) {
+//        //do nothing
+//    } else {
+//
+//        //ptr is not null
+//
+//        //free memory object ptr points to
+//    }
+//
+//    //check for coalesce, now
+//    if (coalesce == FALSE) {
+//        //simply can return, now
+//    } else {
+//        //do something here, now, since we are asked to coalesce
+//        //go through the free list and combine memory sections
+//        coalesceList(head);
+//    }
 }
 
 void Mem_Dump() {}
