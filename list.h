@@ -16,7 +16,7 @@ typedef struct header {
     struct header *nextFree; //second linked list
 
     // know what the user has because you round up to nearest multiple of 8
-//    short secondCheckSum;
+    short secondCheckSum;
     //TODO: add check sums
 } header;
 
