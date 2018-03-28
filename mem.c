@@ -36,7 +36,8 @@ int Mem_Init(long sizeOfRegion) {
 
     //Request that much memory from mmap
     //TODO: check with Dianna this value tomorrow in OH
-    int amountToMmap = roundToPage((sizeOfRegion * 8) + (sizeOfRegion * sizeof(header)) + sizeof(header)); //worst case what we need to have mmaped to give the user what they requested
+    int amountToMmap = roundToPage((sizeOfRegion * 8) + (sizeOfRegion * sizeof(header)) +
+                                   sizeof(header)); //worst case what we need to have mmaped to give the user what they requested
     void *mapReturn = mmap(NULL, amountToMmap, PROT_EXEC | PROT_READ | PROT_WRITE,
                            MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 
@@ -47,18 +48,22 @@ int Mem_Init(long sizeOfRegion) {
 
     printf("%p\n", mapReturn); //printing pointer?
 
-    //Setup first node in list (head)
-    //Attach record keeping pointers to the memory //TODO: figure out how to do this...
-//    head = mapReturn;
-//    head->free = TRUE;
-//    head->prevHeader = NULL;
-//    head->nextHeader = NULL;
-//    head->sizeOfRegion = newSizeOfRegion;
-//    head->amountAllocated = newSizeOfRegion - SIZEOFHEADER;
-//    tail = head;
-//
-//    printf("head %p\n", head);
-//    printf("head free %d\n", head->free);
+    //Setup first node in lists (heads)
+    //Attach record keeping pointers to the memory
+    //TODO: check with Dianna how I am doing this, here and check about how values are stored in memory in layout specifically
+    headMainList = mapReturn;
+    headFreeList = mapReturn;
+
+    headMainList->checkSum = 's';
+    headMainList->free = 't';
+    headMainList->nextHeader = NULL;
+    headMainList->amountAllocated = amountToMmap - sizeof(header); //amount of memory after the header
+
+    headFreeList->nextFree = NULL;
+
+
+    printf("head %p\n", headMainList);
+    printf("head free %d\n", headMainList->amountAllocated);
 //    printf("head next available%p\n", head->nextHeader);
 
     //return the appropriate value
