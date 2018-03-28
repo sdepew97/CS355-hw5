@@ -199,4 +199,6 @@ size_t roundToWord(int currentSize) {
     return (size_t) ((((currentSize / wordSize) + 1) * wordSize) - wordSize) + wordSize;
 }
 
-header *worstFit(header *head);
+header *worstFit(header *head) {
+    return NULL;
+}
