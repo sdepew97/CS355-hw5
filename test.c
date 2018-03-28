@@ -2,6 +2,8 @@
 #include "mem.h"
 
 int main() {
+    printf("Size of char %ld", sizeof(char));
+
     printf("Hello, World!\n");
     Mem_Init(1);
     int *tryingWrite = Mem_Alloc(sizeof(int));
