@@ -48,17 +48,17 @@ int Mem_Init(long sizeOfRegion) {
 
     //Setup first node in list (head)
     //Attach record keeping pointers to the memory //TODO: figure out how to do this...
-    head = mapReturn;
-    head->free = TRUE;
-    head->prevHeader = NULL;
-    head->nextHeader = NULL;
-    head->sizeOfRegion = newSizeOfRegion;
-    head->amountAllocated = newSizeOfRegion - SIZEOFHEADER;
-    tail = head;
-
-    printf("head %p\n", head);
-    printf("head free %d\n", head->free);
-    printf("head next available%p\n", head->nextHeader);
+//    head = mapReturn;
+//    head->free = TRUE;
+//    head->prevHeader = NULL;
+//    head->nextHeader = NULL;
+//    head->sizeOfRegion = newSizeOfRegion;
+//    head->amountAllocated = newSizeOfRegion - SIZEOFHEADER;
+//    tail = head;
+//
+//    printf("head %p\n", head);
+//    printf("head free %d\n", head->free);
+//    printf("head next available%p\n", head->nextHeader);
 
     //return the appropriate value
     return SUCCESS;

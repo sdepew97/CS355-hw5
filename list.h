@@ -22,8 +22,8 @@ typedef struct header {
 extern header *headMainList;
 extern header *headFreeList;
 
-node *worstFit(header *head);
-void coalesceList(node *head);
+header *worstFit(header *head);
+void coalesceList(header *head);
 
 //go through free list
 
