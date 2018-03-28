@@ -10,12 +10,10 @@ typedef struct header {
     //look up type for single bit for free or not... //TODO
     //TODO: pad to 32 bytes here and then set check sums
     char firstCheckSum;
-
-    long amountAllocated; //to be used for compaction
-    struct header *nextHeader; //first linked list
-
-    struct header *nextFree; //second linked list
     char free;
+    struct header *nextHeader; //first linked list
+    long amountAllocated; //to be used for compaction
+    struct header *nextFree; //second linked list
     //TODO: figure out how to add another check sum here...
 } header;
 
