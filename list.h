@@ -12,6 +12,7 @@ typedef struct header {
     long amountAllocated; //to be used for compaction
     struct header *nextFree; //second linked list pointers
     //TODO: figure out how to add another check sum here...
+    //TODO: ask about the automatic padding here????
 } header;
 
 extern header *headMainList;

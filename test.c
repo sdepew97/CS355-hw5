@@ -4,10 +4,10 @@
 
 
 int main() {
-    printf("Size of char %ld", sizeof(char));
-    printf("Size of long %ld", sizeof(long));
-    printf("Size of int %ld", sizeof(int));
-    printf("Size of header %ld", sizeof(header));
+    printf("Size of char %ld\n", sizeof(char));
+    printf("Size of long %ld\n", sizeof(long));
+    printf("Size of int %ld\n", sizeof(int));
+    printf("Size of header %ld\n", sizeof(header));
 
     printf("Hello, World!\n");
     Mem_Init(1);
