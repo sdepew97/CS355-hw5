@@ -11,8 +11,8 @@ typedef struct header {
     //TODO: pad to 32 bytes here and then set check sums
 //    short firstCheckSum;
     int free;
-    long amountAllocated; //to be used for compaction
     struct header *nextHeader; //first linked list
+    long amountAllocated; //to be used for compaction
     struct header *nextFree; //second linked list
 
     // know what the user has because you round up to nearest multiple of 8
