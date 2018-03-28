@@ -5,18 +5,20 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/mman.h>
+#include <math.h>
 #include "mem.h"
 #include "helper.h"
 #include "boolean.h"
 #include "list.h"
 
 int m_error;
-node *head = NULL;
-node *tail = NULL;
+header *headMainList;
+header *headFreeList;
 
 //TODO: clarify data structure, above and discuss implementations with rachel (Done)
 
 int Mem_Init(long sizeOfRegion) {
+    printf("Size of header %d\n", sizeof(header));
     //check sizeOfRegion is a valid, non-negative or zero value
     if (sizeOfRegion <= 0) {
         m_error = E_BAD_ARGS;
@@ -26,7 +28,7 @@ int Mem_Init(long sizeOfRegion) {
     //check that Mem_Init hasn't been called more than once
     if (head != NULL) {
         //has already been called once, so this should raise an error
-        m_error = E_BAD_ARGS; //TODO: determine if this is the correct error to call here
+        m_error = E_BAD_ARGS;
         return ERROR;
     } else {
 
@@ -34,12 +36,11 @@ int Mem_Init(long sizeOfRegion) {
 
     //Request that much memory from mmap
     int newSizeOfRegion = roundToPage(sizeOfRegion);
-    //TODO: check on mmap call here and ask what the heck this is doing... (DONE)
     void *mapReturn = mmap(NULL, newSizeOfRegion, PROT_EXEC | PROT_READ | PROT_WRITE,
                            MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 
     if (*((int *) mapReturn) == ERROR) {
-        m_error = E_BAD_POINTER; //TODO: check this is correct error to be raising (check for this...)
+        m_error = E_BAD_POINTER; //TODO: check this is correct error to be raising (check for this...) (check error value for what to return here)
         return ERROR;
     }
 
@@ -83,6 +84,8 @@ void *Mem_Alloc(long size) {
         return (void *) worstFitReturn + SIZEOFHEADER;
     } else {
         //worstFit->amountAllocated > totalSought
+
+        //TODO: header, eight bytes otherwise doesn't make sense
 
         //if there is also room for a header, then proceed
         if (worstFitReturn->amountAllocated > totalSought) {

@@ -2,24 +2,27 @@
 // Created by Sarah Depew on 3/25/18.
 //
 
-#include "boolean.h"
-
 #ifndef HW5_LIST_H
 #define HW5_LIST_H
 
-typedef struct node {
+typedef struct header {
+//    boolean free;
+    //look up type for single bit for free or not... //TODO
+    //TODO: pad to 32 bytes here and then set check sums
+    int firstCheckSum;
     boolean free;
-    struct node *prevHeader;
-    struct node *nextHeader;
-    int sizeOfRegion;
-    int amountAllocated; //to be used for compaction
-    //TODO: ask Rachel what else I could need here? (Done)
-} node;
+    struct header *nextHeader; //first linked list
+    struct header *nextFree; //second linked list
+    long amountAllocated; //to be used for compaction
+    // know what the user has because you round up to nearest multiple of 8
+    int secondCheckSum;
+    //TODO: add check sums
+} header;
 
-extern node *head;
-extern node *tail;
+extern header *headMainList;
+extern header *headFreeList;
 
-node *worstFit(node *head);
+node *worstFit(header *head);
 void coalesceList(node *head);
 
 //go through free list
