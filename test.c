@@ -1,8 +1,13 @@
 #include <stdio.h>
+#include "list.h"
 #include "mem.h"
+
 
 int main() {
     printf("Size of char %ld", sizeof(char));
+    printf("Size of long %ld", sizeof(long));
+    printf("Size of int %ld", sizeof(int));
+    printf("Size of header %ld", sizeof(header));
 
     printf("Hello, World!\n");
     Mem_Init(1);
