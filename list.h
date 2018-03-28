@@ -9,7 +9,7 @@ typedef struct header {
 //    boolean free;
     //look up type for single bit for free or not... //TODO
     //TODO: pad to 32 bytes here and then set check sums
-//    short firstCheckSum;
+    short firstCheckSum;
     int free;
     struct header *nextHeader; //first linked list
     long amountAllocated; //to be used for compaction
