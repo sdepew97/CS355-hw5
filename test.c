@@ -14,6 +14,9 @@ int main() {
 
     for(int i=0; i< 10000; i++) {
         int *tryingWrite = Mem_Alloc(sizeof(int));
+        if(tryingWrite == NULL) {
+            break;
+        }
 //    Mem_Dump();
         *tryingWrite = 12;
 //    Mem_Dump();
