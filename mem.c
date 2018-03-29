@@ -60,7 +60,7 @@ int Mem_Init(long sizeOfRegion) {
     headFreeList->nextFree = NULL;
 
     printf("head %p\n", headMainList);
-    printf("head allocated value %ld\n", headMainList->amountAllocated);
+    printf("Amount Allocated %ld\n", headMainList->amountAllocated);
 
     //return the appropriate value
     return SUCCESS;
