@@ -292,6 +292,10 @@ void sortList (header *head) {
     }
 }
 
+void coalesceList(header *head) {
+
+}
+
 int checkValid(header *head, void *ptr) {
     header *currentHeader = head;
 
