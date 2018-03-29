@@ -150,7 +150,7 @@ int Mem_Free(void *ptr, int coalesce) {
             ((header *) (ptr - sizeof(header)))->free = 't';
             //TODO: add to free list and sort free list as well!
             ((header *) (ptr - sizeof(header)))->nextFree = headFreeList->nextFree; //WE ARE ASSUMING THAT THE HEAD OF THE LIST IS CHOSEN HERE for worstFitReturn
-            headFreeList = ((header *) (ptr) - sizeof(header));
+            headFreeList = ((header *) (ptr - sizeof(header)));
             sortList(headFreeList);
         } else {
             m_error = E_BAD_POINTER;
