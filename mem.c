@@ -239,10 +239,10 @@ header *worstFit(header *head) {
     return head;
 }
 
-void addHeader (header *head, header *newHeader, header *previous) {
+void addHeader (header **head, header *newHeader, header *previous) {
     if (previous == NULL) {
         //Add to start of list
-        newHeader->nextHeader = head;
+        newHeader->nextHeader = *head;
         head = newHeader;
     } else if (previous->nextHeader == NULL) {
         //Add to end of list
@@ -255,10 +255,10 @@ void addHeader (header *head, header *newHeader, header *previous) {
     }
 }
 
-void removeFreeHeader (header *head, header *headerToRemove, header *previous) {
+void removeFreeHeader (header **head, header *headerToRemove, header *previous) {
     if (previous == NULL) {
         //Remove at start of list
-        head = headerToRemove->nextFree;
+        *head = headerToRemove->nextFree;
     } else if (previous->nextHeader == NULL) {
         //Remove at end of list
         previous->nextHeader = NULL;
@@ -269,13 +269,13 @@ void removeFreeHeader (header *head, header *headerToRemove, header *previous) {
 }
 
 //TODO: error check this method
-void sortList (header *head) {
+void sortList (header **head) {
     //Put the largest available node as the header of the list
-    long worstFitValue = head->amountAllocated;
-    header *worstFit = head;
+    long worstFitValue = *head->amountAllocated;
+    header *worstFit = *head;
     header *worstFitPrevious = NULL;
 
-    header *currentHeader = head;
+    header *currentHeader = *head;
     header *previousHeader = NULL;
 
     while (currentHeader != NULL) {
@@ -290,14 +290,14 @@ void sortList (header *head) {
 
     if (worstFitPrevious == NULL) {
         //we are done, since our node is already the head
-    } else if (worstFit->nextFree == NULL) {
-        worstFitPrevious->nextFree = NULL;
-        worstFit->nextFree = head;
-        head = worstFit;
+    } else if(worstFit->nextFree == NULL) {
+        worstFitPrevious->nextFree = worstFit->nextFree;
+        worstFit->nextFree = *head;
+        *head = worstFit;
     } else {
         worstFitPrevious->nextFree = worstFit->nextFree;
-        worstFit->nextFree = head;
-        head = worstFit;
+        worstFit->nextFree = *head;
+        *head = worstFit;
     }
 }
 
