@@ -106,7 +106,8 @@ void *Mem_Alloc(long size) {
             newHeader->amountAllocated = worstFitReturn->amountAllocated - sizeof(header) - sizeToWordSize;
             newHeader->nextHeader = worstFitReturn->nextHeader;
 
-            newHeader->nextFree = headFreeList->nextFree; //WE ARE ASSUMING THAT THE HEAD OF THE LIST IS CHOSEN HERE for worstFitReturn
+//            newHeader->nextFree = headFreeList->nextFree; //WE ARE ASSUMING THAT THE HEAD OF THE LIST IS CHOSEN HERE for worstFitReturn
+            newHeader->nextFree = headFreeList;
             headFreeList = newHeader;
             sortList(headFreeList); //need to ensure largest header is indeed at head of the list
 
@@ -149,7 +150,7 @@ int Mem_Free(void *ptr, int coalesce) {
         if (checkValid(headMainList, ptr)) {
             ((header *) (ptr - sizeof(header)))->free = 't';
             //TODO: add to free list and sort free list as well!
-            ((header *) (ptr - sizeof(header)))->nextFree = headFreeList->nextFree; //WE ARE ASSUMING THAT THE HEAD OF THE LIST IS CHOSEN HERE for worstFitReturn
+            ((header *) (ptr - sizeof(header)))->nextFree = headFreeList; //WE ARE ASSUMING THAT THE HEAD OF THE LIST IS CHOSEN HERE for worstFitReturn
             headFreeList = ((header *) (ptr - sizeof(header)));
             sortList(headFreeList);
         } else {
