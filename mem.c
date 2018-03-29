@@ -107,13 +107,15 @@ void *Mem_Alloc(long size) {
             newHeader->nextHeader = worstFitReturn->nextHeader;
 
 //            newHeader->nextFree = headFreeList->nextFree; //WE ARE ASSUMING THAT THE HEAD OF THE LIST IS CHOSEN HERE for worstFitReturn
-            newHeader->nextFree = headFreeList;
+            newHeader->nextFree = headFreeList->nextFree; //we want nextFree here, since we are removing the head of the list as it is being allocated and turned to false as available
+            headFreeList->nextFree = NULL;
             headFreeList = newHeader;
             sortList(headFreeList); //need to ensure largest header is indeed at head of the list
 
             //make header not free anymore
             //TODO: add check sums, here
             worstFitReturn->free = 'f';
+
             worstFitReturn->amountAllocated = size;  //Note: changed to permit for error checking
             addHeader(headMainList, newHeader,
                       worstFitReturn); //worstFitReturn is previous, since the memory was added to the top and the header, below
@@ -152,6 +154,7 @@ int Mem_Free(void *ptr, int coalesce) {
             //TODO: add to free list and sort free list as well!
             ((header *) (ptr - sizeof(header)))->nextFree = headFreeList; //WE ARE ASSUMING THAT THE HEAD OF THE LIST IS CHOSEN HERE for worstFitReturn
             headFreeList = ((header *) (ptr - sizeof(header)));
+
             sortList(headFreeList);
         } else {
             m_error = E_BAD_POINTER;
