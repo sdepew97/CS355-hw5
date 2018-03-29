@@ -75,7 +75,8 @@ int Mem_Init(long sizeOfRegion) {
 void *Mem_Alloc(long size) {
     int sizeToWordSize = roundToWord(size); //only allocate word sizes
     int totalSought =
-            sizeToWordSize + sizeof(header) + 8; //We need room for the header AND we need room for more word-aligned memory
+            sizeToWordSize + sizeof(header) +
+            8; //We need room for the header AND we need room for more word-aligned memory
 
     //search through the list to get the largest available
     header *worstFitReturn = worstFit(headFreeList);
@@ -88,7 +89,6 @@ void *Mem_Alloc(long size) {
         //exactly enough, so simply switch free bit to FALSE
         worstFitReturn->free = 'f';
 
-        //TODO: remove node from free list and sort free list
         removeFreeHeader(headFreeList, worstFitReturn, NULL); //WE ARE ASSUMING THAT THE HEAD OF THE LIST IS CHOSEN HERE
         sortList(headFreeList);
 
@@ -98,23 +98,25 @@ void *Mem_Alloc(long size) {
         if (worstFitReturn->amountAllocated > totalSought) {
             //add a node here!
 
-//            node *newHeader = worstFitReturn + sizeToWordSize + SIZEOFHEADER; //location of new header
-//            newHeader->free = TRUE;
-//            newHeader->sizeOfRegion = worstFitReturn->sizeOfRegion - SIZEOFHEADER - sizeToWordSize;
-//            newHeader->amountAllocated = newHeader->sizeOfRegion - SIZEOFHEADER;
-//            newHeader->nextHeader = worstFitReturn->nextHeader;
-//            newHeader->prevHeader = worstFitReturn;
+            header *newHeader = (void *) worstFitReturn + sizeToWordSize + sizeof(header); //location of new header
+            newHeader->checkSum = 's'; //TODO: add in check sum checking for errors
+            newHeader->free = 't';
+            newHeader->amountAllocated = worstFitReturn->amountAllocated - sizeof(header) - sizeToWordSize;
+            newHeader->nextHeader = worstFitReturn->nextHeader;
+
+            newHeader->nextFree = headFreeList->nextFree; //WE ARE ASSUMING THAT THE HEAD OF THE LIST IS CHOSEN HERE for worstFitReturn
+            headFreeList = newHeader;
+            sortList(headFreeList); //need to ensure largest header is indeed at head of the list
 
             //make header not free anymore
+            //TODO: add check sums, here
+            worstFitReturn->free = 'f';
+            worstFitReturn->amountAllocated = sizeToWordSize;
+            addHeader(headMainList, newHeader,
+                      worstFitReturn); //worstFitReturn is previous, since the memory was added to the top and the header, below
 
-//            worstFitReturn->free = FALSE;
-//            worstFitReturn->amountAllocated = sizeToWordSize;
-//            worstFitReturn->sizeOfRegion = sizeToWordSize + SIZEOFHEADER;
-//            worstFitReturn->nextHeader = newHeader;
-
-//            printf("%p pointer to returned region\n", worstFitReturn + SIZEOFHEADER);
-            //TODO: sort list here
-            return (void *) worstFitReturn + SIZEOFHEADER; //this is the section where we made room for the memory! :)
+            printf("%p pointer to returned region\n", (void *) worstFitReturn + sizeof(header));
+            return (void *) worstFitReturn + sizeof(header); //this is the section where we made room for the memory! :)
         }
             //else there is not enough room to split the memory into the section plus header, so fails!
         else {
