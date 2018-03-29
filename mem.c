@@ -147,7 +147,7 @@ int Mem_Free(void *ptr, int coalesce) {
     } else {
         //Mark as free
         if (checkValid(headMainList, ptr)) {
-            ((header *) ptr - sizeof(header))->free = 't';
+            ((header *) (ptr - sizeof(header)))->free = 't';
         } else {
             m_error = E_BAD_POINTER;
             return ERROR;
