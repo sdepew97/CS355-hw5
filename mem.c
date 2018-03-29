@@ -287,8 +287,8 @@ void sortList (header *head) {
     }
 }
 
-int checkValid(header *header, void *ptr) {
-    header * currentHeader = header;
+int checkValid(header *head, void *ptr) {
+    header *currentHeader = head;
 
     while (currentHeader != NULL) {
         if (((void *) currentHeader + sizeof(header)) == ptr) {
