@@ -10,7 +10,7 @@ int main() {
     printf("Size of header %ld\n", sizeof(header));
 
     printf("Hello, World!\n");
-    Mem_Init(1);
+    Mem_Init(10000000);
 
     for(int i=0; i< 10000; i++) {
         int *tryingWrite = Mem_Alloc(sizeof(int));
