@@ -91,8 +91,8 @@ void *Mem_Alloc(long size) {
         //exactly enough, so simply switch free bit to FALSE
         worstFitReturn->free = 'f';
 
-        removeFreeHeader(headFreeList, worstFitReturn, NULL); //WE ARE ASSUMING THAT THE HEAD OF THE LIST IS CHOSEN HERE
-        sortList(headFreeList);
+        removeFreeHeader(&headFreeList, worstFitReturn, NULL); //WE ARE ASSUMING THAT THE HEAD OF THE LIST IS CHOSEN HERE
+        sortList(&headFreeList);
 
         return ((void *) worstFitReturn + sizeof(header)); //TODO: check pointer arithmetic with her, tomorrow
     } else {
@@ -117,7 +117,7 @@ void *Mem_Alloc(long size) {
             worstFitReturn->free = 'f';
 
             worstFitReturn->amountAllocated = size;  //Note: changed to permit for error checking
-            addHeader(headMainList, newHeader,
+            addHeader(&headMainList, newHeader,
                       worstFitReturn); //worstFitReturn is previous, since the memory was added to the top and the header, below
 
             printf("%p pointer to returned region\n", (void *) worstFitReturn + sizeof(header));
@@ -243,7 +243,7 @@ void addHeader (header **head, header *newHeader, header *previous) {
     if (previous == NULL) {
         //Add to start of list
         newHeader->nextHeader = *head;
-        head = newHeader;
+        *head = newHeader;
     } else if (previous->nextHeader == NULL) {
         //Add to end of list
         newHeader->nextHeader = previous->nextHeader;
@@ -271,7 +271,7 @@ void removeFreeHeader (header **head, header *headerToRemove, header *previous) 
 //TODO: error check this method
 void sortList (header **head) {
     //Put the largest available node as the header of the list
-    long worstFitValue = *head->amountAllocated;
+    long worstFitValue = (*head)->amountAllocated;
     header *worstFit = *head;
     header *worstFitPrevious = NULL;
 
