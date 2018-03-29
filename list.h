@@ -17,9 +17,9 @@ typedef struct header {
 extern header *headMainList;
 extern header *headFreeList;
 
-void sortList (header *head);
-void removeFreeHeader (header *head, header *headerToRemove, header *previous);
-void addHeader (header *head, header *newHeader, header *previous);
+void sortList (header **head);
+void removeFreeHeader (header **head, header *headerToRemove, header *previous);
+void addHeader (header **head, header *newHeader, header *previous);
 header *worstFit(header *head);
 void coalesceList(header *head);
 int checkValid(header *header, void *ptr);
