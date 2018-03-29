@@ -12,21 +12,24 @@ int main() {
 
     printf("Hello, World!\n");
 
-    if(Mem_Init(10000) != 0) {
-        exit(EXIT_FAILURE);
-    }
+    Mem_Init(1);
 
-    for(int i=0; i< 10000; i++) {
-        int *tryingWrite = Mem_Alloc(sizeof(int));
-        if(tryingWrite == NULL) {
-            break;
-        }
-//    Mem_Dump();
-        *tryingWrite = 12;
-//    Mem_Dump();
-        printf("value of tryingWrite %d\n", *tryingWrite);
-    }
-//    int *tryingWrite2 = Mem_Alloc(sizeof(int));
+//    if(Mem_Init(10000) != 0) {
+//        exit(EXIT_FAILURE);
+//    }
+
+//    for(int i=0; i< 10000; i++) {
+//        int *tryingWrite = Mem_Alloc(sizeof(int));
+//        if(tryingWrite == NULL) {
+//            break;
+//        }
+////    Mem_Dump();
+//        *tryingWrite = 12;
+////    Mem_Dump();
+//        printf("value of tryingWrite %d\n", *tryingWrite);
+//    }
+
+    Mem_Alloc(4064);
 //    Mem_Dump();
 //    *tryingWrite2 = 129879807;
 //    Mem_Dump();

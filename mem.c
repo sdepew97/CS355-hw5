@@ -132,6 +132,15 @@ void *Mem_Alloc(long size) {
     return NULL;
 }
 
+/*
+ * 0) no coalesce then mark as free and add pointers (done) else if coalesce is true
+ * 1) Mark byte as free rather than occupied (don't have to go through list)
+ * 2) Update free pointers in free list and locally coalesce
+ * 3) Coalesce globally if needed (don't do global coalesce if you always call coalesce and code should know??)
+ * 4) Think about situation where you don't have to go thorough the whole list when you call this (have to decide if list has to be traversed)
+ * 5) Set flag if you need a global traversal or not...
+ * 6) Sort free list (if you're sorting it) (no matter flag for coalesce) //TODO: figure out if optimization is needed...
+ */
 int Mem_Free(void *ptr, int coalesce) {
 //    if (ptr == NULL) {
 //        //do nothing
