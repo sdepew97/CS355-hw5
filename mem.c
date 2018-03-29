@@ -161,7 +161,12 @@ int Mem_Free(void *ptr, int coalesce) {
         //do something here, now, since we are asked to coalesce
         //go through the free list and combine memory sections
         coalesceList(headMainList);
+
+        return SUCCESS;
     }
+
+    //default to return success
+    return SUCCESS;
 }
 
 void Mem_Dump() {}
