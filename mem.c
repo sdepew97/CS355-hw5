@@ -16,7 +16,6 @@ long howMuchUserRequested;
 header *headMainList = NULL;
 header *headFreeList = NULL;
 
-//TODO: clarify data structure, above and discuss implementations with rachel (Done)
 
 int Mem_Init(long sizeOfRegion) {
     //check sizeOfRegion is a valid, non-negative or zero value
@@ -50,7 +49,7 @@ int Mem_Init(long sizeOfRegion) {
 
     //Setup first node in lists (heads)
     //Attach record keeping pointers to the memory
-    headMainList = (header *) mapReturn; //TODO: gdb to check this...
+    headMainList = (header *) mapReturn; //TODO: gdb to check this... (how, ask her tomorrow after class!)
     headFreeList = (header *) mapReturn;
 
     headMainList->checkSum = 's';
@@ -67,15 +66,19 @@ int Mem_Init(long sizeOfRegion) {
     return SUCCESS;
 }
 
+/*
+ * 1) round up to a multiple of 8
+ * 2) Find location of WF free in list (head)
+ * 3) Add on header and adjust pointers
+ * 4) Re-sort the free list after new insertion (determine if list is partially sorted)
+ */
 void *Mem_Alloc(long size) {
     int sizeToWordSize = roundToWord(size); //only allocate word sizes
     int totalSought =
-            sizeToWordSize + sizeof(header) + 8; //We need room for the header AND we need room for the word-aligned memory
+            sizeToWordSize + sizeof(header) + 8; //We need room for the header AND we need room for more word-aligned memory
 
     //search through the list to get the largest available
-    header *worstFitReturn = worstFit(headFreeList); //TODO: fix this function...
-
-    //TODO: think through if the fit is perfect, then only need one header, so that's a problem, since could fit exactly! what I need...otherwise need room for a header (think through cases)
+    header *worstFitReturn = worstFit(headFreeList);
 
     if (worstFitReturn->amountAllocated < sizeToWordSize) {
         //not enough at all
@@ -84,7 +87,11 @@ void *Mem_Alloc(long size) {
     } else if (worstFitReturn->amountAllocated == sizeToWordSize) {
         //exactly enough, so simply switch free bit to FALSE
         worstFitReturn->free = 'f';
-        //TODO: sort list here
+
+        //TODO: remove node from free list and sort free list
+        removeFreeHeader(headFreeList, worstFitReturn, NULL); //WE ARE ASSUMING THAT THE HEAD OF THE LIST IS CHOSEN HERE
+        sortList(headFreeList);
+
         return ((void *) worstFitReturn + sizeof(header)); //TODO: check pointer arithmetic with her, tomorrow
     } else {
         //if there is also room for a header and at least another 8 bytes of memory, then proceed
@@ -199,5 +206,64 @@ size_t roundToWord(int currentSize) {
 }
 
 header *worstFit(header *head) {
-    return NULL;
+    //assume that the free list is sorted
+    return head;
+}
+
+void addHeader (header *head, header *newHeader, header *previous) {
+    if (previous == NULL) {
+        //Add to start of list
+        newHeader->nextHeader = head;
+        head = newHeader;
+    } else if (previous->nextHeader == NULL) {
+        //Add to end of list
+        newHeader->nextHeader = previous->nextHeader;
+        previous->nextHeader = newHeader;
+    } else {
+        //Add to the middle of the list
+        newHeader->nextHeader = previous->nextHeader;
+        previous->nextHeader = newHeader;
+    }
+}
+
+void removeFreeHeader (header *head, header *headerToRemove, header *previous) {
+    if (previous == NULL) {
+        //Remove at start of list
+        head = headerToRemove->nextFree;
+    } else if (previous->nextHeader == NULL) {
+        //Remove at end of list
+        previous->nextHeader = NULL;
+    } else {
+        //Remove at the middle of the list
+        previous->nextHeader = headerToRemove->nextFree;
+    }
+}
+
+void sortList (header *head) {
+    //Put the largest available node as the header of the list
+    long worstFitValue = head->amountAllocated;
+    header *worstFit = head;
+    header *currentHeader = head;
+    header *previousHeader = NULL;
+
+    while(currentHeader != NULL) {
+        if(currentHeader->amountAllocated > worstFitValue) {
+            worstFitValue = currentHeader->amountAllocated;
+            worstFit = currentHeader;
+        }
+        previousHeader = currentHeader;
+        currentHeader = currentHeader->nextFree;
+    }
+
+    if(previousHeader == NULL) {
+        //we are done, since our node is already the head
+    } else if(currentHeader->nextFree == NULL) {
+        previousHeader->nextFree = NULL;
+        currentHeader->nextFree = head;
+        head = currentHeader;
+    } else {
+        previousHeader->nextFree = currentHeader->nextFree;
+        currentHeader->nextFree = head;
+        head = currentHeader;
+    }
 }
