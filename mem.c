@@ -148,6 +148,10 @@ int Mem_Free(void *ptr, int coalesce) {
         //Mark as free
         if (checkValid(headMainList, ptr)) {
             ((header *) (ptr - sizeof(header)))->free = 't';
+            //TODO: add to free list and sort free list as well!
+            ((header *) (ptr))->nextFree = headFreeList->nextFree; //WE ARE ASSUMING THAT THE HEAD OF THE LIST IS CHOSEN HERE for worstFitReturn
+            headFreeList = ((header *) (ptr));
+            sortList(headFreeList);
         } else {
             m_error = E_BAD_POINTER;
             return ERROR;
