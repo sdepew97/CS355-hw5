@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "list.h"
 #include "mem.h"
 
@@ -11,6 +12,10 @@ int main() {
 
     printf("Hello, World!\n");
     Mem_Init(10000000);
+
+    if(Mem_Init != 0) {
+        exit(EXIT_FAILURE);
+    }
 
     for(int i=0; i< 10000; i++) {
         int *tryingWrite = Mem_Alloc(sizeof(int));
