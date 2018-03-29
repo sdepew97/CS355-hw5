@@ -152,9 +152,9 @@ int Mem_Free(void *ptr, int coalesce) {
         if (checkValid(headMainList, ptr)) {
             ((header *) (ptr - sizeof(header)))->free = 't';
             //TODO: add to free list and sort free list as well!
-            ((header *) (ptr - sizeof(header)))->nextFree = headFreeList; //WE ARE ASSUMING THAT THE HEAD OF THE LIST IS CHOSEN HERE for worstFitReturn
+            ((header *) (ptr -
+                         sizeof(header)))->nextFree = headFreeList; //WE ARE ASSUMING THAT THE HEAD OF THE LIST IS CHOSEN HERE for worstFitReturn
             headFreeList = ((header *) (ptr - sizeof(header)));
-
             sortList(headFreeList);
         } else {
             m_error = E_BAD_POINTER;
@@ -268,6 +268,7 @@ void removeFreeHeader (header *head, header *headerToRemove, header *previous) {
     }
 }
 
+//TODO: error check this method
 void sortList (header *head) {
     //Put the largest available node as the header of the list
     long worstFitValue = head->amountAllocated;
@@ -277,7 +278,7 @@ void sortList (header *head) {
     header *currentHeader = head;
     header *previousHeader = NULL;
 
-    while (currentHeader->nextFree != NULL) {
+    while (currentHeader != NULL) {
         if (currentHeader->amountAllocated > worstFitValue) {
             worstFitValue = currentHeader->amountAllocated;
             worstFitPrevious = previousHeader;
