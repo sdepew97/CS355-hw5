@@ -73,6 +73,8 @@ int Mem_Init(long sizeOfRegion) {
  * 4) Re-sort the free list after new insertion (determine if list is partially sorted)
  */
 void *Mem_Alloc(long size) {
+    //TODO: subtract what the user asked for with size, so we can error check here as well...
+
     int sizeToWordSize = roundToWord(size); //only allocate word sizes
     int totalSought =
             sizeToWordSize + sizeof(header) +

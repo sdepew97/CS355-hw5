@@ -11,11 +11,14 @@ int main() {
 
     printf("Hello, World!\n");
     Mem_Init(1);
-    int *tryingWrite = Mem_Alloc(sizeof(int));
+
+    for(int i=0; i< 10000; i++) {
+        int *tryingWrite = Mem_Alloc(sizeof(int));
 //    Mem_Dump();
-    *tryingWrite = 12;
+        *tryingWrite = 12;
 //    Mem_Dump();
-    printf("value of tryingWrite %d\n", *tryingWrite);
+        printf("value of tryingWrite %d\n", *tryingWrite);
+    }
 //    int *tryingWrite2 = Mem_Alloc(sizeof(int));
 //    Mem_Dump();
 //    *tryingWrite2 = 129879807;
