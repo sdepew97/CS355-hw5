@@ -244,11 +244,10 @@ void removeFreeHeader (header *head, header *headerToRemove, header *previous) {
 void sortList (header *head) {
     //Put the largest available node as the header of the list
     long worstFitValue = head->amountAllocated;
-    header *worstFit = head;
     header *currentHeader = head;
     header *previousHeader = NULL;
 
-    while(currentHeader != NULL) {
+    while(currentHeader->nextFree != NULL) {
         if(currentHeader->amountAllocated > worstFitValue) {
             worstFitValue = currentHeader->amountAllocated;
             worstFit = currentHeader;
