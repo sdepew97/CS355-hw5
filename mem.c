@@ -284,7 +284,7 @@ void sortList (header *head) {
         currentHeader = currentHeader->nextFree;
     }
 
-    if (previousHeader == NULL) {
+    if (worstFitPrevious == NULL) {
         //we are done, since our node is already the head
     } else if (worstFit->nextFree == NULL) {
         worstFitPrevious->nextFree = NULL;
