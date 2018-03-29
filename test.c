@@ -11,7 +11,7 @@ int main() {
     printf("Size of header %ld\n", sizeof(header));
 
     printf("Hello, World!\n");
-    Mem_Init(10000000);
+    Mem_Init(1000);
 
     if(Mem_Init != 0) {
         exit(EXIT_FAILURE);
