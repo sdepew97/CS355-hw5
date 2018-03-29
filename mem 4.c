@@ -133,7 +133,7 @@ void *Mem_Alloc(long size) {
 }
 
 /*
- * 0) No coalesce then mark as free and add pointers (done) else if coalesce is true
+ * 0) no coalesce then mark as free and add pointers (done) else if coalesce is true
  * 1) Mark byte as free rather than occupied (don't have to go through list)
  * 2) Update free pointers in free list and locally coalesce
  * 3) Coalesce globally if needed (don't do global coalesce if you always call coalesce and code should know??)
@@ -146,21 +146,18 @@ int Mem_Free(void *ptr, int coalesce) {
         //don't mark anything as free, since ptr is NULL
     } else {
         //Mark as free
-        if (checkValid(headMainList, ptr)) {
-            ((header *) ptr - sizeof(header))->free = 't';
-        } else {
-            m_error = E_BAD_POINTER;
-            return ERROR;
+        if(checkValid(headMainList, ptr)) {
+            
         }
     }
 
     //check for coalesce, now
     if (coalesce == FALSE) {
-        return SUCCESS;
+
     } else {
         //do something here, now, since we are asked to coalesce
         //go through the free list and combine memory sections
-        coalesceList(headMainList);
+        coalesceList(head);
     }
 }
 

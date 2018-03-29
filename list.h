@@ -12,7 +12,6 @@ typedef struct header {
     long amountAllocated; //to be used for compaction
     struct header *nextFree; //second linked list pointers
     //TODO: figure out how to add another check sum here...
-    //TODO: ask about the automatic padding here????
 } header;
 
 extern header *headMainList;
@@ -23,6 +22,7 @@ void removeFreeHeader (header *head, header *headerToRemove, header *previous);
 void addHeader (header *head, header *newHeader, header *previous);
 header *worstFit(header *head);
 void coalesceList(header *head);
+int checkValid(header *header, void *ptr);
 
 //go through free list
 

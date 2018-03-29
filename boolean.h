@@ -8,7 +8,6 @@
 #define TRUE 1
 #define FALSE 0
 
-//TODO: determine how to track if init has already been called; ask Rachel if solution is acceptable? (Done and yes)
 typedef short int boolean;
 
 #endif //HW5_BOOLEAN_H

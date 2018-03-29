@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "list.h"
+#include "boolean.h"
 #include "mem.h"
 
 
@@ -29,7 +30,9 @@ int main() {
 //        printf("value of tryingWrite %d\n", *tryingWrite);
 //    }
 
-    Mem_Alloc(4064);
+    void *allocated = Mem_Alloc(4064);
+    Mem_Free(allocated, FALSE);
+
 //    Mem_Dump();
 //    *tryingWrite2 = 129879807;
 //    Mem_Dump();
