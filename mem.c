@@ -173,7 +173,7 @@ int Mem_Free(void *ptr, int coalesce) {
         //go through the free list and combine memory sections
         localCoalesce(((header *) (ptr - sizeof(header))));
 
-        if(needGlobal) {
+        if (needGlobal) {
             coalesceList(headMainList);
         }
 
@@ -293,6 +293,7 @@ void addHeader (header **head, header *newHeader, header *previous) {
     }
 }
 
+//TODO: error check this method
 void removeFreeHeader (header **head, header *headerToRemove, header *previous) {
     if (previous == NULL) {
         //Remove at start of list
@@ -350,9 +351,9 @@ void localCoalesce(header *ptr) {
                 //adjust both lists according to the local coalesce that just happened (need to remove ptr->nextHeader from free list and from other list
 //                ptr->nextFree = ptr->nextFree->nextFree;
                 if(ptr->nextHeader == headFreeList) {
-                    removeFreeHeader(headFreeList, ptr->nextHeader, NULL);
+                    removeFreeHeader(&headFreeList, ptr->nextHeader, NULL);
                 } else {
-                    removeFreeHeader(headFreeList, ptr->nextHeader, findPreviousFree(headFreeList, ptr));
+                    removeFreeHeader(&headFreeList, ptr->nextHeader, findPreviousFree(headFreeList, ptr));
                 }
 
                 ptr->nextHeader = ptr->nextHeader->nextHeader;
