@@ -205,7 +205,7 @@ void Mem_Dump() {
             //We don't need to print allocated here
             location = location + roundToWord(currentHeader->amountAllocated);
         }
-        currentHeader = currentHeader->nextFree;
+        currentHeader = currentHeader->nextHeader;
     }
 
     printf("\n*****************\n*    ALL MEMORY    *\n*****************\n");
