@@ -259,7 +259,6 @@ size_t roundToPage(int currentSize) {
 
 size_t roundToWord(int currentSize) {
     int wordSize = SIZEOFWORD;
-    printf("Word Size: %d\n", wordSize);
     if ((currentSize / wordSize) * wordSize == currentSize) {
         //we are requesting a multiple of word size bytes
         return (size_t) currentSize;
