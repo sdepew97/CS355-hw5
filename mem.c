@@ -190,20 +190,20 @@ void Mem_Dump() {
     while (currentHeader != NULL) {
         //print header and then print occupied or free
         if (currentHeader == headFreeList) {
-            printf("*****************\n%d*   HEADER   *%ld, %d\n*****************", location,
+            printf("*****************\n%d*   HEADER   *%ld, %ld\n*****************", location,
                    location + currentHeader->amountAllocated,
                    location + roundToWord(currentHeader->amountAllocated));
         } else {
-            printf("%d*   HEADER   *%ld, %d\n*****************", location,
+            printf("%d*   HEADER   *%ld, %ld\n*****************", location,
                    location + currentHeader->amountAllocated, location + roundToWord(currentHeader->amountAllocated));
         }
         location = location + sizeof(header);
         if (currentHeader->free == 't') {
-            printf("\n%d*   FREE   *%ld, %d\n*****************\n", location,
-                   location + currentNode->amountAllocated, location + roundToWord(currentHeader->amountAllocated));
+            printf("\n%d*   FREE   *%ld, %ld\n*****************\n", location,
+                   location + currentHeader->amountAllocated, location + roundToWord(currentHeader->amountAllocated));
             location = location + roundToWord(currentHeader->amountAllocated);
         } else {
-            printf("\n%d*   ALLOCATED   *%ld, %d\n*****************\n", location,
+            printf("\n%d*   ALLOCATED   *%ld, %ld\n*****************\n", location,
                    location + currentNode->amountAllocated, location + roundToWord(currentHeader->amountAllocated));
             location = location + roundToWord(currentHeader->amountAllocated);
         }
@@ -212,7 +212,7 @@ void Mem_Dump() {
 
     printf("*****************\n*    ALL MEMORY    *\n*****************");
     currentHeader = headMainList;
-    int location = 0;
+    location = 0;
 
     if (currentHeader == NULL) {
         printf("*****************\n*    NO INIT    *\n*****************");
@@ -222,20 +222,20 @@ void Mem_Dump() {
     while (currentHeader != NULL) {
         //print header and then print occupied or free
         if (currentHeader == headMainList) {
-            printf("*****************\n%d*   HEADER   *%ld, %d\n*****************", location,
+            printf("*****************\n%d*   HEADER   *%ld, %ld\n*****************", location,
                    location + currentHeader->amountAllocated,
                    location + roundToWord(currentHeader->amountAllocated));
         } else {
-            printf("%d*   HEADER   *%ld, %d\n*****************", location,
+            printf("%d*   HEADER   *%ld, %ld\n*****************", location,
                    location + currentHeader->amountAllocated, location + roundToWord(currentHeader->amountAllocated));
         }
         location = location + sizeof(header);
         if (currentHeader->free == 't') {
-            printf("\n%d*   FREE   *%ld, %d\n*****************\n", location,
+            printf("\n%d*   FREE   *%ld, %ld\n*****************\n", location,
                    location + currentHeader->amountAllocated, location + roundToWord(currentHeader->amountAllocated));
             location = location + roundToWord(currentNode->amountAllocated);
         } else {
-            printf("\n%d*   ALLOCATED   *%ld, %d\n*****************\n", location,
+            printf("\n%d*   ALLOCATED   *%ld, %ld\n*****************\n", location,
                    location + currentHeader->amountAllocated, location + roundToWord(currentHeader->amountAllocated));
             location = location + roundToWord(currentHeader->amountAllocated);
         }
