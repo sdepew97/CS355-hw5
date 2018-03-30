@@ -345,6 +345,7 @@ void localCoalesce(header *ptr) {
             if((((void *) ptr) + sizeof(header) + roundToWord(ptr->amountAllocated)) == ptr->nextFree) {
                 //interesting case where adjacent blocks are free
                 ptr->amountAllocated = roundToWord(ptr->amountAllocated) + sizeof(header) + roundToWord(ptr->nextFree->amountAllocated);
+                ptr->nextFree = ptr->nextFree->nextFree;
             } else {
                 //do nothing since not adjacent
             }
