@@ -21,6 +21,7 @@ void sortList (header **head);
 void removeFreeHeader (header **head, header *headerToRemove, header *previous);
 void addHeader (header **head, header *newHeader, header *previous);
 header *worstFit(header *head);
+void localCoalesce(header *ptr);
 void coalesceList(header *head);
 int checkValid(header *header, void *ptr);
 

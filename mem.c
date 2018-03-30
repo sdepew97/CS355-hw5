@@ -13,6 +13,7 @@
 
 int m_error;
 long howMuchUserRequested;
+boolean needGlobal;
 header *headMainList = NULL;
 header *headFreeList = NULL;
 
@@ -32,6 +33,7 @@ int Mem_Init(long sizeOfRegion) {
     }
 
     howMuchUserRequested = sizeOfRegion; //TODO: add error checking to ensure the user doesn't ask for memory beyond this amount
+    needGlobal = FALSE;
 
     //Request that much memory from mmap
     //TODO: check with Dianna this value tomorrow in OH (pont define these values)
@@ -148,7 +150,7 @@ int Mem_Free(void *ptr, int coalesce) {
     if (ptr == NULL) {
         //don't mark anything as free, since ptr is NULL
     } else {
-        //Mark as free
+        //Mark as free and add to free list
         if (checkValid(headMainList, ptr)) {
             ((header *) (ptr - sizeof(header)))->free = 't';
             //TODO: add to free list and sort free list as well!
@@ -164,11 +166,16 @@ int Mem_Free(void *ptr, int coalesce) {
 
     //check for coalesce, now
     if (coalesce == FALSE) {
+        needGlobal = TRUE; //need a global coalesce next time
         return SUCCESS;
     } else {
         //do something here, now, since we are asked to coalesce
         //go through the free list and combine memory sections
-        coalesceList(headMainList);
+        localCoaslesce(ptr);
+
+        if(needGlobal) {
+            coalesceList(headMainList);
+        }
 
         return SUCCESS;
     }
@@ -332,8 +339,27 @@ void sortList (header **head) {
     }
 }
 
-void coalesceList(header *head) {
+void localCoalesce(header *ptr) {
+    if(ptr != NULL) {
+        if(ptr->nextFree != NULL){
+            if((((void *) ptr) + sizeof(header) + roundToWord(ptr->amountAllocated)) == ptr->nextFree) {
+                //interesting case where adjacent blocks are free
+                ptr->amountAllocated = roundToWord(ptr->amountAllocated) + sizeof(header) + roundToWord(ptr->nextFree->amountAllocated);
+            } else {
+                //do nothing since not adjacent
+            }
+        } else {
+            //do nothing since already at end of list
+        }
+    } else
+    {
+        //do nothing, since error value was passed in
+    }
+}
 
+void coalesceList(header *head) {
+    //nothing yet here...
+    //TODO: fill in the body of this
 }
 
 int checkValid(header *head, void *ptr) {
