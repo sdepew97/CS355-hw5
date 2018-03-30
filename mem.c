@@ -171,7 +171,7 @@ int Mem_Free(void *ptr, int coalesce) {
     } else {
         //do something here, now, since we are asked to coalesce
         //go through the free list and combine memory sections
-        localCoalesce(ptr);
+        localCoalesce(((header *) (ptr - sizeof(header))));
 
         if(needGlobal) {
             coalesceList(headMainList);
