@@ -23,6 +23,7 @@ void addHeader (header **head, header *newHeader, header *previous);
 header *worstFit(header *head);
 void localCoalesce(header *ptr);
 void coalesceList(header *head);
+header *findPreviousFree(header *head, header *ptr);
 int checkValid(header *header, void *ptr);
 
 //go through free list

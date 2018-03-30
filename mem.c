@@ -346,10 +346,16 @@ void localCoalesce(header *ptr) {
                 //interesting case where adjacent blocks are free
                 ptr->amountAllocated = roundToWord(ptr->amountAllocated) + sizeof(header) + roundToWord(ptr->nextHeader->amountAllocated);
                 ptr->nextHeader = ptr->nextHeader->nextHeader;
+
                 //TODO: ensure state of free list here, too!
-                if(ptr->nextFree != NULL) {
-                    //TODO: ensure state here!!
+                if(headFreeList == ptr) {
+                    //simply reset ptr for header
+                    ptr->nextFree = ptr->nextFree->nextFree;
+                } else {
+                    //ptr is in the middle of the list
+                    findPreviousFree(headFreeList, ptr)->nextFree = ptr->nextFree;
                 }
+
             } else {
                 //do nothing since not adjacent
             }
@@ -360,6 +366,24 @@ void localCoalesce(header *ptr) {
     {
         //do nothing, since error value was passed in
     }
+}
+
+header *findPreviousFree(header *head, header *ptr) {
+    header *currentHeader = head;
+
+    if (ptr == NULL || head == NULL || currentHeader == ptr || currentHeader->nextFree == NULL) {
+        return NULL;
+    } else {
+        while (currentHeader->nextFree != NULL) {
+            if (currentHeader->nextFree == ptr) {
+                return currentHeader;
+            }
+
+            currentHeader = currentHeader->nextFree;
+        }
+    }
+
+    return NULL;
 }
 
 void coalesceList(header *head) {
