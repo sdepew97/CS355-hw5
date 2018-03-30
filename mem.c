@@ -204,7 +204,7 @@ void Mem_Dump() {
             location = location + roundToWord(currentHeader->amountAllocated);
         } else {
             printf("\n%d*   ALLOCATED   *%ld, %ld\n*****************\n", location,
-                   location + currentNode->amountAllocated, location + roundToWord(currentHeader->amountAllocated));
+                   location + currentHeader->amountAllocated, location + roundToWord(currentHeader->amountAllocated));
             location = location + roundToWord(currentHeader->amountAllocated);
         }
         currentHeader = currentHeader->nextFree;
@@ -233,7 +233,7 @@ void Mem_Dump() {
         if (currentHeader->free == 't') {
             printf("\n%d*   FREE   *%ld, %ld\n*****************\n", location,
                    location + currentHeader->amountAllocated, location + roundToWord(currentHeader->amountAllocated));
-            location = location + roundToWord(currentNode->amountAllocated);
+            location = location + roundToWord(currentHeader->amountAllocated);
         } else {
             printf("\n%d*   ALLOCATED   *%ld, %ld\n*****************\n", location,
                    location + currentHeader->amountAllocated, location + roundToWord(currentHeader->amountAllocated));
