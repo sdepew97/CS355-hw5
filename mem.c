@@ -340,30 +340,24 @@ void sortList (header **head) {
 }
 
 void localCoalesce(header *ptr) {
-    if(ptr != NULL) {
-        if(ptr->nextHeader != NULL && ptr->nextHeader->free == 't'){
-            if((((void *) ptr) + sizeof(header) + roundToWord(ptr->amountAllocated)) == ptr->nextHeader) {
+    if (ptr != NULL) {
+        if (ptr->nextHeader != NULL && ptr->nextHeader->free == 't') {
+            if ((((void *) ptr) + sizeof(header) + roundToWord(ptr->amountAllocated)) == ptr->nextHeader) {
                 //interesting case where adjacent blocks are free
-                ptr->amountAllocated = roundToWord(ptr->amountAllocated) + sizeof(header) + roundToWord(ptr->nextHeader->amountAllocated);
+                ptr->amountAllocated = roundToWord(ptr->amountAllocated) + sizeof(header) +
+                                       roundToWord(ptr->nextHeader->amountAllocated);
+
+                //by checking ptr->nextHeader->free == 't', this ensured that ptr had a ptr->nextFree value
+                //adjust both lists according to the local coalesce that just happened
+                ptr->nextFree = ptr->nextFree->nextFree;
                 ptr->nextHeader = ptr->nextHeader->nextHeader;
-
-                //TODO: ensure state of free list here, too!
-                if(headFreeList == ptr) {
-                    //simply reset ptr for header
-                    ptr->nextFree = ptr->nextFree->nextFree;
-                } else {
-                    //ptr is in the middle of the list
-                    findPreviousFree(headFreeList, ptr)->nextFree = ptr->nextFree;
-                }
-
             } else {
                 //do nothing since not adjacent
             }
         } else {
             //do nothing since already at end of list
         }
-    } else
-    {
+    } else {
         //do nothing, since error value was passed in
     }
 }

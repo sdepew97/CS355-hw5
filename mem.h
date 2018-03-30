@@ -37,9 +37,9 @@ void Mem_Dump();
 
 /*
  * Order of Development Recommended:
- * 1) Init
- * 2) Allocation
- * 3) Free
+ * 1) Init (done)
+ * 2) Allocation (done)
+ * 3) Free (working on it...)
  * 4) test along the way
  * 5) add the components mentioned earlier
  * 6) Add complexity/optimize
