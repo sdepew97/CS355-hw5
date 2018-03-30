@@ -344,8 +344,12 @@ void localCoalesce(header *ptr) {
         if(ptr->nextHeader != NULL && ptr->nextHeader->free == 't'){
             if((((void *) ptr) + sizeof(header) + roundToWord(ptr->amountAllocated)) == ptr->nextHeader) {
                 //interesting case where adjacent blocks are free
-                ptr->amountAllocated = roundToWord(ptr->amountAllocated) + sizeof(header) + roundToWord(ptr->nextFree->amountAllocated);
-                ptr->nextFree = ptr->nextFree->nextFree;
+                ptr->amountAllocated = roundToWord(ptr->amountAllocated) + sizeof(header) + roundToWord(ptr->nextHeader->amountAllocated);
+                ptr->nextHeader = ptr->nextHeader->nextHeader;
+                //TODO: ensure state of free list here, too!
+                if(ptr->nextFree != NULL) {
+                    //TODO: ensure state here!!
+                }
             } else {
                 //do nothing since not adjacent
             }
