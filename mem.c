@@ -341,8 +341,8 @@ void sortList (header **head) {
 
 void localCoalesce(header *ptr) {
     if(ptr != NULL) {
-        if(ptr->nextFree != NULL){
-            if((((void *) ptr) + sizeof(header) + roundToWord(ptr->amountAllocated)) == ptr->nextFree) {
+        if(ptr->nextHeader != NULL && ptr->nextHeader->free == 't'){
+            if((((void *) ptr) + sizeof(header) + roundToWord(ptr->amountAllocated)) == ptr->nextHeader) {
                 //interesting case where adjacent blocks are free
                 ptr->amountAllocated = roundToWord(ptr->amountAllocated) + sizeof(header) + roundToWord(ptr->nextFree->amountAllocated);
                 ptr->nextFree = ptr->nextFree->nextFree;
