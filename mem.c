@@ -190,22 +190,22 @@ void Mem_Dump() {
     while (currentHeader != NULL) {
         //print header and then print occupied or free
         if (currentHeader == headFreeList) {
-            printf("*****************\n%d*   HEADER   *%d, %d\n*****************", location,
+            printf("*****************\n%d*   HEADER   *%ld, %d\n*****************", location,
                    location + currentHeader->amountAllocated,
                    location + roundToWord(currentHeader->amountAllocated));
         } else {
-            printf("%d*   HEADER   *%d, %d\n*****************", location,
-                   location + currentNode->amountAllocated, location + roundToWord(currentHeader->amountAllocated));
+            printf("%d*   HEADER   *%ld, %d\n*****************", location,
+                   location + currentHeader->amountAllocated, location + roundToWord(currentHeader->amountAllocated));
         }
         location = location + sizeof(header);
         if (currentHeader->free == 't') {
-            printf("\n%d*   FREE   *%d, %d\n*****************\n", location,
+            printf("\n%d*   FREE   *%ld, %d\n*****************\n", location,
                    location + currentNode->amountAllocated, location + roundToWord(currentHeader->amountAllocated));
-            location = location + roundToWord(currentNode->amountAllocated);
+            location = location + roundToWord(currentHeader->amountAllocated);
         } else {
-            printf("\n%d*   ALLOCATED   *%d\n*****************\n", location,
+            printf("\n%d*   ALLOCATED   *%ld, %d\n*****************\n", location,
                    location + currentNode->amountAllocated, location + roundToWord(currentHeader->amountAllocated));
-            location = location + roundToWord(currentNode->amountAllocated);
+            location = location + roundToWord(currentHeader->amountAllocated);
         }
         currentHeader = currentHeader->nextFree;
     }
@@ -221,23 +221,23 @@ void Mem_Dump() {
 
     while (currentHeader != NULL) {
         //print header and then print occupied or free
-        if (currentHeader == headFreeList) {
-            printf("*****************\n%d*   HEADER   *%d, %d\n*****************", location,
+        if (currentHeader == headMainList) {
+            printf("*****************\n%d*   HEADER   *%ld, %d\n*****************", location,
                    location + currentHeader->amountAllocated,
                    location + roundToWord(currentHeader->amountAllocated));
         } else {
-            printf("%d*   HEADER   *%d, %d\n*****************", location,
-                   location + currentNode->amountAllocated, location + roundToWord(currentHeader->amountAllocated));
+            printf("%d*   HEADER   *%ld, %d\n*****************", location,
+                   location + currentHeader->amountAllocated, location + roundToWord(currentHeader->amountAllocated));
         }
         location = location + sizeof(header);
         if (currentHeader->free == 't') {
-            printf("\n%d*   FREE   *%d, %d\n*****************\n", location,
-                   location + currentNode->amountAllocated, location + roundToWord(currentHeader->amountAllocated));
+            printf("\n%d*   FREE   *%ld, %d\n*****************\n", location,
+                   location + currentHeader->amountAllocated, location + roundToWord(currentHeader->amountAllocated));
             location = location + roundToWord(currentNode->amountAllocated);
         } else {
-            printf("\n%d*   ALLOCATED   *%d\n*****************\n", location,
-                   location + currentNode->amountAllocated, location + roundToWord(currentHeader->amountAllocated));
-            location = location + roundToWord(currentNode->amountAllocated);
+            printf("\n%d*   ALLOCATED   *%ld, %d\n*****************\n", location,
+                   location + currentHeader->amountAllocated, location + roundToWord(currentHeader->amountAllocated));
+            location = location + roundToWord(currentHeader->amountAllocated);
         }
         currentHeader = currentHeader->nextHeader;
     }
