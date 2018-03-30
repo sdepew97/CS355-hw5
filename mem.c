@@ -179,7 +179,7 @@ int Mem_Free(void *ptr, int coalesce) {
 
 void Mem_Dump() {
     printf("\n*****************\n*    FREE MEMORY    *\n*****************\n");
-    header *currentHeader = headFreeList;
+    header *currentHeader = headMainList;
     int location = 0;
 
     if (currentHeader == NULL) {
@@ -189,10 +189,10 @@ void Mem_Dump() {
 
     while (currentHeader != NULL) {
         //print header and then print occupied or free
-        if (currentHeader == headFreeList) {
+        if (currentHeader == headMainList && currentHeader->free == 't') {
             printf("*****************\n%d*   HEADER   *%ld\n*****************", location,
                    location + sizeof(header));
-        } else {
+        } else if(currentHeader->free == 't') {
             printf("%d*   HEADER   *%ld\n*****************", location,
                    location + sizeof(header));
         }
@@ -202,8 +202,7 @@ void Mem_Dump() {
                    location + currentHeader->amountAllocated, location + roundToWord(currentHeader->amountAllocated));
             location = location + roundToWord(currentHeader->amountAllocated);
         } else {
-            printf("\n%d*   ALLOCATED   *%ld, %ld\n*****************\n", location,
-                   location + currentHeader->amountAllocated, location + roundToWord(currentHeader->amountAllocated));
+            //We don't need to print allocated here
             location = location + roundToWord(currentHeader->amountAllocated);
         }
         currentHeader = currentHeader->nextFree;
