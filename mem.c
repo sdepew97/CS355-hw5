@@ -178,7 +178,7 @@ int Mem_Free(void *ptr, int coalesce) {
 }
 
 void Mem_Dump() {
-    printf("*****************\n*    FREE MEMORY    *\n*****************");
+    printf("\n*****************\n*    FREE MEMORY    *\n*****************\n");
     header *currentHeader = headFreeList;
     int location = 0;
 
@@ -210,7 +210,7 @@ void Mem_Dump() {
         currentHeader = currentHeader->nextFree;
     }
 
-    printf("*****************\n*    ALL MEMORY    *\n*****************");
+    printf("\n*****************\n*    ALL MEMORY    *\n*****************\n");
     currentHeader = headMainList;
     location = 0;
 
