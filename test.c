@@ -14,6 +14,7 @@ int main() {
     printf("Hello, World!\n");
 
     Mem_Init(8);
+    Mem_Dump();
 
 //    if(Mem_Init(10000) != 0) {
 //        exit(EXIT_FAILURE);
@@ -33,9 +34,8 @@ int main() {
     void *allocated = Mem_Alloc(1);
     void *allocated2 = Mem_Alloc(7);
     Mem_Free(allocated, FALSE);
+    Mem_Dump();
 
-
-//    Mem_Dump();
 //    *tryingWrite2 = 129879807;
 //    Mem_Dump();
 //    printf("value of tryingWrite2 %d\n", *tryingWrite2);

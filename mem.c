@@ -177,36 +177,71 @@ int Mem_Free(void *ptr, int coalesce) {
     return SUCCESS;
 }
 
-void Mem_Dump() {}
-//    //TODO: ask about what if the user requests memory not in an increment of page for sizeOfRegion and how that affects printout here...
-//    node *currentNode = head;
-//    int location = 0;
-//
-//    if(currentNode == NULL) {
-//        printf("*****************\n*    NO INIT    *\n*****************");
-//        return;
-//    }
-//
-//    while (currentNode != NULL) {
-//        //print header and then print occupied or free
-//        if(currentNode == head) {
-//            printf("*****************\n%d*   HEADER   *%d\n*****************", location, location + currentNode->sizeOfRegion - currentNode->amountAllocated);
-//        } else {
-//            printf("%d*   HEADER   *%d\n*****************", location, location + currentNode->sizeOfRegion - currentNode->amountAllocated);
-//        }
-//        location = location + SIZEOFHEADER;
-//        if (currentNode->free == TRUE) {
-//            printf("\n%d*   FREE   *%d\n*****************\n", location,
-//                   location + currentNode->amountAllocated);
-//            location = location + currentNode->amountAllocated;
-//        } else {
-//            printf("\n%d*   ALLOCATED   *%d\n*****************\n", location,
-//                   location + currentNode->amountAllocated);
-//            location = location + currentNode->amountAllocated;
-//        }
-//        currentNode = currentNode->nextHeader;
-//    }
-//}
+void Mem_Dump() {
+    printf("*****************\n*    FREE MEMORY    *\n*****************");
+    header *currentHeader = headFreeList;
+    int location = 0;
+
+    if (currentHeader == NULL) {
+        printf("*****************\n*    NO INIT    *\n*****************");
+        return;
+    }
+
+    while (currentHeader != NULL) {
+        //print header and then print occupied or free
+        if (currentHeader == headFreeList) {
+            printf("*****************\n%d*   HEADER   *%d, %d\n*****************", location,
+                   location + currentHeader->amountAllocated,
+                   location + roundToWord(currentHeader->amountAllocated));
+        } else {
+            printf("%d*   HEADER   *%d, %d\n*****************", location,
+                   location + currentNode->amountAllocated, location + roundToWord(currentHeader->amountAllocated));
+        }
+        location = location + sizeof(header);
+        if (currentHeader->free == 't') {
+            printf("\n%d*   FREE   *%d, %d\n*****************\n", location,
+                   location + currentNode->amountAllocated, location + roundToWord(currentHeader->amountAllocated));
+            location = location + roundToWord(currentNode->amountAllocated);
+        } else {
+            printf("\n%d*   ALLOCATED   *%d\n*****************\n", location,
+                   location + currentNode->amountAllocated, location + roundToWord(currentHeader->amountAllocated));
+            location = location + roundToWord(currentNode->amountAllocated);
+        }
+        currentHeader = currentHeader->nextFree;
+    }
+
+    printf("*****************\n*    ALL MEMORY    *\n*****************");
+    currentHeader = headMainList;
+    int location = 0;
+
+    if (currentHeader == NULL) {
+        printf("*****************\n*    NO INIT    *\n*****************");
+        return;
+    }
+
+    while (currentHeader != NULL) {
+        //print header and then print occupied or free
+        if (currentHeader == headFreeList) {
+            printf("*****************\n%d*   HEADER   *%d, %d\n*****************", location,
+                   location + currentHeader->amountAllocated,
+                   location + roundToWord(currentHeader->amountAllocated));
+        } else {
+            printf("%d*   HEADER   *%d, %d\n*****************", location,
+                   location + currentNode->amountAllocated, location + roundToWord(currentHeader->amountAllocated));
+        }
+        location = location + sizeof(header);
+        if (currentHeader->free == 't') {
+            printf("\n%d*   FREE   *%d, %d\n*****************\n", location,
+                   location + currentNode->amountAllocated, location + roundToWord(currentHeader->amountAllocated));
+            location = location + roundToWord(currentNode->amountAllocated);
+        } else {
+            printf("\n%d*   ALLOCATED   *%d\n*****************\n", location,
+                   location + currentNode->amountAllocated, location + roundToWord(currentHeader->amountAllocated));
+            location = location + roundToWord(currentNode->amountAllocated);
+        }
+        currentHeader = currentHeader->nextHeader;
+    }
+}
 
 //helper functions
 size_t roundToPage(int currentSize) {
