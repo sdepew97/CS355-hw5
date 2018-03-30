@@ -347,9 +347,14 @@ void localCoalesce(header *ptr) {
                 ptr->amountAllocated = roundToWord(ptr->amountAllocated) + sizeof(header) +
                                        roundToWord(ptr->nextHeader->amountAllocated);
 
-                //by checking ptr->nextHeader->free == 't', this ensured that ptr had a ptr->nextFree value
-                //adjust both lists according to the local coalesce that just happened
-                ptr->nextFree = ptr->nextFree->nextFree;
+                //adjust both lists according to the local coalesce that just happened (need to remove ptr->nextHeader from free list and from other list
+//                ptr->nextFree = ptr->nextFree->nextFree;
+                if(ptr->nextHeader == headFreeList) {
+                    removeFreeHeader(headFreeList, ptr->nextHeader, NULL);
+                } else {
+                    removeFreeHeader(headFreeList, ptr->nextHeader, findPreviousFree(headFreeList, ptr));
+                }
+
                 ptr->nextHeader = ptr->nextHeader->nextHeader;
             } else {
                 //do nothing since not adjacent
