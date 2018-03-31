@@ -36,10 +36,10 @@ int main() {
     void *allocated3 = Mem_Alloc(8);
     Mem_Dump();
 //    Mem_Free(allocated, FALSE);
-    Mem_Free(allocated2, TRUE);
+    Mem_Free(allocated2, FALSE);
     Mem_Dump();
     Mem_Free(allocated2, FALSE);
-    Mem_Free(allocated3, TRUE);
+    Mem_Free(allocated3, FALSE);
     Mem_Dump();
 
 //    *tryingWrite2 = 129879807;
