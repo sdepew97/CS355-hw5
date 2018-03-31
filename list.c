@@ -1,7 +1,7 @@
 //
 // Created by Sarah Depew on 3/31/18.
 //
-#include "list.c"
+#include "list.h"
 
 header *worstFit(header *head) {
     //assume that the free list is sorted
