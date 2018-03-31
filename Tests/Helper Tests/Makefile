@@ -1,6 +1,6 @@
 all: helperTest helper clean
 
-helperTest.o:
+helperTest.o: ../../helper.h
 	gcc -Wall -c helperTest.c
 
 helper.o: ../../helper.c ../../helper.h
