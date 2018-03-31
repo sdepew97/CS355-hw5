@@ -1,4 +1,4 @@
-all: mem test clean
+all: cleanFirst mem test cleanLast
 
 test:
 	gcc -g -ggdb -o test test.c -L. -lmem
@@ -15,5 +15,8 @@ helper.o: helper.c helper.h
 list.o: list.c list.h
 	gcc -g -ggdb -Wall -fpic -c list.c
 
-clean:
+cleanFirst:
+	rm -rf *.o *.gch *.dSYM test
+
+cleanLast:
 	rm -rf *.o *.gch *.dSYM
