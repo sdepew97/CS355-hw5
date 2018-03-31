@@ -178,7 +178,7 @@ int Mem_Free(void *ptr, int coalesce) {
 
         if (needGlobal) {
             coalesceList(headMainList);
-        }1
+        }
 
         sortList(&headFreeList); //TODO: determine if needed? Yes, because there are cases when needed
         return SUCCESS;
