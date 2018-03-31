@@ -36,10 +36,10 @@ int main() {
     void *allocated3 = Mem_Alloc(8);
     Mem_Dump();
 //    Mem_Free(allocated, FALSE);
-    Mem_Free(allocated2, TRUE);
+    Mem_Free(allocated2, FALSE);
     printf("after second freed\n");
     Mem_Dump();
-    Mem_Free(allocated, TRUE);
+    Mem_Free(allocated, FALSE);
     printf("after first freed\n");
     Mem_Dump();
 //    Mem_Free(allocated2, FALSE);
