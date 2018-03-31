@@ -1,6 +1,7 @@
 //
 // Created by Sarah Depew on 3/31/18.
 //
+#include <unistd.h>
 #include "helper.h"
 
 //helper functions

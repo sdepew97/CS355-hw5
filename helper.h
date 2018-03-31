@@ -5,6 +5,8 @@
 #ifndef HW5_HELPER_H
 #define HW5_HELPER_H
 
+#include <unistd.h>
+
 #define SUCCESS 0
 #define ERROR -1
 #define SIZEOFHEADER 32
