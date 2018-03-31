@@ -39,6 +39,7 @@ int main() {
     Mem_Free(allocated2, TRUE);
     Mem_Dump();
     Mem_Free(allocated2, FALSE);
+    Mem_Free(allocated3, TRUE);
     Mem_Dump();
 
 //    *tryingWrite2 = 129879807;
