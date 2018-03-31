@@ -83,7 +83,7 @@ void *Mem_Alloc(long size) {
             8; //We need room for the header AND we need room for more word-aligned memory
 
     //search through the list to get the largest available
-    header *worstFitReturn = worstFit(headFreeList);
+    header *worstFitReturn = worstFit(headFreeList); //TODO: could this ever return NULL?
 
     if (worstFitReturn->amountAllocated < sizeToWordSize) {
         //not enough at all
@@ -110,7 +110,8 @@ void *Mem_Alloc(long size) {
 
 //            newHeader->nextFree = headFreeList->nextFree; //WE ARE ASSUMING THAT THE HEAD OF THE LIST IS CHOSEN HERE for worstFitReturn
             newHeader->nextFree = headFreeList->nextFree; //we want nextFree here, since we are removing the head of the list as it is being allocated and turned to false as available
-            headFreeList->nextFree = NULL;
+//            headFreeList->nextFree = NULL; //TODO: determine if this line is correct?
+            headFreeList->nextFree = NULL; //TODO: determine if this line is correct? (yes)
             headFreeList = newHeader;
             sortList(&headFreeList); //need to ensure largest header is indeed at head of the list
 
@@ -301,16 +302,19 @@ void removeFreeHeader (header **head, header *headerToRemove, header *previous) 
     if (previous == NULL) {
         //Remove at start of list
         *head = headerToRemove->nextFree;
+        headerToRemove->nextFree = NULL;
     } else if (previous->nextHeader == NULL) {
         //Remove at end of list
         previous->nextHeader = NULL;
+
     } else {
         //Remove at the middle of the list
         previous->nextHeader = headerToRemove->nextFree;
+        headerToRemove->nextFree = NULL;
     }
 }
 
-//TODO: error check this method
+//TODO: error check this method (something isn't right with this method and how it runs...keeps creating circular linked lists...)
 void sortList (header **head) {
     //Put the largest available node as the header of the list
     long worstFitValue = (*head)->amountAllocated;
@@ -332,12 +336,11 @@ void sortList (header **head) {
 
     if (worstFitPrevious == NULL) {
         //we are done, since our node is already the head
-    } else if(worstFit->nextFree == NULL) {
-        worstFitPrevious->nextFree = worstFit->nextFree;
-        worstFit->nextFree = *head;
-        *head = worstFit;
     } else {
-        worstFitPrevious->nextFree = worstFit->nextFree;
+        //remove worstFit node
+        removeFreeHeader(&headFreeList, worstFit, worstFitPrevious);
+
+        //add it to the head
         worstFit->nextFree = *head;
         *head = worstFit;
     }
