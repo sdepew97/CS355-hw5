@@ -93,8 +93,8 @@ void *Mem_Alloc(long size) {
         //exactly enough, so simply switch free bit to FALSE
         worstFitReturn->free = 'f';
 
-        removeFreeHeader(&headFreeList, worstFitReturn, NULL); //WE ARE ASSUMING THAT THE HEAD OF THE LIST IS CHOSEN HERE
-        sortList(&headFreeList);
+        removeHeaderFree(&headFreeList, worstFitReturn, NULL); //WE ARE ASSUMING THAT THE HEAD OF THE LIST IS CHOSEN HERE
+        sortFreeList(&headFreeList);
 
         return ((void *) worstFitReturn + sizeof(header)); //TODO: check pointer arithmetic with her, tomorrow
     } else {
@@ -113,14 +113,14 @@ void *Mem_Alloc(long size) {
 //            headFreeList->nextFree = NULL; //TODO: determine if this line is correct?
             headFreeList->nextFree = NULL; //TODO: determine if this line is correct? (yes)
             headFreeList = newHeader;
-            sortList(&headFreeList); //need to ensure largest header is indeed at head of the list
+            sortFreeList(&headFreeList); //need to ensure largest header is indeed at head of the list
 
             //make header not free anymore
             //TODO: add check sums, here
             worstFitReturn->free = 'f';
 
             worstFitReturn->amountAllocated = size;  //Note: changed to permit for error checking
-            addHeader(&headMainList, newHeader,
+            addHeaderMain(&headMainList, newHeader,
                       worstFitReturn); //worstFitReturn is previous, since the memory was added to the top and the header, below
 
             printf("%p pointer to returned region\n", (void *) worstFitReturn + sizeof(header));
@@ -152,7 +152,7 @@ int Mem_Free(void *ptr, int coalesce) {
         //don't mark anything as free, since ptr is NULL
     } else {
         //Mark as free and add to free list
-        if (checkValid(headMainList, ptr)) {
+        if (checkValidPtrMain(headMainList, ptr)) {
             //check if already free and if so, then don't add to free list, since it is already there
             if (((header *) (ptr - sizeof(header)))->free == 't') {
                 //do nothing, since it should not be added a second time
@@ -165,7 +165,7 @@ int Mem_Free(void *ptr, int coalesce) {
             }
 
             //TODO: think about the placement of this statement
-            sortList(&headFreeList);
+            sortFreeList(&headFreeList);
         } else {
             m_error = E_BAD_POINTER;
             return ERROR;
@@ -181,14 +181,14 @@ int Mem_Free(void *ptr, int coalesce) {
     } else {
         //do something here, now, since we are asked to coalesce
         //go through the free list and combine memory sections
-        localCoalesce(((header *) (ptr - sizeof(header))));
+        localCoalesceFree(&headFreeList, ((header *) (ptr - sizeof(header))));
 
         //TODO: figure out what's wrong with globalCoalesce
 //        if (needGlobal) {
-//            coalesceList(headMainList);
+//            coalesceFreeList(headMainList);
 //        }
 
-        sortList(&headFreeList); //TODO: determine if needed? Yes, because there are cases when needed
+        sortFreeList(&headFreeList); //TODO: determine if needed? Yes, because there are cases when needed
         return SUCCESS;
     }
 

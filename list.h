@@ -17,18 +17,20 @@ typedef struct header {
 extern header *headMainList;
 extern header *headFreeList;
 
-void sortList (header **head);
-void removeFreeHeader (header **head, header *headerToRemove, header *previous);
-void addHeader (header **head, header *newHeader, header *previous);
+//general methods for lists
 header *worstFit(header *head);
-void localCoalesce(header *ptr);
-void coalesceList(header *head);
+
+//methods specifically for main list
+void addHeaderMain (header **head, header *newHeader, header *previous);
+void removeHeaderMain(header **head, header *newHeader, header *previous);
+int checkValidPtrMain(header *head, void *ptr);
+
+//methods specifically for free list
+void addHeaderFree(header **head, header *headerToRemove, header *previous);
+void removeHeaderFree(header **head, header *headerToRemove, header *previous);
+void sortFreeList (header **head);
+void localCoalesceFree(header **head, header *ptr);
+void coalesceFreeList(header *head);
 header *findPreviousFree(header *head, header *ptr);
-void localCoalesceForGlobal(header *ptr, header *prev);
-int checkValid(header *header, void *ptr);
-
-//go through free list
-
-//combine neighboring memory sections
 
 #endif //HW5_LIST_H
