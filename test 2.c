@@ -44,9 +44,8 @@ int main() {
     Mem_Dump();
 //    Mem_Free(allocated2, FALSE);
 //    Mem_Dump();
-    Mem_Free(allocated3, TRUE);
-    printf("after third freed\n");
-    Mem_Dump();
+//    Mem_Free(allocated3, FALSE);
+//    Mem_Dump();
 
 //    *tryingWrite2 = 129879807;
 //    Mem_Dump();
