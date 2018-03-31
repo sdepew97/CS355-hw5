@@ -1,4 +1,4 @@
-all: helperTest helper clean
+all: cleanFirst helper helperTest cleanLast
 
 helperTest:
 	gcc -g -ggdb -o helperTest helperTest.c -L. -lhelper
@@ -9,5 +9,8 @@ helper: helper.o
 helper.o: ../../helper.c ../../helper.h
 	gcc -g -ggdb -Wall -fpic -c ../../helper.c
 
-clean:
+cleanFirst:
+	rm -rf *.o *.gch *.dSYM helperTest
+
+cleanLast:
 	rm -rf *.o *.gch *.dSYM
