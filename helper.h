@@ -12,4 +12,5 @@
 
 size_t roundToPage(int currentSize);
 size_t roundToWord(int currentSize);
+
 #endif //HW5_HELPER_H

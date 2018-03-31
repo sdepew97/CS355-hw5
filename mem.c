@@ -183,6 +183,7 @@ int Mem_Free(void *ptr, int coalesce) {
         //go through the free list and combine memory sections
         localCoalesce(((header *) (ptr - sizeof(header))));
 
+        //TODO: figure out what's wrong with globalCoalesce
 //        if (needGlobal) {
 //            coalesceList(headMainList);
 //        }
@@ -256,31 +257,6 @@ void Mem_Dump() {
         }
         currentHeader = currentHeader->nextHeader;
     }
-}
-
-//helper functions
-size_t roundToPage(int currentSize) {
-    //TODO: implement method that rounds the currentSize to a page size
-    int pageSize = getpagesize();
-    printf("Page Size: %d\n", pageSize);
-    if ((currentSize / pageSize) * pageSize == currentSize) {
-        //we are requesting a multiple of page size bytes
-        return (size_t) currentSize;
-    }
-
-    //we do not have a multiple of the page size, yet, so we must round
-    return (size_t) ((((currentSize / pageSize) + 1) * pageSize) - pageSize) + pageSize;
-}
-
-size_t roundToWord(int currentSize) {
-    int wordSize = SIZEOFWORD;
-    if ((currentSize / wordSize) * wordSize == currentSize) {
-        //we are requesting a multiple of word size bytes
-        return (size_t) currentSize;
-    }
-
-    //we do not have a multiple of the word size, yet, so we must round
-    return (size_t) ((((currentSize / wordSize) + 1) * wordSize) - wordSize) + wordSize;
 }
 
 header *worstFit(header *head) {

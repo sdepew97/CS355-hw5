@@ -42,7 +42,7 @@ void Mem_Dump();
  * 3) Free (working on it...done!)
  * 4) test along the way (test all API's used)
  * 5) add the components mentioned earlier
- * 6) Add complexity/optimize
+ * 6) Add complexity/optimize, add all the error checking components here
  */
 #endif
 
