@@ -73,7 +73,6 @@ void removeHeaderFree(header **head, header *headerToRemove, header *previous) {
     } else if (previous->nextFree == NULL) {
         //Remove at end of list
         previous->nextFree = NULL;
-
     } else {
         //Remove at the middle of the list
         previous->nextFree = headerToRemove->nextFree;
@@ -125,7 +124,7 @@ void localCoalesceFree(header **head, header *ptr) {
                 if (ptr->nextHeader == headFreeList) {
                     removeHeaderFree(head, ptr->nextHeader, NULL);
                 } else {
-                    removeHeaderFree(head, ptr->nextHeader, findPreviousFree(headFreeList, ptr));
+                    removeHeaderFree(head, ptr->nextHeader, findPreviousFree(headFreeList, ptr->nextHeader));
                 }
 
                 ptr->nextHeader = ptr->nextHeader->nextHeader;
@@ -166,6 +165,9 @@ void coalesceFreeList(header *head) {
     } while (coalesceOccurred);
 }
 
+/*
+ * //TODO: fix this method, so that it correctly returns the prior node
+ */
 header *findPreviousFree(header *head, header *ptr) {
     header *currentHeader = head;
 
