@@ -1,13 +1,13 @@
 all: helperTest helper clean
 
-helperTest: helperTest.o helper.o
-	gcc -o helperTest helper.o helperTest.o
+helperTest:
+	gcc -g -ggdb -o helperTest helperTest.c -L. -lhelper
 
-helperTest.o: ../../helper.h
-	gcc -Wall -c helperTest.c
+helper: helper.o
+	gcc -g -ggdb -o libhelper.so helper.o -shared
 
 helper.o: ../../helper.c ../../helper.h
-	gcc -Wall -c ../../helper.c
+	gcc -g -ggdb -Wall -fpic -c ../../helper.c
 
 clean:
 	rm -rf *.o *.gch *.dSYM
