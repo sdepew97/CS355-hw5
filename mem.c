@@ -176,6 +176,8 @@ int Mem_Free(void *ptr, int coalesce) {
     if (coalesce == FALSE) {
         //TODO: figure out how to set this value, so that we don't coalesce each time! EFFICIENCY!
         //TODO: fix current bug here that would cause coalesce to be called each time on mem_free(NULL, 0) call
+        //False means don't want a global coalesce
+        localCoalesceFree(&headFreeList, ((header *) (ptr - sizeof(header))));
         needGlobal = TRUE; //need a global coalesce next time
         return SUCCESS;
     } else {
