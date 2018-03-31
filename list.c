@@ -1,6 +1,11 @@
 //
 // Created by Sarah Depew on 3/31/18.
 //
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/mman.h>
+#include "boolean.h"
+#include "helper.h"
 #include "list.h"
 
 header *worstFit(header *head) {
