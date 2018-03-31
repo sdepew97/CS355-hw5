@@ -183,9 +183,9 @@ int Mem_Free(void *ptr, int coalesce) {
         //go through the free list and combine memory sections
         localCoalesce(((header *) (ptr - sizeof(header))));
 
-        if (needGlobal) {
-            coalesceList(headMainList);
-        }
+//        if (needGlobal) {
+//            coalesceList(headMainList);
+//        }
 
         sortList(&headFreeList); //TODO: determine if needed? Yes, because there are cases when needed
         return SUCCESS;
