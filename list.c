@@ -153,7 +153,8 @@ void coalesceFreeList(header *head) {
         coalesceOccurred = FALSE;
 
         while (currentHeader != NULL) {
-            if (currentHeader->free == 't') {
+            if (currentHeader->free == 't' && currentHeader->nextHeader != NULL &&
+                currentHeader->nextHeader->free == 't') {
                 localCoalesceFree(&headFreeList, currentHeader);
                 coalesceOccurred = TRUE;
             }
