@@ -37,7 +37,7 @@ int main() {
     Mem_Dump();
 //    Mem_Free(allocated, FALSE);
     Mem_Free(allocated, TRUE);
-    Mem_Free(allocated2, FALSE);
+    Mem_Free(allocated2, TRUE);
     Mem_Dump();
     Mem_Free(allocated2, FALSE);
     Mem_Free(allocated3, FALSE);
