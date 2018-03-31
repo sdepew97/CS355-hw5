@@ -186,9 +186,9 @@ int Mem_Free(void *ptr, int coalesce) {
         localCoalesceFree(&headFreeList, ((header *) (ptr - sizeof(header))));
 
         //TODO: figure out what's wrong with globalCoalesce
-//        if (needGlobal) {
-//            coalesceFreeList(headMainList);
-//        }
+        if (needGlobal) {
+            coalesceFreeList(headMainList);
+        }
 
         sortFreeList(&headFreeList); //TODO: determine if needed? Yes, because there are cases when needed
         return SUCCESS;
