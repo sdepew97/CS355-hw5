@@ -179,7 +179,7 @@ int Mem_Free(void *ptr, int coalesce) {
             coalesceList(headMainList);
         }
 
-        sortList(headFreeList); //TODO: determine if needed? Yes, because there are cases when needed
+        sortList(&headFreeList); //TODO: determine if needed? Yes, because there are cases when needed
         return SUCCESS;
     }
 
