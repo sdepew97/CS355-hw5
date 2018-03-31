@@ -36,6 +36,7 @@ int main() {
     void *allocated3 = Mem_Alloc(8);
     Mem_Dump();
 //    Mem_Free(allocated, FALSE);
+    Mem_Free(allocated, FALSE);
     Mem_Free(allocated2, FALSE);
     Mem_Dump();
     Mem_Free(allocated2, FALSE);
