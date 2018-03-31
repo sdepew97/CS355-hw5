@@ -13,7 +13,7 @@ int main() {
 
     printf("Hello, World!\n");
 
-    Mem_Init(8);
+    Mem_Init(16);
     Mem_Dump();
 
 //    if(Mem_Init(10000) != 0) {
@@ -33,8 +33,10 @@ int main() {
 
     void *allocated = Mem_Alloc(1);
     void *allocated2 = Mem_Alloc(7);
+    void *allocated3 = Mem_Alloc(8);
+    Mem_Dump();
 //    Mem_Free(allocated, FALSE);
-    Mem_Free(allocated2, TRUE);
+    Mem_Free(allocated2, FALSE);
     Mem_Dump();
 
 //    *tryingWrite2 = 129879807;

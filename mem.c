@@ -166,6 +166,8 @@ int Mem_Free(void *ptr, int coalesce) {
 
     //check for coalesce, now
     if (coalesce == FALSE) {
+        //TODO: figure out how to set this value, so that we don't coalesce each time! EFFICIENCY!
+        //TODO: fix current bug here that would cause coalesce to be called each time on mem_free(NULL, 0) call
         needGlobal = TRUE; //need a global coalesce next time
         return SUCCESS;
     } else {
@@ -199,7 +201,7 @@ void Mem_Dump() {
         if (currentHeader == headMainList && currentHeader->free == 't') {
             printf("*****************\n%d*   HEADER   *%ld\n*****************", location,
                    location + sizeof(header));
-        } else if(currentHeader->free == 't') {
+        } else if (currentHeader->free == 't') {
             printf("%d*   HEADER   *%ld\n*****************", location,
                    location + sizeof(header));
         }
@@ -340,6 +342,28 @@ void sortList (header **head) {
     }
 }
 
+void localCoalesceForGlobal(header *ptr, header *prev) {
+    if (ptr != NULL) {
+        if (ptr->nextHeader != NULL && ptr->nextHeader->free == 't') {
+            if ((((void *) ptr) + sizeof(header) + roundToWord(ptr->amountAllocated)) == ptr->nextHeader) {
+                //interesting case where adjacent blocks are free
+                ptr->amountAllocated = roundToWord(ptr->amountAllocated) + sizeof(header) +
+                                       roundToWord(ptr->nextHeader->amountAllocated);
+
+                //adjust both lists according to the local coalesce that just happened (need to remove ptr->nextHeader from free list and from other list
+                removeFreeHeader(&headFreeList, ptr->nextHeader, prev);
+                ptr->nextHeader = ptr->nextHeader->nextHeader;
+            } else {
+                //do nothing since not adjacent
+            }
+        } else {
+            //do nothing since already at end of list
+        }
+    } else {
+        //do nothing, since error value was passed in
+    }
+}
+
 void localCoalesce(header *ptr) {
     if (ptr != NULL) {
         if (ptr->nextHeader != NULL && ptr->nextHeader->free == 't') {
@@ -349,8 +373,7 @@ void localCoalesce(header *ptr) {
                                        roundToWord(ptr->nextHeader->amountAllocated);
 
                 //adjust both lists according to the local coalesce that just happened (need to remove ptr->nextHeader from free list and from other list
-//                ptr->nextFree = ptr->nextFree->nextFree;
-                if(ptr->nextHeader == headFreeList) {
+                if (ptr->nextHeader == headFreeList) {
                     removeFreeHeader(&headFreeList, ptr->nextHeader, NULL);
                 } else {
                     removeFreeHeader(&headFreeList, ptr->nextHeader, findPreviousFree(headFreeList, ptr));
@@ -386,9 +409,29 @@ header *findPreviousFree(header *head, header *ptr) {
     return NULL;
 }
 
+//TODO: check this works
 void coalesceList(header *head) {
     //nothing yet here...
-    //TODO: fill in the body of this
+    boolean coalesceOccurred = FALSE;
+    header *currentHeader;
+    header *previousHeader;
+
+    do {
+        currentHeader = head;
+        previousHeader = NULL;
+        coalesceOccurred = FALSE;
+
+        while (currentHeader != NULL) {
+            if (currentHeader->free == 't') {
+                localCoalesceForGlobal(currentHeader, previousHeader);
+                coalesceOccurred = TRUE;
+            }
+
+            previousHeader = currentHeader;
+            currentHeader = currentHeader->nextHeader;
+        }
+
+    } while (coalesceOccurred);
 }
 
 int checkValid(header *head, void *ptr) {

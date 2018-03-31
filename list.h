@@ -24,6 +24,7 @@ header *worstFit(header *head);
 void localCoalesce(header *ptr);
 void coalesceList(header *head);
 header *findPreviousFree(header *head, header *ptr);
+void localCoalesceForGlobal(header *ptr, header *prev);
 int checkValid(header *header, void *ptr);
 
 //go through free list
