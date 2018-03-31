@@ -178,7 +178,7 @@ int Mem_Free(void *ptr, int coalesce) {
 
         if (needGlobal) {
             coalesceList(headMainList);
-        }
+        }1
 
         sortList(&headFreeList); //TODO: determine if needed? Yes, because there are cases when needed
         return SUCCESS;
@@ -303,13 +303,13 @@ void removeFreeHeader (header **head, header *headerToRemove, header *previous) 
         //Remove at start of list
         *head = headerToRemove->nextFree;
         headerToRemove->nextFree = NULL;
-    } else if (previous->nextHeader == NULL) {
+    } else if (previous->nextFree == NULL) {
         //Remove at end of list
-        previous->nextHeader = NULL;
+        previous->nextFree = NULL;
 
     } else {
         //Remove at the middle of the list
-        previous->nextHeader = headerToRemove->nextFree;
+        previous->nextFree = headerToRemove->nextFree;
         headerToRemove->nextFree = NULL;
     }
 }
