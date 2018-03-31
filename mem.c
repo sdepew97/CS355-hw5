@@ -153,11 +153,18 @@ int Mem_Free(void *ptr, int coalesce) {
     } else {
         //Mark as free and add to free list
         if (checkValid(headMainList, ptr)) {
-            ((header *) (ptr - sizeof(header)))->free = 't';
-            //TODO: add to free list and sort free list as well!
-            ((header *) (ptr -
-                         sizeof(header)))->nextFree = headFreeList; //WE ARE ASSUMING THAT THE HEAD OF THE LIST IS CHOSEN HERE for worstFitReturn
-            headFreeList = ((header *) (ptr - sizeof(header)));
+            //check if already free and if so, then don't add to free list, since it is already there
+            if (((header *) (ptr - sizeof(header)))->free == 't') {
+                //do nothing, since it should not be added a second time
+            } else {
+                //Don't need to add to free list again and sort
+                ((header *) (ptr - sizeof(header)))->free = 't';
+                ((header *) (ptr - sizeof(header)))->nextFree = headFreeList;
+                //WE ARE ASSUMING THAT THE HEAD OF THE LIST IS CHOSEN HERE for worstFitReturn
+                headFreeList = ((header *) (ptr - sizeof(header)));
+            }
+
+            //TODO: think about the placement of this statement
             sortList(&headFreeList);
         } else {
             m_error = E_BAD_POINTER;
@@ -298,6 +305,9 @@ void addHeader (header **head, header *newHeader, header *previous) {
 }
 
 //TODO: error check this method
+/*
+ * Method to remove a header from the free list
+ */
 void removeFreeHeader (header **head, header *headerToRemove, header *previous) {
     if (previous == NULL) {
         //Remove at start of list
