@@ -186,7 +186,7 @@ int Mem_Free(void *ptr, int coalesce) {
         localCoalesceFree(&headFreeList, ((header *) (ptr - sizeof(header))));
 
         //TODO: figure out what's wrong with globalCoalesce
-        if (needGlobal) {
+        if (needGlobal || coalesce) {
             coalesceFreeList(headMainList);
         }
 
