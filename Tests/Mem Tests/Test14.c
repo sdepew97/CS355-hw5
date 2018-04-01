@@ -19,7 +19,7 @@ int test_fourteen() {
     void *allocated = NULL;
 
     //expected behavior: nothing happens
-    if (Mem_Free(allocated, TRUE) == ERROR) {
+    if (Mem_Free(allocated, FALSE) == ERROR) {
         return EXIT_FAILURE;
     }
     printf("after first freed\n");
