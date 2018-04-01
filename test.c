@@ -23,6 +23,7 @@ void test_two_mil() {
 
     void **ptrs = malloc(sizeof(void*) * NUM_ALLOC);
     for (int i = 0; i < NUM_ALLOC; i++) {
+        printf("Value of i: %d\n", i);
         ptrs[i] = Mem_Alloc(BYTE);
         assert(ptrs[i] != NULL);
         if (i % FREE_FREQ == FREE_FREQ - 1)
