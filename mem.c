@@ -208,7 +208,7 @@ int Mem_Free(void *ptr, int coalesce) {
         //TODO: fix current bug here that would cause coalesce to be called each time on mem_free(NULL, 0) call
         //false means don't want a global coalesce
         localCoalesceFree(&headFreeList, ((header *) (ptr - sizeof(header))));
-        needGlobal = TRUE; //need a global coalesce next time //TODO: this is not necessarily true...need to fix this bug
+        needGlobal = FALSE; //need a global coalesce next time //TODO: this is not necessarily true...need to fix this bug
         return SUCCESS;
     } else {
         //do something here, now, since we are asked to coalesce
