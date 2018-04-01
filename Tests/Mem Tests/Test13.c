@@ -25,7 +25,7 @@ int test_thirteen() {
 
     //attempt to allocate a page that you do not have in memory
     void *allocated2 = Mem_Alloc(getpagesize());
-    if (allocated != NULL) {
+    if (allocated2 != NULL) {
         return EXIT_FAILURE;
     }
 
