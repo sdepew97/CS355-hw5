@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "list.h"
 #include "boolean.h"
+#include "helper.h"
 #include "mem.h"
 
 
@@ -13,44 +14,46 @@ int main() {
 
     printf("Hello, World!\n");
 
-    Mem_Init(16);
+    if(Mem_Init(16) == ERROR) {
+        exit(EXIT_FAILURE);
+    }
+
     Mem_Dump();
-
-//    if(Mem_Init(10000) != 0) {
-//        exit(EXIT_FAILURE);
-//    }
-
-//    for(int i=0; i< 10000; i++) {
-//        int *tryingWrite = Mem_Alloc(sizeof(int));
-//        if(tryingWrite == NULL) {
-//            break;
-//        }
-////    Mem_Dump();
-//        *tryingWrite = 12;
-////    Mem_Dump();
-//        printf("value of tryingWrite %d\n", *tryingWrite);
-//    }
 
     void *allocated = Mem_Alloc(1);
+    if(allocated == NULL) {
+        exit(EXIT_FAILURE);
+    }
+
     void *allocated2 = Mem_Alloc(7);
+    if(allocated2 == NULL) {
+        exit(EXIT_FAILURE);
+    }
+
     void *allocated3 = Mem_Alloc(8);
+    if(allocated3 == NULL) {
+        exit(EXIT_FAILURE);
+    }
+
     Mem_Dump();
 //    Mem_Free(allocated, FALSE);
-    Mem_Free(allocated2, FALSE);
+    if(Mem_Free(allocated2, FALSE) == ERROR) {
+        exit(EXIT_FAILURE);
+    }
     printf("after second freed\n");
     Mem_Dump();
-    Mem_Free(allocated, FALSE);
+
+    if(Mem_Free(allocated, FALSE) == ERROR) {
+        exit(EXIT_FAILURE);
+    }
     printf("after first freed\n");
     Mem_Dump();
-//    Mem_Free(allocated2, FALSE);
-//    Mem_Dump();
-    Mem_Free(allocated3, TRUE);
+
+    if(Mem_Free(allocated3, TRUE) == ERROR) {
+        exit(EXIT_FAILURE);
+    }
     printf("after third freed\n");
     Mem_Dump();
 
-//    *tryingWrite2 = 129879807;
-//    Mem_Dump();
-//    printf("value of tryingWrite2 %d\n", *tryingWrite2);
-//    printf("value of memory locations around tryingWrite %d\n", *(tryingWrite2-28));
-    return 0;
+    exit(EXIT_SUCCESS);
 }
