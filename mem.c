@@ -167,7 +167,7 @@ int Mem_Free(void *ptr, int coalesce) {
         return ERROR;
     }
 
-    if (checkPadding((header *) (ptr - sizeof(header))) == FALSE) {
+    if (ptr != NULL && checkPadding((header *) (ptr - sizeof(header))) == FALSE) {
         m_error = E_PADDING_OVERWRITTEN;
         return ERROR;
     }
