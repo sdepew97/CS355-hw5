@@ -13,7 +13,7 @@
 #define SIZEOFHEADER 32
 #define SIZEOFWORD 8
 
-size_t roundToPage(int currentSize);
-size_t roundToWord(int currentSize);
+size_t roundToPage(long currentSize);
+size_t roundToWord(long currentSize);
 
 #endif //HW5_HELPER_H

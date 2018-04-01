@@ -5,7 +5,7 @@
 #include "helper.h"
 
 //helper functions
-size_t roundToPage(int currentSize) {
+size_t roundToPage(long currentSize) {
     int pageSize = getpagesize();
 
     if ((currentSize / pageSize) * pageSize == currentSize) {
@@ -17,7 +17,7 @@ size_t roundToPage(int currentSize) {
     return (size_t) ((((currentSize / pageSize) + 1) * pageSize) - pageSize) + pageSize;
 }
 
-size_t roundToWord(int currentSize) {
+size_t roundToWord(long currentSize) {
     int wordSize = SIZEOFWORD;
 
     if ((currentSize / wordSize) * wordSize == currentSize) {
