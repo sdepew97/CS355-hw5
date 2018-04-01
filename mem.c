@@ -107,6 +107,8 @@ void *Mem_Alloc(long size) {
 
         removeHeaderFree(&headFreeList, worstFitReturn,
                          NULL); //WE ARE ASSUMING THAT THE HEAD OF THE LIST IS CHOSEN HERE (which is how the worst fit algorithm works)
+
+        //TODO: think about this here with Rachel, tonight
 //        sortFreeList(&headFreeList);
 
         //update what the user may request
@@ -131,6 +133,8 @@ void *Mem_Alloc(long size) {
                 newHeader->nextFree = headFreeList->nextFree; //we want nextFree here, since we are removing the head of the list as it is being allocated and turned to false as available
                 headFreeList->nextFree = NULL;
                 headFreeList = newHeader;
+
+                //TODO: think about this with Rachel, tonight
 //                sortFreeList(&headFreeList); //need to ensure largest header is indeed at head of the list
             } else {
                 m_error = E_PADDING_OVERWRITTEN;

@@ -137,7 +137,7 @@ int sortFreeList (header **head) {
     return TRUE;
 }
 
-int localCoalesceFree(header **head, header *ptr) {
+int localCoalesceFree(header **head, header *ptr, header *previous) {
     if (checkPadding(ptr)) {
         if (ptr != NULL) {
             if (ptr->nextHeader != NULL && ptr->nextHeader->free == 't') {
@@ -150,7 +150,8 @@ int localCoalesceFree(header **head, header *ptr) {
                     if (ptr->nextHeader == headFreeList) {
                         removeHeaderFree(head, ptr->nextHeader, NULL);
                     } else {
-                        removeHeaderFree(head, ptr->nextHeader, findPreviousFree(headFreeList, ptr->nextHeader));
+                        removeHeaderFree(head, ptr->nextHeader, findPreviousFree(headFreeList,
+                                                                                 ptr->nextHeader)); //have to find the previous in the free list...
                     }
 
                     ptr->nextHeader = ptr->nextHeader->nextHeader;
