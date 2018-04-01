@@ -5,7 +5,10 @@
 #include "../../helper.h"
 #include "../../mem.h"
 
-
+/*
+ * Testing for worst fit allocation
+ * Expected Behavior: Should should memory allocated at the worst blocks in the printout of dumps
+ */
 int test_six() {
     if (Mem_Init(16) == ERROR) {
         return EXIT_FAILURE;
@@ -41,7 +44,7 @@ int test_six() {
     printf("after first freed\n");
     Mem_Dump();
 
-    if (Mem_Free(allocated3, TRUE) == ERROR) {
+    if (Mem_Free(allocated3, FALSE) == ERROR) {
         return EXIT_FAILURE;
     }
     printf("after third freed\n");
