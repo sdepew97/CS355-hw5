@@ -11,12 +11,12 @@
  * Expected Behavior: Should should only one block of memory on dump at end and have it be freed, should have one page of memory
  */
 int test_twelve() {
-    if (Mem_Init(getpagesize()/12) == ERROR) {
+    if (Mem_Init(1) == ERROR) {
         return EXIT_FAILURE;
     }
     Mem_Dump();
 
-    void *allocated = Mem_Alloc(getpagesize()/12);
+    void *allocated = Mem_Alloc(1);
     if (allocated == NULL) {
         return EXIT_FAILURE;
     }
