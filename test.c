@@ -6,7 +6,7 @@
 #include <limits.h>
 #include <unistd.h>
 
-#define NUM_ALLOC 2000000
+#define NUM_ALLOC 1000000
 #define FREE_FREQ 100     // 1:100
 #define BYTE 8
 
