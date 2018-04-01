@@ -34,7 +34,7 @@ int Mem_Init(long sizeOfRegion) {
 
     //Request that much memory from mmap
     //TODO: pont define values connected to amountToMMap
-    int amountToMmap = roundToPage((sizeOfRegion * SIZEOFWORD) + (sizeOfRegion * sizeof(header)) +
+    long amountToMmap = roundToPage((sizeOfRegion * SIZEOFWORD) + (sizeOfRegion * sizeof(header)) +
                                    sizeof(header) + sizeof(header *) + sizeof(header *) + sizeof(int) + sizeof(long)); //worst case what we need to have mmaped to give the user what they requested
 
     void *mapReturn = mmap(NULL, amountToMmap, PROT_EXEC | PROT_READ | PROT_WRITE,
