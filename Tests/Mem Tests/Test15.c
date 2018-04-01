@@ -11,7 +11,7 @@
  * Expected Behavior: Should should only one block of memory on dump at end and have it be freed, should have one page of memory
  */
 int test_fifteen() {
-    if (Mem_Init(sizeof(int)) == ERROR) {
+    if (Mem_Init(sizeof(int *)) == ERROR) {
         return EXIT_FAILURE;
     }
     Mem_Dump();
