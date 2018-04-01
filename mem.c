@@ -35,7 +35,8 @@ int Mem_Init(long sizeOfRegion) {
     //Request that much memory from mmap
     //TODO: pont define values connected to amountToMMap
     long amountToMmap = roundToPage((sizeOfRegion * SIZEOFWORD) + (sizeOfRegion * sizeof(header)) +
-                                   sizeof(header) + sizeof(header *) + sizeof(header *) + sizeof(int) + sizeof(long)); //worst case what we need to have mmaped to give the user what they requested
+                                    sizeof(header) + sizeof(header *) + sizeof(header *) + sizeof(int) +
+                                    sizeof(long)); //worst case what we need to have mmaped to give the user what they requested
 
     void *mapReturn = mmap(NULL, amountToMmap, PROT_EXEC | PROT_READ | PROT_WRITE,
                            MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
@@ -106,7 +107,7 @@ void *Mem_Alloc(long size) {
 
         removeHeaderFree(&headFreeList, worstFitReturn,
                          NULL); //WE ARE ASSUMING THAT THE HEAD OF THE LIST IS CHOSEN HERE (which is how the worst fit algorithm works)
-        sortFreeList(&headFreeList);
+//        sortFreeList(&headFreeList);
 
         //update what the user may request
         howMuchUserHasLeftToRequest -= size;
@@ -130,7 +131,7 @@ void *Mem_Alloc(long size) {
                 newHeader->nextFree = headFreeList->nextFree; //we want nextFree here, since we are removing the head of the list as it is being allocated and turned to false as available
                 headFreeList->nextFree = NULL;
                 headFreeList = newHeader;
-                sortFreeList(&headFreeList); //need to ensure largest header is indeed at head of the list
+//                sortFreeList(&headFreeList); //need to ensure largest header is indeed at head of the list
             } else {
                 m_error = E_PADDING_OVERWRITTEN;
                 return NULL;
@@ -167,11 +168,6 @@ int Mem_Free(void *ptr, int coalesce) {
         return ERROR;
     }
 
-    if (checkFreeSpace(ptr)) {
-        //check that the user didn't write into memory they were not allowed to write into
-        //TODO: ask Rachel how we can check the free space without cleaning the memory?? (emailed Dianna)
-    }
-
     if (ptr == NULL) {
         //don't mark anything as free, since ptr is NULL
     } else {
@@ -191,11 +187,11 @@ int Mem_Free(void *ptr, int coalesce) {
 
             }
 
-            //TODO: think about the placement of this statement
-            if (sortFreeList(&headFreeList) == FALSE) {
-                m_error = E_PADDING_OVERWRITTEN;
-                return ERROR;
-            }
+//            //TODO: think about the placement of this statement
+//            if (sortFreeList(&headFreeList) == FALSE) {
+//                m_error = E_PADDING_OVERWRITTEN;
+//                return ERROR;
+//            }
         } else {
             m_error = E_BAD_POINTER;
             return ERROR;
@@ -223,10 +219,10 @@ int Mem_Free(void *ptr, int coalesce) {
             coalesceFreeList(headMainList);
         }
 
-        if (sortFreeList(&headFreeList) == FALSE) {
-            m_error = E_PADDING_OVERWRITTEN;
-            return ERROR;
-        }
+//        if (sortFreeList(&headFreeList) == FALSE) {
+//            m_error = E_PADDING_OVERWRITTEN;
+//            return ERROR;
+//        }
 
         return SUCCESS;
     }

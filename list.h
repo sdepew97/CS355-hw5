@@ -18,9 +18,7 @@ extern header *headMainList;
 extern header *headFreeList;
 
 //general methods for lists
-header *worstFit(header *head);
 int checkPadding(header *header1);
-int checkFreeSpace(header *header1);
 
 //methods specifically for main list
 void addHeaderMain (header **head, header *newHeader, header *previous);
@@ -28,6 +26,7 @@ void removeHeaderMain(header **head, header *newHeader, header *previous);
 int checkValidPtrMain(header *head, void *ptr);
 
 //methods specifically for free list
+header *worstFitFree(header *head);
 void addHeaderFree(header **head, header *headerToRemove, header *previous);
 void removeHeaderFree(header **head, header *headerToRemove, header *previous);
 int sortFreeList (header **head);

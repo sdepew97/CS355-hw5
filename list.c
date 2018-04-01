@@ -15,11 +15,6 @@
 //header *headFreeList = NULL;
 
 //general methods for lists
-header *worstFit(header *head) {
-    //assume that the free list is sorted
-    return head;
-}
-
 int checkPadding(header *header1) {
     if(header1 == NULL) {
         return TRUE;
@@ -75,6 +70,11 @@ int checkValidPtrMain(header *head, void *ptr) {
 }
 
 //methods specifically for free list
+header *worstFitFree(header *head) {
+    //assume that the free list is sorted
+    sortFreeList(&head); //first have to sort the free list
+    return head;
+}
 
 void addHeaderFree(header **head, header *headerToRemove, header *previous) {
     //TODO: implement body here to replace code in main
