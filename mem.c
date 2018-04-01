@@ -162,7 +162,7 @@ int Mem_Free(void *ptr, int coalesce) {
         return ERROR;
     }
 
-    if (checkPadding(((header *) ptr - sizeof(header))) == FALSE) {
+    if (checkPadding((header *) (ptr - sizeof(header))) == FALSE) {
         m_error = E_PADDING_OVERWRITTEN;
         return ERROR;
     }
@@ -180,12 +180,15 @@ int Mem_Free(void *ptr, int coalesce) {
             //check if already free and if so, then don't add to free list, since it is already there
             if (((header *) (ptr - sizeof(header)))->free == 't') {
                 //do nothing, since it should not be added a second time
+                //TODO: determine if I should raise an error here like free does when trying to free already freed memory? (Ask Rachel)
             } else {
+                howMuchUserHasLeftToRequest += ((header *) (ptr - sizeof(header)))->amountAllocated;
                 ((header *) (ptr -
                              sizeof(header)))->free = 't'; //was removed from list, since is false, so no circular linking is gonna happen here
                 ((header *) (ptr - sizeof(header)))->nextFree = headFreeList;
                 //WE ARE ASSUMING THAT THE HEAD OF THE LIST IS CHOSEN HERE for worstFitReturn
                 headFreeList = ((header *) (ptr - sizeof(header)));
+
             }
 
             //TODO: think about the placement of this statement
