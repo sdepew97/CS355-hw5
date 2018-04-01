@@ -9,6 +9,7 @@
 
 #define SUCCESS 0
 #define ERROR -1
+#define MMAPERROR (void *)-1
 #define SIZEOFHEADER 32
 #define SIZEOFWORD 8
 

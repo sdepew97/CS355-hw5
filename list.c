@@ -20,6 +20,21 @@ header *worstFit(header *head) {
     return head;
 }
 
+int checkPadding(header *header1) {
+    if(header1 == NULL) {
+        return TRUE;
+    } else {
+        return (header1->checkSum == 's');
+    }
+}
+
+//TODO: Ask Rachel how to implement this method without cleaning the memory??
+int checkFreeSpace(header *header1) {
+    //not doing anything with this method right now
+    //TODO: implement this method
+    return FALSE;
+}
+
 //methods specifically for main list
 void addHeaderMain (header **head, header *newHeader, header *previous) {
     if (previous == NULL) {
@@ -43,6 +58,10 @@ void removeHeaderMain(header **head, header *newHeader, header *previous) {
 
 int checkValidPtrMain(header *head, void *ptr) {
     header *currentHeader = head;
+
+    if(checkPadding(ptr - sizeof(header)) == FALSE) {
+        return FALSE;
+    }
 
     while (currentHeader != NULL) {
         if (((void *) currentHeader + sizeof(header)) == ptr) {
@@ -81,7 +100,7 @@ void removeHeaderFree(header **head, header *headerToRemove, header *previous) {
 }
 
 //TODO: error check this method (something isn't right with this method and how it runs...keeps creating circular linked lists...)
-void sortFreeList (header **head) {
+int sortFreeList (header **head) {
     //Put the largest available node as the header of the list
     long worstFitValue = (*head)->amountAllocated;
     header *worstFit = *head;
@@ -91,6 +110,10 @@ void sortFreeList (header **head) {
     header *previousHeader = NULL;
 
     while (currentHeader != NULL) {
+        if(checkPadding(currentHeader) == FALSE) {
+            return FALSE;
+        }
+
         if (currentHeader->amountAllocated > worstFitValue) {
             worstFitValue = currentHeader->amountAllocated;
             worstFitPrevious = previousHeader;
@@ -110,33 +133,42 @@ void sortFreeList (header **head) {
         worstFit->nextFree = *head;
         *head = worstFit;
     }
+
+    return TRUE;
 }
 
-void localCoalesceFree(header **head, header *ptr) {
-    if (ptr != NULL) {
-        if (ptr->nextHeader != NULL && ptr->nextHeader->free == 't') {
-            if ((((void *) ptr) + sizeof(header) + roundToWord(ptr->amountAllocated)) == ptr->nextHeader) {
-                //interesting case where adjacent blocks are free
-                ptr->amountAllocated = roundToWord(ptr->amountAllocated) + sizeof(header) +
-                                       roundToWord(ptr->nextHeader->amountAllocated);
+int localCoalesceFree(header **head, header *ptr) {
+    if (checkPadding(ptr)) {
+        if (ptr != NULL) {
+            if (ptr->nextHeader != NULL && ptr->nextHeader->free == 't') {
+                if ((((void *) ptr) + sizeof(header) + roundToWord(ptr->amountAllocated)) == ptr->nextHeader) {
+                    //interesting case where adjacent blocks are free
+                    ptr->amountAllocated = roundToWord(ptr->amountAllocated) + sizeof(header) +
+                                           roundToWord(ptr->nextHeader->amountAllocated);
 
-                //adjust both lists according to the local coalesce that just happened (need to remove ptr->nextHeader from free list and from other list
-                if (ptr->nextHeader == headFreeList) {
-                    removeHeaderFree(head, ptr->nextHeader, NULL);
+                    //adjust both lists according to the local coalesce that just happened (need to remove ptr->nextHeader from free list and from other list
+                    if (ptr->nextHeader == headFreeList) {
+                        removeHeaderFree(head, ptr->nextHeader, NULL);
+                    } else {
+                        removeHeaderFree(head, ptr->nextHeader, findPreviousFree(headFreeList, ptr->nextHeader));
+                    }
+
+                    ptr->nextHeader = ptr->nextHeader->nextHeader;
                 } else {
-                    removeHeaderFree(head, ptr->nextHeader, findPreviousFree(headFreeList, ptr->nextHeader));
+                    //do nothing since not adjacent
                 }
-
-                ptr->nextHeader = ptr->nextHeader->nextHeader;
             } else {
-                //do nothing since not adjacent
+                //do nothing since already at end of list
             }
         } else {
-            //do nothing since already at end of list
+            //do nothing, since error value was passed in
         }
     } else {
-        //do nothing, since error value was passed in
+        //the padding has been corrupted
+        return FALSE;
     }
+
+    return TRUE;
 }
 
 //TODO: check this works and actually program it!
