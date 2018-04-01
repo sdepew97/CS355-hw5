@@ -137,7 +137,7 @@ int sortFreeList (header **head) {
     return TRUE;
 }
 
-int localCoalesceFree(header **head, header *ptr, header *previous) {
+int localCoalesceFree(header **head, header *ptr) {
     if (checkPadding(ptr)) {
         if (ptr != NULL) {
             if (ptr->nextHeader != NULL && ptr->nextHeader->free == 't') {
