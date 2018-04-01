@@ -23,13 +23,6 @@ int checkPadding(header *header1) {
     }
 }
 
-//TODO: Ask Rachel how to implement this method without cleaning the memory??
-int checkFreeSpace(header *header1) {
-    //not doing anything with this method right now
-    //TODO: implement this method
-    return FALSE;
-}
-
 //methods specifically for main list
 void addHeaderMain (header **head, header *newHeader, header *previous) {
     if (previous == NULL) {
@@ -47,13 +40,8 @@ void addHeaderMain (header **head, header *newHeader, header *previous) {
     }
 }
 
-void removeHeaderMain(header **head, header *newHeader, header *previous) {
-    //TODO: implement body here to replace code in main
-}
-
 int checkValidPtrMain(header *head, long sizeOfList, void *ptr) {
     //check if in memory region
-    //TODO: make global for size and then first check if it's in the memory region and then if not in region return false otherwise cast to header and then check
     void *min = (void *) head;
     void *max = (void *) head + sizeOfList;
 
