@@ -207,15 +207,26 @@ int Mem_Free(void *ptr, int coalesce) {
         //TODO: figure out how to set this value, so that we don't coalesce each time! EFFICIENCY! (ask Rachel tomorrow)
         //TODO: fix current bug here that would cause coalesce to be called each time on mem_free(NULL, 0) call
         //false means don't want a global coalesce
-        localCoalesceFree(&headFreeList, ((header *) (ptr - sizeof(header))));
+        if(ptr == NULL) {
+            localCoalesceFree(&headFreeList, NULL);
+        } else {
+            localCoalesceFree(&headFreeList, ((header *) (ptr - sizeof(header))));
+        }
         needGlobal = FALSE; //need a global coalesce next time //TODO: this is not necessarily true...need to fix this bug
         return SUCCESS;
     } else {
         //do something here, now, since we are asked to coalesce
         //go through the free list and combine memory sections
-        if (localCoalesceFree(&headFreeList, ((header *) (ptr - sizeof(header)))) == FALSE) {
-            m_error = E_PADDING_OVERWRITTEN;
-            return ERROR;
+        if(ptr == NULL) {
+            if (localCoalesceFree(&headFreeList, NULL) == FALSE) {
+                m_error = E_PADDING_OVERWRITTEN;
+                return ERROR;
+            }
+        } else {
+            if (localCoalesceFree(&headFreeList, ((header *) (ptr - sizeof(header)))) == FALSE) {
+                m_error = E_PADDING_OVERWRITTEN;
+                return ERROR;
+            }
         }
 
         //TODO: figure out what's wrong with globalCoalesce
