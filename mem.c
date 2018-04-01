@@ -13,6 +13,7 @@
 
 int m_error;
 long howMuchUserHasLeftToRequest;
+long sizeOfList;
 boolean needGlobal;
 header *headMainList = NULL;
 header *headFreeList = NULL;
@@ -60,6 +61,7 @@ int Mem_Init(long sizeOfRegion) {
     //Setup Globals
     howMuchUserHasLeftToRequest = sizeOfRegion; //TODO: add error checking to ensure the user doesn't ask for memory beyond this amount
     needGlobal = FALSE;
+    sizeOfList = amountToMmap;
 
     //return the appropriate value
     return SUCCESS;
@@ -85,7 +87,7 @@ void *Mem_Alloc(long size) {
     int totalSought = sizeToWordSize + sizeof(header) + SIZEOFWORD;
 
     //search through the list to get the largest available
-    header *worstFitReturn = worstFitFree(headFreeList);
+    header *worstFitReturn = worstFitFree(headFreeList); //TODO: implement the updated ideas from Rachel
 
     if (worstFitReturn == NULL) {
         m_error = E_BAD_POINTER;
@@ -107,9 +109,6 @@ void *Mem_Alloc(long size) {
 
         removeHeaderFree(&headFreeList, worstFitReturn,
                          NULL); //WE ARE ASSUMING THAT THE HEAD OF THE LIST IS CHOSEN HERE (which is how the worst fit algorithm works)
-
-        //TODO: think about this here with Rachel, tonight
-//        sortFreeList(&headFreeList);
 
         //update what the user may request
         howMuchUserHasLeftToRequest -= size;
@@ -134,8 +133,6 @@ void *Mem_Alloc(long size) {
                 headFreeList->nextFree = NULL;
                 headFreeList = newHeader;
 
-                //TODO: think about this with Rachel, tonight
-//                sortFreeList(&headFreeList); //need to ensure largest header is indeed at head of the list
             } else {
                 m_error = E_PADDING_OVERWRITTEN;
                 return NULL;
@@ -176,7 +173,7 @@ int Mem_Free(void *ptr, int coalesce) {
         //don't mark anything as free, since ptr is NULL
     } else {
         //Mark as free and add to free list
-        if (checkValidPtrMain(headMainList, ptr)) {
+        if (checkValidPtrMain(headMainList, sizeOfList, ptr)) {
             //check if already free and if so, then don't add to free list, since it is already there
             if (((header *) (ptr - sizeof(header)))->free == 't') {
                 //do nothing, since it should not be added a second time
@@ -207,7 +204,7 @@ int Mem_Free(void *ptr, int coalesce) {
         //TODO: figure out how to set this value, so that we don't coalesce each time! EFFICIENCY! (ask Rachel tomorrow)
         //TODO: fix current bug here that would cause coalesce to be called each time on mem_free(NULL, 0) call
         //false means don't want a global coalesce
-        if(ptr == NULL) {
+        if (ptr == NULL) {
             localCoalesceFree(&headFreeList, NULL);
         } else {
             localCoalesceFree(&headFreeList, ((header *) (ptr - sizeof(header))));
@@ -217,7 +214,7 @@ int Mem_Free(void *ptr, int coalesce) {
     } else {
         //do something here, now, since we are asked to coalesce
         //go through the free list and combine memory sections
-        if(ptr == NULL) {
+        if (ptr == NULL) {
             if (localCoalesceFree(&headFreeList, NULL) == FALSE) {
                 m_error = E_PADDING_OVERWRITTEN;
                 return ERROR;

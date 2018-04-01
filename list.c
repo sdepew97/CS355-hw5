@@ -51,22 +51,17 @@ void removeHeaderMain(header **head, header *newHeader, header *previous) {
     //TODO: implement body here to replace code in main
 }
 
-int checkValidPtrMain(header *head, void *ptr) {
-    header *currentHeader = head;
+int checkValidPtrMain(header *head, long sizeOfList, void *ptr) {
+    //check if in memory region
+    //TODO: make global for size and then first check if it's in the memory region and then if not in region return false otherwise cast to header and then check
+    void *min = (void *) head;
+    void *max = (void *) head + sizeOfList;
 
-    if(checkPadding(ptr - sizeof(header)) == FALSE) {
+    if ((ptr - sizeof(header)) < min || ptr > max) {
         return FALSE;
+    } else {
+        return checkPadding(ptr - sizeof(header));
     }
-
-    while (currentHeader != NULL) {
-        if (((void *) currentHeader + sizeof(header)) == ptr) {
-            return TRUE;
-        }
-
-        currentHeader = currentHeader->nextHeader;
-    }
-
-    return FALSE;
 }
 
 //methods specifically for free list
@@ -137,6 +132,7 @@ int sortFreeList (header **head) {
     return TRUE;
 }
 
+//TODO: ask about if I have to keep coalescing down or just do direct neighbor?
 int localCoalesceFree(header **head, header *ptr) {
     if (checkPadding(ptr)) {
         if (ptr != NULL) {
@@ -146,7 +142,7 @@ int localCoalesceFree(header **head, header *ptr) {
                     ptr->amountAllocated = roundToWord(ptr->amountAllocated) + sizeof(header) +
                                            roundToWord(ptr->nextHeader->amountAllocated);
 
-                    //adjust both lists according to the local coalesce that just happened (need to remove ptr->nextHeader from free list and from other list
+                    //adjust both lists according to the local coalesce that just happened (need to remove ptr->nextHeader from free list and from other list, since it has been combined)
                     if (ptr->nextHeader == headFreeList) {
                         removeHeaderFree(head, ptr->nextHeader, NULL);
                     } else {
