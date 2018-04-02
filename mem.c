@@ -35,9 +35,7 @@ int Mem_Init(long sizeOfRegion) {
 
     //Request that much memory from mmap
     //TODO: pont define values connected to amountToMMap
-    long amountToMmap = roundToPage((sizeOfRegion * SIZEOFWORD) + (sizeOfRegion * sizeof(header)) +
-                                    sizeof(header) + sizeof(header *) + sizeof(header *) + sizeof(int) +
-                                    sizeof(long)); //worst case what we need to have mmaped to give the user what they requested
+    long amountToMmap = WORSTCASE;
 
     void *mapReturn = mmap(NULL, amountToMmap, PROT_EXEC | PROT_READ | PROT_WRITE,
                            MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
@@ -59,7 +57,7 @@ int Mem_Init(long sizeOfRegion) {
     headFreeList->nextFree = NULL;
 
     //Setup Globals
-    howMuchUserHasLeftToRequest = sizeOfRegion; //TODO: add error checking to ensure the user doesn't ask for memory beyond this amount
+    howMuchUserHasLeftToRequest = sizeOfRegion;
     needGlobal = FALSE;
     sizeOfList = amountToMmap;
 
@@ -80,14 +78,13 @@ void *Mem_Alloc(long size) {
         return NULL;
     }
 
-    //TODO: subtract what the user asked for with size, so we can error check here as well...
-
     int sizeToWordSize = roundToWord(size); //only allocate word sizes
     //We need room for the header AND we need room for more word-aligned memory
     int totalSought = sizeToWordSize + sizeof(header) + SIZEOFWORD;
 
     //search through the list to get the largest available
-    header *worstFitReturn = worstFitFree(headFreeList); //TODO: implement the updated ideas from Rachel
+    header *worstFitReturn = worstFitFree(headFreeList);
+    //TODO: implement the updated ideas from Rachel (not needed with timing)
 
     if (worstFitReturn == NULL) {
         m_error = E_BAD_POINTER;
@@ -178,7 +175,7 @@ int Mem_Free(void *ptr, int coalesce) {
             //check if already free and if so, then don't add to free list, since it is already there
             if (((header *) (ptr - sizeof(header)))->free == 't') {
                 //do nothing, since it should not be added a second time
-                //TODO: determine if I should raise an error here like free does when trying to free already freed memory? (Ask Rachel)
+                //TODO: determine if I should raise an error here like free does when trying to free already freed memory? (Ask Rachel) (yes, raise error here)
             } else {
                 howMuchUserHasLeftToRequest += ((header *) (ptr - sizeof(header)))->amountAllocated;
                 ((header *) (ptr -
@@ -188,12 +185,6 @@ int Mem_Free(void *ptr, int coalesce) {
                 headFreeList = ((header *) (ptr - sizeof(header)));
 
             }
-
-//            //TODO: think about the placement of this statement
-//            if (sortFreeList(&headFreeList) == FALSE) {
-//                m_error = E_PADDING_OVERWRITTEN;
-//                return ERROR;
-//            }
         } else {
             m_error = E_BAD_POINTER;
             return ERROR;
@@ -202,8 +193,7 @@ int Mem_Free(void *ptr, int coalesce) {
 
     //check for coalesce, now
     if (coalesce == FALSE) {
-        //TODO: figure out how to set this value, so that we don't coalesce each time! EFFICIENCY! (ask Rachel tomorrow)
-        //TODO: fix current bug here that would cause coalesce to be called each time on mem_free(NULL, 0) call
+        //TODO: fix current bug here that would cause coalesce to be called each time on mem_free(NULL, 0) call etc...add code to work on not calling a ton (do 2 million free(NULL, 1) in a row...only go over list once)
         //false means don't want a global coalesce
         if (ptr == NULL) {
             localCoalesceFree(&headFreeList, NULL);
@@ -227,15 +217,9 @@ int Mem_Free(void *ptr, int coalesce) {
             }
         }
 
-        //TODO: figure out what's wrong with globalCoalesce
         if (needGlobal || coalesce) {
             coalesceFreeList(headMainList);
         }
-
-//        if (sortFreeList(&headFreeList) == FALSE) {
-//            m_error = E_PADDING_OVERWRITTEN;
-//            return ERROR;
-//        }
 
         return SUCCESS;
     }

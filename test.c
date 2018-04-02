@@ -49,6 +49,7 @@
 #include <limits.h>
 #include <unistd.h>
 #include "boolean.h"
+#include "list.h"
 #include "helper.h"
 
 #define NUM_ALLOC 2000000
@@ -85,6 +86,7 @@ void test_two_mil() {
 
 
 int main() {
-    test_two_mil();
+    printf("sizeof header %ld\n", sizeof(header));
+//    test_two_mil();
     return EXIT_SUCCESS;
 }

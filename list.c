@@ -59,11 +59,6 @@ header *worstFitFree(header *head) {
     return head;
 }
 
-void addHeaderFree(header **head, header *headerToRemove, header *previous) {
-    //TODO: implement body here to replace code in main
-}
-
-//TODO: error check this method
 /*
  * Method to remove a header from the free list
  */
@@ -82,7 +77,6 @@ void removeHeaderFree(header **head, header *headerToRemove, header *previous) {
     }
 }
 
-//TODO: error check this method (something isn't right with this method and how it runs...keeps creating circular linked lists...)
 int sortFreeList (header **head) {
     //Put the largest available node as the header of the list
     long worstFitValue = (*head)->amountAllocated;
@@ -120,7 +114,7 @@ int sortFreeList (header **head) {
     return TRUE;
 }
 
-//TODO: ask about if I have to keep coalescing down or just do direct neighbor?
+//TODO: ask about if I have to keep coalescing down or just do direct neighbor? (no, not two adjacent)
 int localCoalesceFree(header **head, header *ptr) {
     if (checkPadding(ptr)) {
         if (ptr != NULL) {
@@ -156,7 +150,6 @@ int localCoalesceFree(header **head, header *ptr) {
     return TRUE;
 }
 
-//TODO: check this works and actually program it!
 void coalesceFreeList(header *head) {
     //nothing yet here...
     boolean coalesceOccurred = FALSE;
@@ -182,9 +175,6 @@ void coalesceFreeList(header *head) {
     } while (coalesceOccurred);
 }
 
-/*
- * //TODO: fix this method, so that it correctly returns the prior node
- */
 header *findPreviousFree(header *head, header *ptr) {
     header *currentHeader = head;
 
