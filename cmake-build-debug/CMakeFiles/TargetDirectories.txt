@@ -1,3 +1,0 @@
-/Users/Sarah/Library/Mobile Documents/com~apple~CloudDocs/Spring 2018/Operating Systems/hw5/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/Users/Sarah/Library/Mobile Documents/com~apple~CloudDocs/Spring 2018/Operating Systems/hw5/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/Sarah/Library/Mobile Documents/com~apple~CloudDocs/Spring 2018/Operating Systems/hw5/cmake-build-debug/CMakeFiles/hw5.dir
