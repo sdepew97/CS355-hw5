@@ -770,65 +770,67 @@ void large_alloc_and_free_coalesce(void)
  */
 int main(int argc, char *argv[]) {
 
-    int test_one_function = FALSE;
-    int location_of_func = -1;
-    int number_of_successes = 0;
+    odd_sized_allocations();
 
-    printf("--------------------------\n");
-
-    /**
-     * handle  -n flags
-     */
-    for (int i = 0; i < argc; i++) {
-        if (strcmp(argv[i], "-n") == 0) {
-            if (i + 1 < argc) {
-                char *name_of_desire_func = argv[i + 1];
-                for (int j = 0; j < NUMBER_UNIT_TESTS; j++) {
-                    if (strcmp(name_of_desire_func, unit_test_names[j]) == 0) {
-                        printf("Running test only for %s \n", unit_test_names[j]);
-                        test_one_function = TRUE;
-                        location_of_func = j;
-                    }
-                }
-            }
-        }
-    }
-
-    printf("Beginning Test Suite...\n");
-    printf("--------------------------\n");
-
-    int current_test_count = 0;
-    int num_tests_considered = 0;
-    int pid;
-    while (current_test_count < NUMBER_UNIT_TESTS) {
-        num_tests_considered++;
-        pid = fork();
-        if (pid == 0) {
-            if (test_one_function)
-                (*test_funcs[location_of_func])();
-            else
-                (*test_funcs[current_test_count])();
-        } else if (pid < 0) {
-            perror("fork");
-            exit(EXIT_FAILURE);
-        } else {
-            int wstatus;
-            wait(&wstatus);
-            if (test_one_function)
-                current_test_count = location_of_func;
-            printf("Test ~%s~ exited with status... %s\n", unit_test_names[current_test_count], \
-         result_char[WEXITSTATUS(wstatus)]);
-            if (WEXITSTATUS(wstatus) == EXIT_SUCCESS)
-                number_of_successes++;
-            printf("--------------------------\n");
-
-            current_test_count++;
-            if (test_one_function) { break; }
-        }
-    }
-
-    printf(" * Unit Test Complete.\n * %d out of %d returned successfully.\n", number_of_successes,
-           num_tests_considered);
+//    int test_one_function = FALSE;
+//    int location_of_func = -1;
+//    int number_of_successes = 0;
+//
+//    printf("--------------------------\n");
+//
+//    /**
+//     * handle  -n flags
+//     */
+//    for (int i = 0; i < argc; i++) {
+//        if (strcmp(argv[i], "-n") == 0) {
+//            if (i + 1 < argc) {
+//                char *name_of_desire_func = argv[i + 1];
+//                for (int j = 0; j < NUMBER_UNIT_TESTS; j++) {
+//                    if (strcmp(name_of_desire_func, unit_test_names[j]) == 0) {
+//                        printf("Running test only for %s \n", unit_test_names[j]);
+//                        test_one_function = TRUE;
+//                        location_of_func = j;
+//                    }
+//                }
+//            }
+//        }
+//    }
+//
+//    printf("Beginning Test Suite...\n");
+//    printf("--------------------------\n");
+//
+//    int current_test_count = 0;
+//    int num_tests_considered = 0;
+//    int pid;
+//    while (current_test_count < NUMBER_UNIT_TESTS) {
+//        num_tests_considered++;
+//        pid = fork();
+//        if (pid == 0) {
+//            if (test_one_function)
+//                (*test_funcs[location_of_func])();
+//            else
+//                (*test_funcs[current_test_count])();
+//        } else if (pid < 0) {
+//            perror("fork");
+//            exit(EXIT_FAILURE);
+//        } else {
+//            int wstatus;
+//            wait(&wstatus);
+//            if (test_one_function)
+//                current_test_count = location_of_func;
+//            printf("Test ~%s~ exited with status... %s\n", unit_test_names[current_test_count], \
+//         result_char[WEXITSTATUS(wstatus)]);
+//            if (WEXITSTATUS(wstatus) == EXIT_SUCCESS)
+//                number_of_successes++;
+//            printf("--------------------------\n");
+//
+//            current_test_count++;
+//            if (test_one_function) { break; }
+//        }
+//    }
+//
+//    printf(" * Unit Test Complete.\n * %d out of %d returned successfully.\n", number_of_successes,
+//           num_tests_considered);
 
     return EXIT_SUCCESS;
 }
