@@ -243,15 +243,15 @@ void Mem_Dump() {
     while (currentHeader != NULL) {
         //print header and then print occupied or free
         if (currentHeader == headMainList && currentHeader->free == 't') {
-            printf("*****************\n%d*   HEADER   *%ld\n*****************", location,
+            printf("*****************\n%ld*   HEADER   *%ld\n*****************", location,
                    location + sizeof(header));
         } else if (currentHeader->free == 't') {
-            printf("%d*   HEADER   *%ld\n*****************", location,
+            printf("%ld*   HEADER   *%ld\n*****************", location,
                    location + sizeof(header));
         }
         location = location + sizeof(header);
         if (currentHeader->free == 't') {
-            printf("\n%d*   FREE   *%ld, %ld\n*****************\n", location,
+            printf("\n%ld*   FREE   *%ld, %ld\n*****************\n", location,
                    location + currentHeader->amountAllocated, location + roundToWord(currentHeader->amountAllocated));
             location = location + roundToWord(currentHeader->amountAllocated);
         } else {
@@ -273,19 +273,19 @@ void Mem_Dump() {
     while (currentHeader != NULL) {
         //print header and then print occupied or free
         if (currentHeader == headMainList) {
-            printf("*****************\n%d*   HEADER   *%ld\n*****************", location,
+            printf("*****************\n%ld*   HEADER   *%ld\n*****************", location,
                    location + sizeof(header));
         } else {
-            printf("%d*   HEADER   *%ld\n*****************", location,
+            printf("%ld*   HEADER   *%ld\n*****************", location,
                    location + sizeof(header));
         }
         location = location + sizeof(header);
         if (currentHeader->free == 't') {
-            printf("\n%d*   FREE   *%ld, %ld\n*****************\n", location,
+            printf("\n%ld*   FREE   *%ld, %ld\n*****************\n", location,
                    location + currentHeader->amountAllocated, location + roundToWord(currentHeader->amountAllocated));
             location = location + roundToWord(currentHeader->amountAllocated);
         } else {
-            printf("\n%d*   ALLOCATED   *%ld, %ld\n*****************\n", location,
+            printf("\n%ld*   ALLOCATED   *%ld, %ld\n*****************\n", location,
                    location + currentHeader->amountAllocated, location + roundToWord(currentHeader->amountAllocated));
             location = location + roundToWord(currentHeader->amountAllocated);
         }
