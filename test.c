@@ -316,32 +316,30 @@ void alligned_allocations(void)
 /**
  * Start odd sized allocations test
  */
-void odd_sized_allocations(void)
-{
+void odd_sized_allocations(void) {
     int allocs = 5;
 
     printf(" * Testing odd sized allocations...\n");
     printf(" * On free of aligned allocaitons, should see 6 free blocks of varying sizes\n");
     printf(" * and all are aligned in memory\n");
 
-    if (Mem_Init(allocs * 50) == FAILURE) {
+//    if (Mem_Init(allocs * 50) == FAILURE) {
+    if (Mem_Init(359) == FAILURE) {
         fprintf(stderr, "Failure initializing\n");
         exit(EXIT_FAILURE);
     }
 
     void **ptrs = malloc(sizeof(void *) * allocs);
 
-    for (int i = 0; i < allocs; ++i)
-    {
-        ptrs[i] = Mem_Alloc((i*i*i*i) + 1);
+    for (int i = 0; i < allocs; ++i) {
+        ptrs[i] = Mem_Alloc((i * i * i * i) + 1);
         if (ptrs[i] == NULL || (long) ptrs[i] % 8 != 0) {
             fprintf(stderr, "Failure allocating\n");
             exit(EXIT_FAILURE);
         }
     }
 
-    for (int i = 0; i < allocs; ++i)
-    {
+    for (int i = 0; i < allocs; ++i) {
         if (Mem_Free(ptrs[i], FALSE) == FAILURE) {
             fprintf(stderr, "Failure freeing\n");
             exit(EXIT_FAILURE);
