@@ -78,9 +78,9 @@ void *Mem_Alloc(long size) {
         return NULL;
     }
 
-    int sizeToWordSize = roundToWord(size); //only allocate word sizes
+    long sizeToWordSize = roundToWord(size); //only allocate word sizes
     //We need room for the header AND we need room for more word-aligned memory
-    int totalSought = sizeToWordSize + sizeof(header) + SIZEOFWORD;
+    long totalSought = sizeToWordSize + sizeof(header) + SIZEOFWORD;
 
     //search through the list to get the largest available
     header *worstFitReturn = worstFitFree(headFreeList);
@@ -233,7 +233,7 @@ void Mem_Dump() {
            howMuchUserHasLeftToRequest, needGlobal, headMainList, headFreeList);
     printf("\n*****************\n*    FREE MEMORY    *\n*****************\n");
     header *currentHeader = headMainList;
-    int location = 0;
+    long location = 0;
 
     if (currentHeader == NULL) {
         printf("*****************\n*    NO INIT    *\n*****************");
