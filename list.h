@@ -5,7 +5,7 @@
 #ifndef HW5_LIST_H
 #define HW5_LIST_H
 
-#define WORSTCASE (roundToPage((sizeOfRegion * SIZEOFWORD) + (sizeOfRegion * sizeof(header)) + sizeof(header))
+#define WORSTCASE (roundToPage((sizeOfRegion * SIZEOFWORD) + (sizeOfRegion * sizeof(header)) + sizeof(header)))
 #define ALIGNED (roundToPage((sizeOfRegion) + (sizeOfRegion/SIZEOFWORD * sizeof(header)) + sizeof(header)))
 #define AVERAGE (roundToPage((sizeOfRegion) + (sizeOfRegion/(2*SIZEOFWORD) * sizeof(header)) + sizeof(header)))
 
