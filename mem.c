@@ -190,7 +190,7 @@ int Mem_Free(void *ptr, int coalesce) {
                              sizeof(header)))->free = 't'; //was removed from list, since is false, so no circular linking is gonna happen here
                 ((header *) (ptr - sizeof(header)))->nextFree = headFreeList;
                 //WE ARE ASSUMING THAT THE HEAD OF THE LIST IS CHOSEN HERE for worstFitReturn
-//                headFreeList = ((header *) (ptr - sizeof(header))); //TODO: why does this take so much time???
+                headFreeList = ((header *) (ptr - sizeof(header))); //TODO: why does this take so much time??? (because it adds to sort above...)
             }
         } else {
             m_error = E_BAD_POINTER;
