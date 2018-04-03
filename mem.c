@@ -213,13 +213,14 @@ int Mem_Free(void *ptr, int coalesce) {
             }
         } else {
             //have to coalesce above...
-            if (localCoalesceFree(&headFreeList, findPreviousFree(headFreeList, (header *) (ptr - sizeof(header)))) ==
-                FALSE) {
+            header *newPtr = findPreviousFree(headFreeList, (header *) (ptr - sizeof(header)));
+            if (localCoalesceFree(&headFreeList, newPtr) == FALSE) {
                 m_error = E_PADDING_OVERWRITTEN;
                 return ERROR;
             }
 
-            if (localCoalesceFree(&headFreeList, ((header *) (ptr - sizeof(header)))) == FALSE) {
+            //and below...
+            if (localCoalesceFree(&headFreeList, newPtr) == FALSE) {
                 m_error = E_PADDING_OVERWRITTEN;
                 return ERROR;
             }
