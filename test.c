@@ -1,6 +1,7 @@
 #include "mem.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 #include <math.h>
 #include <sys/mman.h>
 #include <unistd.h>
