@@ -267,7 +267,6 @@ void coalesceFreeList(header *head) {
 
     do {
         currentHeader = head;
-        previousHeader = NULL;
         coalesceOccurred = FALSE;
 
         while (currentHeader != NULL) {
@@ -277,7 +276,6 @@ void coalesceFreeList(header *head) {
                 coalesceOccurred = TRUE;
             }
 
-            previousHeader = currentHeader;
             currentHeader = currentHeader->nextHeader;
         }
 
