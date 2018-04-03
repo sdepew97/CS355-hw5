@@ -219,7 +219,8 @@ int Mem_Free(void *ptr, int coalesce) {
         }
 
         //only coalesce if requested AND the last coalesce was local and not global
-        if (coalesce && !lastWasGlobal) {
+//        if (coalesce && !lastWasGlobal) {
+        if (coalesce) {
             coalesceFreeList(headMainList);
         }
 
