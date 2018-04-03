@@ -172,10 +172,10 @@ int Mem_Free(void *ptr, int coalesce) {
         //Mark as free and add to free list
 //        if (checkValidPtrMain(headMainList, sizeOfList, ptr)) {
         //check if the ptr has been overwritten
-        if (ptr != NULL && checkPadding((header *) (ptr - sizeof(header))) == FALSE) {
-            m_error = E_PADDING_OVERWRITTEN;
-            return ERROR;
-        }
+//        if (ptr != NULL && checkPadding((header *) (ptr - sizeof(header))) == FALSE) {
+//            m_error = E_PADDING_OVERWRITTEN;
+//            return ERROR;
+//        }
 
         //check if already free and if so, then don't add to free list, since it is already there
         if (((header *) (ptr - sizeof(header)))->free == 't') {
