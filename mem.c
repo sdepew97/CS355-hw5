@@ -212,6 +212,13 @@ int Mem_Free(void *ptr, int coalesce) {
                 return ERROR;
             }
         } else {
+            //have to coalesce above...
+            if (localCoalesceFree(&headFreeList, findPreviousFree(headFreeList, (header *) (ptr - sizeof(header)))) ==
+                FALSE) {
+                m_error = E_PADDING_OVERWRITTEN;
+                return ERROR;
+            }
+
             if (localCoalesceFree(&headFreeList, ((header *) (ptr - sizeof(header)))) == FALSE) {
                 m_error = E_PADDING_OVERWRITTEN;
                 return ERROR;
@@ -219,8 +226,8 @@ int Mem_Free(void *ptr, int coalesce) {
         }
 
         //only coalesce if requested AND the last coalesce was local and not global
-//        if (coalesce && !lastWasGlobal) {
-        if (coalesce) {
+        if (coalesce && !lastWasGlobal) {
+//        if (coalesce) {
             coalesceFreeList(headMainList);
         }
 

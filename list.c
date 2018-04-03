@@ -117,7 +117,7 @@ int sortFreeList (header **head) {
 //TODO: ask about if I have to keep coalescing down or just do direct neighbor? (no, not two adjacent)
 int localCoalesceFree(header **head, header *ptr) {
     if (checkPadding(ptr)) {
-        if (ptr != NULL) {
+        if (ptr != NULL && ptr->free == 't') {
             if (ptr->nextHeader != NULL && ptr->nextHeader->free == 't') {
                 if ((((void *) ptr) + sizeof(header) + roundToWord(ptr->amountAllocated)) == ptr->nextHeader) {
                     //interesting case where adjacent blocks are free
