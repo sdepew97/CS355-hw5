@@ -5,6 +5,7 @@
 #include <assert.h>
 #include <limits.h>
 #include <unistd.h>
+#include <string.h>
 
 #define REQ_SIZE 1000
 #define ALLOC_SIZE 80
@@ -22,7 +23,7 @@ int main(){
     Mem_Dump();
 
 
-    strcpy(ptr0, "Hello!");
+    strcpy(ptr, "Hello!");
 
     printf("%s\n", ptr0);
 
