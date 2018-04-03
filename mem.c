@@ -112,7 +112,7 @@ void *Mem_Alloc(long size) {
         worstFitReturn = worstFitFree(&headFreeList);
     }
 
-    printf("worst fit: %p", worstFitReturn);
+    printf("worst fit: %p\n", worstFitReturn);
     if (worstFitReturn == NULL) {
         m_error = E_BAD_POINTER;
         return NULL;
