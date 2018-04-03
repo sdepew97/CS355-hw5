@@ -231,6 +231,11 @@ int checkFreeListCachedTotal() {
 }
 
 void *Mem_Alloc(long size) {
+    if(headMainList == NULL) {
+        m_error = E_BAD_POINTER;
+        return NULL;
+    }
+
     //check sizeOfRegion is a valid, non-negative or zero value
     if (size <= 0) {
         m_error = E_BAD_ARGS;
@@ -346,11 +351,10 @@ void *Mem_Alloc(long size) {
 }
 
 int Mem_Free(void *ptr, int coalesce) {
-    //TODO: remove when done debugging
-//    printf("%p\n", headFreeList);
-//    if (headFreeList == NULL) {
-//        return ERROR;
-//    }
+    if(headFreeList == NULL) {
+        m_error = E_BAD_POINTER;
+        return ERROR;
+    }
 
     if (coalesce > 1 || coalesce < 0) {
         m_error = E_BAD_ARGS;
