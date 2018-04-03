@@ -364,38 +364,38 @@ int free_null_pointer() {
 
 
 
-//testing memory_written_after_allocation
-int memory_written_after_allocation() {
-    if (Mem_Init(PAGE) == FAILURE ) {
-        printf("Mem_Init FAILURE\n");
-        return FALSE;
-    } else {
-        int size = 10;
-        void **ptrs = malloc(sizeof(void*) * size);
-        for (int i = 0; i < size; i++) {
-            ptrs[i] = Mem_Alloc(alloc);
-            if (ptrs[i] == NULL) {
-                return FALSE;
-            }
-        }
-        printf("\tPRINTING LIST after initial allocation \n");
-        Mem_Dump();
-
-        free_ptrs(ptrs);
-
-        printf("\tPRINTING LIST -- check to see if list is free\n");
-        Mem_Dump();
-
-        void *p = Mem_Alloc(200);
-
-        printf("\tPRINTING LIST -- check to see if allocating 200 bytes works properly\n");
-        Mem_Dump();
-
-        Mem_Free(p, FALSE);
-
-        return TRUE;
-    }
-}
+////testing memory_written_after_allocation
+//int memory_written_after_allocation() {
+//    if (Mem_Init(PAGE) == FAILURE ) {
+//        printf("Mem_Init FAILURE\n");
+//        return FALSE;
+//    } else {
+//        int size = 10;
+//        void **ptrs = malloc(sizeof(void*) * size);
+//        for (int i = 0; i < size; i++) {
+//            ptrs[i] = Mem_Alloc(alloc);
+//            if (ptrs[i] == NULL) {
+//                return FALSE;
+//            }
+//        }
+//        printf("\tPRINTING LIST after initial allocation \n");
+//        Mem_Dump();
+//
+//        free_ptrs(ptrs);
+//
+//        printf("\tPRINTING LIST -- check to see if list is free\n");
+//        Mem_Dump();
+//
+//        void *p = Mem_Alloc(200);
+//
+//        printf("\tPRINTING LIST -- check to see if allocating 200 bytes works properly\n");
+//        Mem_Dump();
+//
+//        Mem_Free(p, FALSE);
+//
+//        return TRUE;
+//    }
+//}
 
 
 int main() {
@@ -422,7 +422,7 @@ int main() {
     printf("------------\n");
     printf("free_null_pointer: %s\n", free_null_pointer() == TRUE ? "it worked!" : "oh no :(");
     printf("------------\n");
-    printf("memory_written_after_allocation: %s\n", memory_written_after_allocation() == TRUE ? "basic measures passed, make sure to also check mem_dump" : "oh no :(");
+//    printf("memory_written_after_allocation: %s\n", memory_written_after_allocation() == TRUE ? "basic measures passed, make sure to also check mem_dump" : "oh no :(");
     printf("\n\n\nall tests done\n");
 }
 
