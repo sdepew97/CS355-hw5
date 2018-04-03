@@ -144,12 +144,12 @@ int localCoalesceFree(header **head, header *ptr) {
 
                     //adjust both lists according to the local coalesce that just happened (need to remove ptr->nextHeader from free list and from other list, since it has been combined)
                     //TODO: see if moving this to sort makes my code much faster?
-//                    if (ptr->nextHeader == headFreeList) {
-//                        removeHeaderFree(head, ptr->nextHeader, NULL);
-//                    } else {
-//                        removeHeaderFree(head, ptr->nextHeader, findPreviousFree(headFreeList,
-//                                                                                 ptr->nextHeader)); //have to find the previous in the free list...
-//                    }
+                    if (ptr->nextHeader == headFreeList) {
+                        removeHeaderFree(head, ptr->nextHeader, NULL);
+                    } else {
+                        removeHeaderFree(head, ptr->nextHeader, findPreviousFree(headFreeList,
+                                                                                 ptr->nextHeader)); //have to find the previous in the free list...
+                    }
 
                     ptr->nextHeader = ptr->nextHeader->nextHeader;
                 } else {
