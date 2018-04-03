@@ -8,6 +8,7 @@
 
 #define NUM_ALLOC 2000000
 #define FREE_FREQ 100     // 1:100
+#define COALESCE_FREQ 100000   // 1:100000
 #define BYTE 8
 
 clock_t begin, end;
@@ -27,7 +28,8 @@ void test_two_mil() {
         ptrs[i] = Mem_Alloc(BYTE);
         assert(ptrs[i] != NULL);
         if (i % FREE_FREQ == FREE_FREQ - 1)
-            Mem_Free(ptrs[i - FREE_FREQ + 1], 1);
+//            Mem_Free(ptrs[i - FREE_FREQ + 1], 1);
+            Mem_Free(ptrs[i - FREE_FREQ + 1], i % COALESCE_FREQ == 0);
     }
 
     end = clock();
