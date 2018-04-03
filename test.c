@@ -52,7 +52,7 @@
 #include "list.h"
 #include "helper.h"
 
-#define NUM_ALLOC 20000
+#define NUM_ALLOC 2000000
 #define FREE_FREQ 100          // 1:100
 #define COALESCE_FREQ 100000   // 1:100000
 #define BYTE 8
@@ -79,13 +79,13 @@ void test_two_mil() {
             Mem_Free(ptrs[i-FREE_FREQ+1], i % COALESCE_FREQ == 0);
     }
 
-    for (int i = 0; i < NUM_ALLOC; i++) {
-        printf("Iteration %d\n", i);
-        if (Mem_Free(ptrs[i], 1) == ERROR) {
-            printf("got here\n");
-            break;
-        }
-    }
+//    for (int i = 0; i < NUM_ALLOC; i++) {
+//        printf("Iteration %d\n", i);
+//        if (Mem_Free(ptrs[i], 1) == ERROR) {
+//            printf("got here\n");
+//            break;
+//        }
+//    }
 
     Mem_Dump();
     end = clock();
