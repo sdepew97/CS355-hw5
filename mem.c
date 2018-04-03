@@ -253,7 +253,7 @@ int Mem_Free(void *ptr, int coalesce) {
     } else {
         //only coalesce if requested AND the last coalesce was local and not global
         //TODO: figure out how to tackle this one... perhaps count #frees??
-        if (coalesce && !lastWasGlobal && seeFreeOccurred) {
+        if (coalesce && (!lastWasGlobal || seeFreeOccurred)) {
 //        if (coalesce) {
             coalesceFreeList(headMainList);
             seeFreeOccurred = FALSE;
