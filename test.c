@@ -35,7 +35,7 @@ void test_two_mil() {
 //        if (i % FREE_FREQ == FREE_FREQ - 1)
 //            Mem_Free(ptrs[i - FREE_FREQ + 1], i % COALESCE_FREQ == 0);
 
-        Mem_Free(NULL, 0);
+        Mem_Free(NULL, 1);
     }
 
 
