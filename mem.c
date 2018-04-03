@@ -254,55 +254,25 @@ void *Mem_Alloc(long size) {
     //check if there are enough nodes to need to cache
     if(headFreeList->nextFree == NULL || headFreeList->nextFree->nextFree == NULL || headFreeList->nextFree->nextFree->nextFree == NULL) {
         sortFreeList(&headFreeList); //first have to sort the free list //TODO: optimize this statement!!! :)
-       //TODO: remove here
-//        if(checkFreeList() == FALSE) {
-//            return NULL;
-//        }
         worstFitReturn = headFreeList;
     } else if(freeOccurred || (totalAllocs%2 == 0)){
         if(freeOccurred) {
             if(headFreeList->nextFree == NULL || headFreeList->nextFree->nextFree == NULL || headFreeList->nextFree->nextFree->nextFree == NULL) {
                 sortFreeList(&headFreeList); //first have to sort the free list //TODO: optimize this statement!!! :)
-                //TODO: remove here
-//                if(checkFreeList() == FALSE) {
-//                    return NULL;
-//                }
                 worstFitReturn = headFreeList;
             }
             else {
                 cacheFreeList(&headFreeList);
-//                //TODO: remove here
-//                if(checkFreeList() == FALSE) {
-//                    return NULL;
-//                }
                 worstFitReturn = worstFitFree(&headFreeList);
             }
         } else {
             cacheFreeList(&headFreeList);
-//            //TODO: remove here
-//            if(checkFreeList() == FALSE) {
-//                return NULL;
-//            }
             worstFitReturn = worstFitFree(&headFreeList);
         }
     } else {
         //do nothing for this round, since we have already cached the list enough and no frees were made
         worstFitReturn = worstFitFree(&headFreeList);
     }
-
-    //TODO: REMOVE
-//    if(headFreeList->nextFree == NULL || headFreeList->nextFree->nextFree == NULL || headFreeList->nextFree->nextFree->nextFree == NULL) {
-//
-//    } else {
-//        if(checkFreeListCachedTotal() == FALSE) {
-//            printf("Test failed\n");
-//            return NULL;
-//        }
-//    }
-
-
-//    printf("worst fit: %p\n", worstFitReturn);
-//    printFreeList();
 
     if (worstFitReturn == NULL) {
         m_error = E_BAD_POINTER;
