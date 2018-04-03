@@ -166,10 +166,11 @@ int Mem_Free(void *ptr, int coalesce) {
         m_error = E_BAD_ARGS;
         return ERROR;
     }
-//
-//    if (ptr == NULL) {
-//        //don't mark anything as free, since ptr is NULL
-//    } else {
+
+    if (ptr == NULL) {
+        //don't mark anything as free, since ptr is NULL
+    }
+    //else {
 //        //Mark as free and add to free list
 //        if (checkValidPtrMain(headMainList, sizeOfList, ptr)) {
 //            //check if the ptr has been overwritten
