@@ -52,6 +52,24 @@ int checkValidPtrMain(header *head, long sizeOfList, void *ptr) {
     }
 }
 
+header *findPreviousMain(header *head, header *ptr) {
+    header *currentHeader = head;
+
+    if (ptr == NULL || head == NULL || currentHeader == ptr || currentHeader->nextHeader == NULL) {
+        return NULL;
+    } else {
+        while (currentHeader->nextHeader != NULL) {
+            if (currentHeader->nextHeader == ptr) {
+                return currentHeader;
+            }
+
+            currentHeader = currentHeader->nextHeader;
+        }
+    }
+
+    return NULL;
+}
+
 //methods specifically for free list
 header *worstFitFree(header *head) {
     //assume that the free list is sorted
