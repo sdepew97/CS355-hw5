@@ -87,9 +87,9 @@ void test_two_mil() {
 //        }
 //    }
 
-//    Mem_Dump();
     end = clock();
     print_execution_time(begin, end);
+//    Mem_Dump();
     free(ptrs);
 }
 
