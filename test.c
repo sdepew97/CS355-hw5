@@ -81,7 +81,9 @@ void test_two_mil() {
 
     for (int i = 0; i < NUM_ALLOC; i++) {
         printf("Iteration %d\n", i);
-        Mem_Free(ptrs[i], 1);
+        if(Mem_Free(ptrs[i], 1) == ERROR) {
+            break;
+        }
     }
 
     Mem_Dump();
