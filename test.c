@@ -52,7 +52,7 @@
 #include "list.h"
 #include "helper.h"
 
-#define NUM_ALLOC 2000000
+#define NUM_ALLOC 20000
 #define FREE_FREQ 100          // 1:100
 #define COALESCE_FREQ 100000   // 1:100000
 #define BYTE 8
