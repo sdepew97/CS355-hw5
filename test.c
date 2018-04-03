@@ -77,11 +77,9 @@ void test_two_mil() {
 
         if (i % FREE_FREQ == FREE_FREQ - 1)
             Mem_Free(ptrs[i-FREE_FREQ+1], i % COALESCE_FREQ == 0);
-            if(i % COALESCE_FREQ == 0) {
-                Mem_Dump();
-            }
 
     }
+    Mem_Dump();
     end = clock();
     print_execution_time(begin, end);
     free(ptrs);
