@@ -201,7 +201,10 @@ int Mem_Free(void *ptr, int coalesce) {
                 return ERROR;
             }
         } else {
-            localCoalesceFree(&headFreeList, ((header *) (ptr - sizeof(header))));
+            if (localCoalesceFree(&headFreeList, ((header *) (ptr - sizeof(header)))) == FALSE) {
+                m_error = E_PADDING_OVERWRITTEN;
+                return ERROR;
+            }
         }
 
         lastWasGlobal = FALSE;
