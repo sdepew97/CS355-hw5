@@ -71,9 +71,8 @@ header *findPreviousMain(header *head, header *ptr) {
 }
 
 //methods specifically for free list
-header *worstFitFree(header **head) {
+header *worstFitFree(header *head) {
     //assume that the free list is sorted
-    sortFreeList(head); //first have to sort the free list
     return head;
 }
 

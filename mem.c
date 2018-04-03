@@ -83,7 +83,8 @@ void *Mem_Alloc(long size) {
     long totalSought = sizeToWordSize + sizeof(header) + SIZEOFWORD;
 
     //search through the list to get the largest available
-    header *worstFitReturn = worstFitFree(&headFreeList);
+    sortFreeList(&headFreeList); //first have to sort the free list
+    header *worstFitReturn = worstFitFree(headFreeList);
 
     if (worstFitReturn == NULL) {
         m_error = E_BAD_POINTER;
