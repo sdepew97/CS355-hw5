@@ -90,12 +90,12 @@ void *Mem_Alloc(long size) {
     //TODO: finish logic here
     header *worstFitReturn;
     //check if there are enough nodes to need to cache
-    if(headFreeList->nextFree == NULL || headFreeList->nextFree->nextFree == NULL) {
+    if(headFreeList->nextFree == NULL || headFreeList->nextFree->nextFree == NULL || headFreeList->nextFree->nextFree->nextFree == NULL) {
         sortFreeList(&headFreeList); //first have to sort the free list //TODO: optimize this statement!!! :)
         worstFitReturn = headFreeList;
     } else if(freeOccurred || (totalAllocs%2 == 0)){
         if(freeOccurred) {
-            if(headFreeList->nextFree == NULL || headFreeList->nextFree->nextFree == NULL) {
+            if(headFreeList->nextFree == NULL || headFreeList->nextFree->nextFree == NULL || headFreeList->nextFree->nextFree->nextFree == NULL) {
                 sortFreeList(&headFreeList); //first have to sort the free list //TODO: optimize this statement!!! :)
                 worstFitReturn = headFreeList;
             }
