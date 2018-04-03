@@ -79,6 +79,157 @@ void printFreeList() {
     }
 }
 
+int checkFreeList() {
+    //method to check that the free list is in the correct worst-fit state after sorting and after coalescing
+    header *currentHeader = headFreeList;
+    header *max = headFreeList;
+    header *max2 = headFreeList->nextFree;
+
+    //check first node is largest
+    while(currentHeader != NULL) {
+        if(max->amountAllocated < currentHeader->amountAllocated) {
+            printFreeList();
+            printf("Test Failed\n");
+            return FALSE;
+        }
+
+        currentHeader = currentHeader->nextFree;
+    }
+
+    currentHeader = headFreeList->nextFree;
+    while(currentHeader != NULL) {
+        if(max2->amountAllocated < currentHeader->amountAllocated) {
+            printFreeList();
+            printf("Test Failed\n");
+            return FALSE;
+        }
+
+        currentHeader = currentHeader->nextFree;
+    }
+
+//    printf("Test Passed\n");
+    return TRUE;
+}
+
+int checkFreeListCachedTotal() {
+    //method to check that the free list is in the correct worst-fit state after sorting and after coalescing
+    header *currentHeader = headFreeList;
+    header *max = headFreeList;
+    header *max2 = headFreeList->nextFree;
+    header *max3 = headFreeList->nextFree->nextFree;
+    header *largestFoundHeader = NULL;
+    boolean largestFound = FALSE;
+    boolean secondLargestFound = FALSE;
+    boolean broke = FALSE;
+
+    //check first node is largest
+    while(currentHeader != NULL) {
+        if(max->amountAllocated < currentHeader->amountAllocated) {
+            largestFound = FALSE;
+            broke = TRUE;
+            break;
+        }
+
+        currentHeader = currentHeader->nextFree;
+    }
+
+    if(broke) {
+        broke = FALSE;
+        while(currentHeader != NULL) {
+            if(max2->amountAllocated < currentHeader->amountAllocated) {
+                largestFound = FALSE;
+                broke = TRUE;
+                break;
+            }
+
+            currentHeader = currentHeader->nextFree;
+        }
+
+        if(broke) {
+            broke = FALSE;
+            while(currentHeader != NULL) {
+                if(max3->amountAllocated < currentHeader->amountAllocated) {
+                    largestFound = FALSE;
+                    broke = TRUE;
+                    break;
+                }
+
+                currentHeader = currentHeader->nextFree;
+            }
+
+            if(broke) {
+                largestFound = FALSE; //largest not among values in list
+            } else {
+                largestFoundHeader = max3;
+                largestFound = TRUE;
+            }
+        } else {
+            largestFoundHeader = max2;
+            largestFound = TRUE;
+        }
+    } else {
+        largestFoundHeader = max;
+        largestFound = TRUE;
+    }
+
+    if(!largestFound) {
+        printFreeList();
+        printf("Test Failed To Find Largest\n");
+        return FALSE;
+    } else {
+        broke = FALSE;
+        currentHeader = headFreeList;
+
+        while (currentHeader != NULL) {
+            if (max->amountAllocated < currentHeader->amountAllocated && currentHeader!=largestFoundHeader) {
+                secondLargestFound = FALSE;
+                broke = TRUE;
+                break;
+            }
+
+            currentHeader = currentHeader->nextFree;
+        }
+
+        if (broke) {
+            broke = FALSE;
+            while (currentHeader != NULL) {
+                if (max2->amountAllocated < currentHeader->amountAllocated && currentHeader!=largestFoundHeader) {
+                    secondLargestFound = FALSE;
+                    broke = TRUE;
+                    break;
+                }
+
+                currentHeader = currentHeader->nextFree;
+            }
+
+            if (broke) {
+                broke = FALSE;
+                while (currentHeader != NULL) {
+                    if (max3->amountAllocated < currentHeader->amountAllocated && currentHeader!=largestFoundHeader) {
+                        secondLargestFound = FALSE;
+                        broke = TRUE;
+                        break;
+                    }
+
+                    currentHeader = currentHeader->nextFree;
+
+                    if(broke) {
+                        secondLargestFound = FALSE;
+                    } else {
+                        secondLargestFound = TRUE;
+                    }
+                }
+            } else {
+                secondLargestFound = TRUE;
+            }
+        } else {
+            secondLargestFound = TRUE;
+        }
+    }
+
+    return (largestFound && secondLargestFound);
+}
+
 void *Mem_Alloc(long size) {
     //check sizeOfRegion is a valid, non-negative or zero value
     if (size <= 0) {
@@ -103,25 +254,51 @@ void *Mem_Alloc(long size) {
     //check if there are enough nodes to need to cache
     if(headFreeList->nextFree == NULL || headFreeList->nextFree->nextFree == NULL || headFreeList->nextFree->nextFree->nextFree == NULL) {
         sortFreeList(&headFreeList); //first have to sort the free list //TODO: optimize this statement!!! :)
+       //TODO: remove here
+        if(checkFreeList() == FALSE) {
+            return NULL;
+        }
         worstFitReturn = headFreeList;
     } else if(freeOccurred || (totalAllocs%2 == 0)){
         if(freeOccurred) {
             if(headFreeList->nextFree == NULL || headFreeList->nextFree->nextFree == NULL || headFreeList->nextFree->nextFree->nextFree == NULL) {
                 sortFreeList(&headFreeList); //first have to sort the free list //TODO: optimize this statement!!! :)
+                //TODO: remove here
+                if(checkFreeList() == FALSE) {
+                    return NULL;
+                }
                 worstFitReturn = headFreeList;
             }
             else {
                 cacheFreeList(&headFreeList);
+                //TODO: remove here
+                if(checkFreeList() == FALSE) {
+                    return NULL;
+                }
                 worstFitReturn = worstFitFree(&headFreeList);
             }
         } else {
             cacheFreeList(&headFreeList);
+            //TODO: remove here
+            if(checkFreeList() == FALSE) {
+                return NULL;
+            }
             worstFitReturn = worstFitFree(&headFreeList);
         }
     } else {
         //do nothing for this round, since we have already cached the list enough and no frees were made
         worstFitReturn = worstFitFree(&headFreeList);
     }
+
+    if(headFreeList->nextFree == NULL || headFreeList->nextFree->nextFree == NULL || headFreeList->nextFree->nextFree->nextFree == NULL) {
+
+    } else {
+        if(checkFreeListCachedTotal() == FALSE) {
+            printf("Test failed\n");
+            return NULL;
+        }
+    }
+
 
 //    printf("worst fit: %p\n", worstFitReturn);
 //    printFreeList();
