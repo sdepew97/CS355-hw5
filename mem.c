@@ -123,8 +123,8 @@ void *Mem_Alloc(long size) {
         worstFitReturn = worstFitFree(&headFreeList);
     }
 
-    printf("worst fit: %p\n", worstFitReturn);
-    printFreeList();
+//    printf("worst fit: %p\n", worstFitReturn);
+//    printFreeList();
 
     if (worstFitReturn == NULL) {
         m_error = E_BAD_POINTER;
