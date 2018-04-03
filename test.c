@@ -8,7 +8,7 @@
 
 #define NUM_ALLOC 2000000
 #define FREE_FREQ 100     // 1:100
-#define COALESCE_FREQ 10000   // 1:100000
+#define COALESCE_FREQ 1000   // 1:100000
 #define BYTE 8
 
 clock_t begin, end;
