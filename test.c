@@ -1,37 +1,21 @@
 #include "mem.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
-#include <assert.h>
-#include <limits.h>
+#include <math.h>
+#include <sys/mman.h>
 #include <unistd.h>
 #include <string.h>
 
-#define REQ_SIZE 1000
-#define ALLOC_SIZE 80
 
 
-int main(){
-    int result = Mem_Init(REQ_SIZE);
-    assert (result == 0);
-
-    void * ptr;
-
-    printf("----------------Starts allocating the first 8 byte--------------\n");
-    ptr = Mem_Alloc(ALLOC_SIZE);
-    assert(ptr != NULL);
+int main() {
+    if(Mem_Init(-10) < 0)
+        printf("Sad, I failed\n");
+    else
+        printf("init successfully\n");
+    printf("The mem_init should fail and we will call Mem_Alloc Mem_Free and Mem_Dump, none of them should work\n");
     Mem_Dump();
-
-
-    strcpy(ptr, "Hello!");
-
-    printf("%s\n", ptr);
-
-    printf("----------------Starts freeing--------------\n");
-
-    result = Mem_Free(ptr, 0);
-    assert(result == 0);
-    Mem_Dump();
-
-    printf("Exit success!\n");
+    void* test = Mem_Alloc(8);
+    Mem_Free(test,1);
+    return 0;
 }
