@@ -31,6 +31,12 @@ int test_seven() {
         return EXIT_FAILURE;
     }
 
+    if (Mem_Free(allocated3, TRUE) == ERROR) {
+        return EXIT_FAILURE;
+    }
+    printf("after third freed\n");
+    Mem_Dump();
+
     if (Mem_Free(allocated2, TRUE) == ERROR) {
         return EXIT_FAILURE;
     }
@@ -41,12 +47,6 @@ int test_seven() {
         return EXIT_FAILURE;
     }
     printf("after first freed\n");
-    Mem_Dump();
-
-    if (Mem_Free(allocated3, TRUE) == ERROR) {
-        return EXIT_FAILURE;
-    }
-    printf("after third freed\n");
     Mem_Dump();
 
     return EXIT_SUCCESS;
