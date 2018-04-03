@@ -6,39 +6,31 @@
 #include <limits.h>
 #include <unistd.h>
 
-#define NUM_ALLOC 2000000
-#define FREE_FREQ 100          // 1:100
-#define COALESCE_FREQ 100000   // 1:100000
-#define BYTE 8
+#define REQ_SIZE 1000
+#define ALLOC_SIZE 80
 
-clock_t begin, end;
 
-static void print_execution_time(clock_t begin, clock_t end) {
-    double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-    printf("Execution time: %.2f seconds\n", time_spent);
-}
+int main(){
+    int result = Mem_Init(REQ_SIZE);
+    assert (result == 0);
 
-void test_two_mil() {
-    int result = Mem_Init(NUM_ALLOC * 96+32);
+    void * ptr;
+
+    printf("----------------Starts allocating the first 8 byte--------------\n");
+    ptr = Mem_Alloc(ALLOC_SIZE);
+    assert(ptr != NULL);
+    Mem_Dump();
+
+
+    strcpy(ptr0, "Hello!");
+
+    printf("%s\n", ptr0);
+
+    printf("----------------Starts freeing--------------\n");
+
+    result = Mem_Free(ptr, 0);
     assert(result == 0);
-    srand(time(NULL));
-    void **ptrs = malloc(sizeof(void*) * NUM_ALLOC);
+    Mem_Dump();
 
-    for (int i = 0; i < NUM_ALLOC; i++) {
-        int r = rand()%96+1;
-        ptrs[i] = Mem_Alloc(r);
-        assert(ptrs[i] != NULL);
-        // printf("\n%d ",i);
-        if (i % FREE_FREQ == FREE_FREQ - 1)
-            Mem_Free(ptrs[i-FREE_FREQ+1], i % COALESCE_FREQ == 0);
-    }
-    end = clock();
-    print_execution_time(begin, end);
-    free(ptrs);
-}
-
-
-int main() {
-    test_two_mil();
-    return EXIT_SUCCESS;
+    printf("Exit success!\n");
 }
