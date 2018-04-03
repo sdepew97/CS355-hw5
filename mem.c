@@ -38,8 +38,8 @@ int Mem_Init(long sizeOfRegion) {
     //Request that much memory from mmap
     //TODO: pont define values connected to amountToMMap
 //    long amountToMmap = WORSTCASE;
-    long amountToMmap = AVERAGE;
-//    long amountToMmap = ALIGNED;
+//    long amountToMmap = AVERAGE;
+    long amountToMmap = ALIGNED;
 
     void *mapReturn = mmap(NULL, amountToMmap, PROT_EXEC | PROT_READ | PROT_WRITE,
                            MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
