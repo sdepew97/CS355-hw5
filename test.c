@@ -95,9 +95,9 @@ void test_two_mil() {
 
 
 int main() {
-    printf("sizeof header %ld\n", sizeof(header));
-    printf("sizeof void * %ld\n", sizeof(void *));
-//    test_two_mil();
+//    printf("sizeof header %ld\n", sizeof(header));
+//    printf("sizeof void * %ld\n", sizeof(void *));
+    test_two_mil();
     return EXIT_SUCCESS;
 }
 //
