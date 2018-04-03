@@ -88,16 +88,18 @@ void *Mem_Alloc(long size) {
     //search through the list to get the largest available
 
     //TODO: finish logic here
+    header *worstFitReturn;
     //check if there are enough nodes to need to cache
     if(headFreeList->nextFree == NULL || headFreeList->nextFree->nextFree == NULL) {
         sortFreeList(&headFreeList); //first have to sort the free list //TODO: optimize this statement!!! :)
+        worstFitReturn = headFreeList;
     } else if(freeOccurred || (totalAllocs%2 == 0)){
         cacheFreeList(&headFreeList);
+        worstFitReturn = worstFitFree(&headFreeList);
     } else {
         //do nothing for this round, since we have already cached the list enough and no frees were made
+        worstFitReturn = worstFitFree(&headFreeList);
     }
-
-    header *worstFitReturn = worstFitFree(&headFreeList);
 
     if (worstFitReturn == NULL) {
         m_error = E_BAD_POINTER;
