@@ -264,7 +264,6 @@ void coalesceFreeList(header *head) {
     //nothing yet here...
     boolean coalesceOccurred = FALSE;
     header *currentHeader;
-    header *previousHeader;
 
     do {
         currentHeader = head;
