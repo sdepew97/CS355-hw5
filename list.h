@@ -28,6 +28,7 @@ int checkPadding(header *header1);
 void addHeaderMain (header **head, header *newHeader, header *previous);
 void removeHeaderMain(header **head, header *newHeader, header *previous);
 int checkValidPtrMain(header *head, long sizeOfList, void *ptr);
+header *findPreviousMain(header *head, header *ptr);
 
 //methods specifically for free list
 header *worstFitFree(header *head);
