@@ -185,13 +185,13 @@ int cacheFreeList (header **head) {
             return FALSE;
         }
 
-        if (currentHeader->amountAllocated > secondWorstFitValue && currentHeader->amountAllocated < worstFitValue) {
-            secondWorstFitValue = currentHeader->amountAllocated;
-            secondWorstFitPrevious = previousHeader;
-            secondWorstFit = currentHeader;
-        }
-
-        if (currentHeader->amountAllocated > worstFitValue) {
+        if(currentHeader->amountAllocated < worstFitValue) {
+            if (currentHeader->amountAllocated > secondWorstFitValue) {
+                secondWorstFitValue = currentHeader->amountAllocated;
+                secondWorstFitPrevious = previousHeader;
+                secondWorstFit = currentHeader;
+            }
+        } else if (currentHeader->amountAllocated > worstFitValue) {
             //update second with prior value
             secondWorstFitValue = worstFitValue;
             secondWorstFitPrevious = worstFitPrevious;

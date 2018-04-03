@@ -68,6 +68,17 @@ int Mem_Init(long sizeOfRegion) {
     return SUCCESS;
 }
 
+void printFreeList() {
+    header *currentHeader = headFreeList;
+
+    while (currentHeader != NULL) {
+        printf("Pointer: %p\n", currentHeader);
+        printf("header allocated amount %d\n", currentHeader->amountAllocated);
+
+        currentHeader = currentHeader->nextFree;
+    }
+}
+
 void *Mem_Alloc(long size) {
     //check sizeOfRegion is a valid, non-negative or zero value
     if (size <= 0) {
@@ -113,6 +124,8 @@ void *Mem_Alloc(long size) {
     }
 
     printf("worst fit: %p\n", worstFitReturn);
+    printFreeList();
+
     if (worstFitReturn == NULL) {
         m_error = E_BAD_POINTER;
         return NULL;
