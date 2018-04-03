@@ -80,7 +80,7 @@ void test_two_mil() {
     }
 
     for (int i = 0; i < NUM_ALLOC; i++) {
-        printf("Iteration i\n");
+        printf("Iteration %d\n", i);
         Mem_Free(ptrs[i], 1);
     }
 
