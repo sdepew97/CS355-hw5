@@ -318,6 +318,5 @@ int main() {
     printf("------------\n");
     printf("free_null_pointer: %s\n", free_null_pointer() == TRUE ? "it worked!" : "oh no :(");
     printf("------------\n");
-    printf("memory_written_after_allocation: %s\n", memory_written_after_allocation() == TRUE ? "basic measures passed, make sure to also check mem_dump" : "oh no :(");
     printf("\n\n\nall tests done\n");
 }
