@@ -73,7 +73,7 @@ void printFreeList() {
 
     while (currentHeader != NULL) {
         printf("Pointer: %p\n", currentHeader);
-        printf("header allocated amount %d\n", currentHeader->amountAllocated);
+        printf("header allocated amount %ld\n", currentHeader->amountAllocated);
 
         currentHeader = currentHeader->nextFree;
     }
