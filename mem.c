@@ -169,16 +169,15 @@ int Mem_Free(void *ptr, int coalesce) {
 
     if (ptr == NULL) {
         //don't mark anything as free, since ptr is NULL
-    }
-    //else {
-//        //Mark as free and add to free list
-//        if (checkValidPtrMain(headMainList, sizeOfList, ptr)) {
-//            //check if the ptr has been overwritten
-//            if (ptr != NULL && checkPadding((header *) (ptr - sizeof(header))) == FALSE) {
-//                m_error = E_PADDING_OVERWRITTEN;
-//                return ERROR;
-//            }
-//
+    } else {
+        //Mark as free and add to free list
+        if (checkValidPtrMain(headMainList, sizeOfList, ptr)) {
+            //check if the ptr has been overwritten
+            if (ptr != NULL && checkPadding((header *) (ptr - sizeof(header))) == FALSE) {
+                m_error = E_PADDING_OVERWRITTEN;
+                return ERROR;
+            }
+
 //            //check if already free and if so, then don't add to free list, since it is already there
 //            if (((header *) (ptr - sizeof(header)))->free == 't') {
 //                //do nothing and return an error, since the ptr should not be freed a second time
@@ -194,11 +193,11 @@ int Mem_Free(void *ptr, int coalesce) {
 //                headFreeList = ((header *) (ptr - sizeof(header)));
 //
 //            }
-//        } else {
-//            m_error = E_BAD_POINTER;
-//            return ERROR;
-//        }
-//    }
+        } else {
+            m_error = E_BAD_POINTER;
+            return ERROR;
+        }
+    }
 
 //    //coalesce locally here
 //    if (ptr == NULL) {
