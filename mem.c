@@ -178,13 +178,14 @@ int Mem_Free(void *ptr, int coalesce) {
                 return ERROR;
             }
 
-//            //check if already free and if so, then don't add to free list, since it is already there
-//            if (((header *) (ptr - sizeof(header)))->free == 't') {
-//                //do nothing and return an error, since the ptr should not be freed a second time
-//                //TODO: uncomment code here
-//                m_error = E_BAD_ARGS;
-//                return ERROR;
-//            } else {
+            //check if already free and if so, then don't add to free list, since it is already there
+            if (((header *) (ptr - sizeof(header)))->free == 't') {
+                //do nothing and return an error, since the ptr should not be freed a second time
+                //TODO: uncomment code here
+                m_error = E_BAD_ARGS;
+                return ERROR;
+            }
+//            else {
 //                howMuchUserHasLeftToRequest += ((header *) (ptr - sizeof(header)))->amountAllocated;
 //                ((header *) (ptr -
 //                             sizeof(header)))->free = 't'; //was removed from list, since is false, so no circular linking is gonna happen here
