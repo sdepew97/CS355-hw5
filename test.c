@@ -16,6 +16,8 @@ int main() {
     printf("The mem_init should fail and we will call Mem_Alloc Mem_Free and Mem_Dump, none of them should work\n");
     Mem_Dump();
     void* test = Mem_Alloc(8);
-    Mem_Free(test,1);
+    assert(test == NULL);
+    assert(Mem_Free(test,1) == -1);
+
     return 0;
 }
