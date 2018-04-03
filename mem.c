@@ -1,7 +1,3 @@
-//
-// Created by Sarah Depew on 3/24/18.
-//
-
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/mman.h>
@@ -36,10 +32,9 @@ int Mem_Init(long sizeOfRegion) {
     }
 
     //Request that much memory from mmap
-    //TODO: pont define values connected to amountToMMap
-//    long amountToMmap = WORSTCASE;
+    long amountToMmap = WORSTCASE;
 //    long amountToMmap = AVERAGE;
-    long amountToMmap = ALIGNED;
+//    long amountToMmap = ALIGNED;
 
     void *mapReturn = mmap(NULL, amountToMmap, PROT_EXEC | PROT_READ | PROT_WRITE,
                            MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
