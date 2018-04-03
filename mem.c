@@ -12,6 +12,7 @@ long howMuchUserHasLeftToRequest;
 long sizeOfList;
 boolean lastWasGlobal;
 boolean freeOccurred;
+boolean seeFreeOccurred;
 long totalAllocs = 0;
 header *headMainList = NULL;
 header *headFreeList = NULL;
@@ -31,7 +32,7 @@ int Mem_Init(long sizeOfRegion) {
         return ERROR;
     }
 
-    //Request that much memory from mmap
+    //Request that much memory from mmap, uncomment whichever measure you'd like for conservation of assignment
     long amountToMmap = WORSTCASE;
 //    long amountToMmap = AVERAGE;
 //    long amountToMmap = ALIGNED;
@@ -59,176 +60,15 @@ int Mem_Init(long sizeOfRegion) {
     howMuchUserHasLeftToRequest = sizeOfRegion;
     lastWasGlobal = FALSE;
     freeOccurred = FALSE;
+    seeFreeOccurred = FALSE;
     sizeOfList = amountToMmap;
 
     //return the appropriate value
     return SUCCESS;
 }
 
-void printFreeList() {
-    header *currentHeader = headFreeList;
-
-    while (currentHeader != NULL) {
-        printf("Pointer: %p\n", currentHeader);
-        printf("header allocated amount %ld\n", currentHeader->amountAllocated);
-
-        currentHeader = currentHeader->nextFree;
-    }
-}
-
-int checkFreeList() {
-    //method to check that the free list is in the correct worst-fit state after sorting and after coalescing
-    header *currentHeader = headFreeList;
-    header *max = headFreeList;
-    header *max2 = headFreeList->nextFree;
-
-    //check first node is largest
-    while(currentHeader != NULL) {
-        if(max->amountAllocated < currentHeader->amountAllocated) {
-            printFreeList();
-            printf("Test Failed\n");
-            return FALSE;
-        }
-
-        currentHeader = currentHeader->nextFree;
-    }
-
-    currentHeader = headFreeList->nextFree;
-    while(currentHeader != NULL) {
-        if(max2->amountAllocated < currentHeader->amountAllocated) {
-            printFreeList();
-            printf("Test Failed\n");
-            return FALSE;
-        }
-
-        currentHeader = currentHeader->nextFree;
-    }
-
-//    printf("Test Passed\n");
-    return TRUE;
-}
-
-int checkFreeListCachedTotal() {
-    //method to check that the free list is in the correct worst-fit state after sorting and after coalescing
-    header *currentHeader = headFreeList;
-    header *max = headFreeList;
-    header *max2 = headFreeList->nextFree;
-    header *max3 = headFreeList->nextFree->nextFree;
-    header *largestFoundHeader = NULL;
-    boolean largestFound = FALSE;
-    boolean secondLargestFound = FALSE;
-    boolean broke = FALSE;
-
-    //check first node is largest
-    while(currentHeader != NULL) {
-        if(max->amountAllocated < currentHeader->amountAllocated) {
-            largestFound = FALSE;
-            broke = TRUE;
-            break;
-        }
-
-        currentHeader = currentHeader->nextFree;
-    }
-
-    if(broke) {
-        broke = FALSE;
-        while(currentHeader != NULL) {
-            if(max2->amountAllocated < currentHeader->amountAllocated) {
-                largestFound = FALSE;
-                broke = TRUE;
-                break;
-            }
-
-            currentHeader = currentHeader->nextFree;
-        }
-
-        if(broke) {
-            broke = FALSE;
-            while(currentHeader != NULL) {
-                if(max3->amountAllocated < currentHeader->amountAllocated) {
-                    largestFound = FALSE;
-                    broke = TRUE;
-                    break;
-                }
-
-                currentHeader = currentHeader->nextFree;
-            }
-
-            if(broke) {
-                largestFound = FALSE; //largest not among values in list
-            } else {
-                largestFoundHeader = max3;
-                largestFound = TRUE;
-            }
-        } else {
-            largestFoundHeader = max2;
-            largestFound = TRUE;
-        }
-    } else {
-        largestFoundHeader = max;
-        largestFound = TRUE;
-    }
-
-    if(!largestFound) {
-        printFreeList();
-        printf("Test Failed To Find Largest\n");
-        return FALSE;
-    } else {
-        broke = FALSE;
-        currentHeader = headFreeList;
-
-        while (currentHeader != NULL) {
-            if (max->amountAllocated < currentHeader->amountAllocated && currentHeader!=largestFoundHeader) {
-                secondLargestFound = FALSE;
-                broke = TRUE;
-                break;
-            }
-
-            currentHeader = currentHeader->nextFree;
-        }
-
-        if (broke) {
-            broke = FALSE;
-            while (currentHeader != NULL) {
-                if (max2->amountAllocated < currentHeader->amountAllocated && currentHeader!=largestFoundHeader) {
-                    secondLargestFound = FALSE;
-                    broke = TRUE;
-                    break;
-                }
-
-                currentHeader = currentHeader->nextFree;
-            }
-
-            if (broke) {
-                broke = FALSE;
-                while (currentHeader != NULL) {
-                    if (max3->amountAllocated < currentHeader->amountAllocated && currentHeader!=largestFoundHeader) {
-                        secondLargestFound = FALSE;
-                        broke = TRUE;
-                        break;
-                    }
-
-                    currentHeader = currentHeader->nextFree;
-
-                    if(broke) {
-                        secondLargestFound = FALSE;
-                    } else {
-                        secondLargestFound = TRUE;
-                    }
-                }
-            } else {
-                secondLargestFound = TRUE;
-            }
-        } else {
-            secondLargestFound = TRUE;
-        }
-    }
-
-    return (largestFound && secondLargestFound);
-}
-
 void *Mem_Alloc(long size) {
-    if(headMainList == NULL) {
+    if (headMainList == NULL) {
         m_error = E_BAD_POINTER;
         return NULL;
     }
@@ -245,25 +85,26 @@ void *Mem_Alloc(long size) {
         return NULL;
     }
 
-    long sizeToWordSize = roundToWord(size); //only allocate word sizes
+    long sizeToWordSize = roundToWord(size); //only allocate word sizes (8 bytes in this case)
     //We need room for the header AND we need room for more word-aligned memory
     long totalSought = sizeToWordSize + sizeof(header) + SIZEOFWORD;
 
-    //search through the list to get the largest available
-
-    //TODO: finish logic here
+    //search through the list to get the largest available (Worst Fit Algorithm)
+    //TODO: test here
     header *worstFitReturn;
     //check if there are enough nodes to need to cache
-    if(headFreeList->nextFree == NULL || headFreeList->nextFree->nextFree == NULL || headFreeList->nextFree->nextFree->nextFree == NULL) {
-        sortFreeList(&headFreeList); //first have to sort the free list //TODO: optimize this statement!!! :)
+    if (headFreeList->nextFree == NULL || headFreeList->nextFree->nextFree == NULL ||
+        headFreeList->nextFree->nextFree->nextFree == NULL) {
+        sortFreeList(&headFreeList); //first have to sort the free list
         worstFitReturn = headFreeList;
-    } else if(freeOccurred || (totalAllocs%2 == 0)){
-        if(freeOccurred) {
-            if(headFreeList->nextFree == NULL || headFreeList->nextFree->nextFree == NULL || headFreeList->nextFree->nextFree->nextFree == NULL) {
-                sortFreeList(&headFreeList); //first have to sort the free list //TODO: optimize this statement!!! :)
+    } else if (freeOccurred || !(totalAllocs % 2)) {
+        if (freeOccurred) {
+            if (headFreeList->nextFree == NULL || headFreeList->nextFree->nextFree == NULL ||
+                headFreeList->nextFree->nextFree->nextFree == NULL) {
+                sortFreeList(&headFreeList); //first have to sort the free list
                 worstFitReturn = headFreeList;
-            }
-            else {
+                freeOccurred = FALSE;
+            } else {
                 cacheFreeList(&headFreeList);
                 worstFitReturn = worstFitFree(&headFreeList);
             }
@@ -372,7 +213,6 @@ int Mem_Free(void *ptr, int coalesce) {
             //check if already free and if so, then don't add to free list, since it is already there
             if (((header *) (ptr - sizeof(header)))->free == 't') {
                 //do nothing and return an error, since the ptr should not be freed a second time
-                //TODO: uncomment code here
                 m_error = E_BAD_ARGS;
                 return ERROR;
             } else {
@@ -382,9 +222,9 @@ int Mem_Free(void *ptr, int coalesce) {
                 ((header *) (ptr - sizeof(header)))->nextFree = headFreeList;
                 //WE ARE ASSUMING THAT THE HEAD OF THE LIST IS CHOSEN HERE for worstFitReturn
                 headFreeList = ((header *) (ptr -
-                                            sizeof(header))); //TODO: why does this take so much time??? (because it adds to sort above...)
-
+                                            sizeof(header)));
                 freeOccurred = TRUE;
+                seeFreeOccurred = TRUE;
             }
         } else {
             m_error = E_BAD_POINTER;
@@ -407,51 +247,16 @@ int Mem_Free(void *ptr, int coalesce) {
 
     //check for global coalesce, now
     if (coalesce == FALSE) {
-        //TODO: fix current bug here that would cause coalesce to be called each time on mem_free(NULL, 0) call etc...add code to work on not calling a ton (do 2 million free(NULL, 1) in a row...only go over list once)
         //false means don't want a global coalesce
         lastWasGlobal = FALSE;
-
         return SUCCESS;
     } else {
-        //do something here, now, since we are asked to coalesce
-        //go through the free list and combine memory sections
-//        if (ptr == NULL) {
-//            if (localCoalesceFree(&headFreeList, NULL) == FALSE) {
-//                m_error = E_PADDING_OVERWRITTEN;
-//                return ERROR;
-//            }
-//        } else {
-////            header *newPtr = findPreviousMain(headMainList, (header *) (ptr - sizeof(header)));
-////
-////            if (newPtr == NULL || newPtr->free == 'f') {
-////                //then ptr is first node and should not try to coalesce from that one
-////                newPtr = (header *) (ptr - sizeof(header));
-////            } else {
-////                //have to coalesce above...
-////                if (localCoalesceFree(&headFreeList, newPtr) == FALSE) {
-////                    m_error = E_PADDING_OVERWRITTEN;
-////                    return ERROR;
-////                }
-////            }
-//
-////            //coalesce below...
-////            if (localCoalesceFree(&headFreeList, newPtr) == FALSE) {
-////                m_error = E_PADDING_OVERWRITTEN;
-////                return ERROR;
-////            }
-//
-//            //coalesce below
-//            if (localCoalesceFree(&headFreeList, ((header *) (ptr - sizeof(header)))) == FALSE) {
-//                m_error = E_PADDING_OVERWRITTEN;
-//                return ERROR;
-//            }
-//        }
-
         //only coalesce if requested AND the last coalesce was local and not global
         //TODO: figure out how to tackle this one... perhaps count #frees??
-//        if (coalesce && !lastWasGlobal) {
-        if (coalesce) {
+        if (coalesce && !lastWasGlobal && seeFreeOccurred) {
+//        if (coalesce) {
             coalesceFreeList(headMainList);
+            seeFreeOccurred = FALSE;
         }
 
         lastWasGlobal = TRUE;

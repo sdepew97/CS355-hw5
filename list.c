@@ -299,3 +299,166 @@ header *findPreviousFree(header *head, header *ptr) {
 
     return NULL;
 }
+
+//Debugging methods
+void printFreeList() {
+    header *currentHeader = headFreeList;
+
+    while (currentHeader != NULL) {
+        printf("Pointer: %p\n", currentHeader);
+        printf("header allocated amount %ld\n", currentHeader->amountAllocated);
+
+        currentHeader = currentHeader->nextFree;
+    }
+}
+
+int checkFreeList() {
+    //method to check that the free list is in the correct worst-fit state after sorting and after coalescing
+    header *currentHeader = headFreeList;
+    header *max = headFreeList;
+    header *max2 = headFreeList->nextFree;
+
+    //check first node is largest
+    while(currentHeader != NULL) {
+        if(max->amountAllocated < currentHeader->amountAllocated) {
+            printFreeList();
+            printf("Test Failed\n");
+            return FALSE;
+        }
+
+        currentHeader = currentHeader->nextFree;
+    }
+
+    currentHeader = headFreeList->nextFree;
+    while(currentHeader != NULL) {
+        if(max2->amountAllocated < currentHeader->amountAllocated) {
+            printFreeList();
+            printf("Test Failed\n");
+            return FALSE;
+        }
+
+        currentHeader = currentHeader->nextFree;
+    }
+
+    printf("Test Passed\n");
+    return TRUE;
+}
+
+int checkFreeListCachedTotal() {
+    //method to check that the free list is in the correct worst-fit state after sorting and after coalescing
+    header *currentHeader = headFreeList;
+    header *max = headFreeList;
+    header *max2 = headFreeList->nextFree;
+    header *max3 = headFreeList->nextFree->nextFree;
+    header *largestFoundHeader = NULL;
+    boolean largestFound = FALSE;
+    boolean secondLargestFound = FALSE;
+    boolean broke = FALSE;
+
+    //check first node is largest
+    while (currentHeader != NULL) {
+        if (max->amountAllocated < currentHeader->amountAllocated) {
+            largestFound = FALSE;
+            broke = TRUE;
+            break;
+        }
+
+        currentHeader = currentHeader->nextFree;
+    }
+
+    if (broke) {
+        broke = FALSE;
+        while (currentHeader != NULL) {
+            if (max2->amountAllocated < currentHeader->amountAllocated) {
+                largestFound = FALSE;
+                broke = TRUE;
+                break;
+            }
+
+            currentHeader = currentHeader->nextFree;
+        }
+
+        if (broke) {
+            broke = FALSE;
+            while (currentHeader != NULL) {
+                if (max3->amountAllocated < currentHeader->amountAllocated) {
+                    largestFound = FALSE;
+                    broke = TRUE;
+                    break;
+                }
+
+                currentHeader = currentHeader->nextFree;
+            }
+
+            if (broke) {
+                largestFound = FALSE; //largest not among values in list
+            } else {
+                largestFoundHeader = max3;
+                largestFound = TRUE;
+            }
+        } else {
+            largestFoundHeader = max2;
+            largestFound = TRUE;
+        }
+    } else {
+        largestFoundHeader = max;
+        largestFound = TRUE;
+    }
+
+    if (!largestFound) {
+        printFreeList();
+        printf("Test Failed To Find Largest\n");
+        return FALSE;
+    } else {
+        broke = FALSE;
+        currentHeader = headFreeList;
+
+        while (currentHeader != NULL) {
+            if (max->amountAllocated < currentHeader->amountAllocated && currentHeader != largestFoundHeader) {
+                secondLargestFound = FALSE;
+                broke = TRUE;
+                break;
+            }
+
+            currentHeader = currentHeader->nextFree;
+        }
+
+        if (broke) {
+            broke = FALSE;
+            while (currentHeader != NULL) {
+                if (max2->amountAllocated < currentHeader->amountAllocated && currentHeader != largestFoundHeader) {
+                    secondLargestFound = FALSE;
+                    broke = TRUE;
+                    break;
+                }
+
+                currentHeader = currentHeader->nextFree;
+            }
+
+            if (broke) {
+                broke = FALSE;
+                while (currentHeader != NULL) {
+                    if (max3->amountAllocated < currentHeader->amountAllocated && currentHeader != largestFoundHeader) {
+                        secondLargestFound = FALSE;
+                        broke = TRUE;
+                        break;
+                    }
+
+                    currentHeader = currentHeader->nextFree;
+
+                    if (broke) {
+                        secondLargestFound = FALSE;
+                    } else {
+                        secondLargestFound = TRUE;
+                    }
+                }
+            } else {
+                secondLargestFound = TRUE;
+            }
+        } else {
+            secondLargestFound = TRUE;
+        }
+    }
+
+    return (largestFound && secondLargestFound);
+}

@@ -40,4 +40,9 @@ int localCoalesceFree(header **head, header *ptr);
 void coalesceFreeList(header *head);
 header *findPreviousFree(header *head, header *ptr);
 
+//Debugging methods
+void printFreeList();
+int checkFreeList();
+int checkFreeListCachedTotal();
+
 #endif //HW5_LIST_H
