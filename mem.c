@@ -94,8 +94,19 @@ void *Mem_Alloc(long size) {
         sortFreeList(&headFreeList); //first have to sort the free list //TODO: optimize this statement!!! :)
         worstFitReturn = headFreeList;
     } else if(freeOccurred || (totalAllocs%2 == 0)){
-        cacheFreeList(&headFreeList);
-        worstFitReturn = worstFitFree(&headFreeList);
+        if(freeOccurred) {
+            if(headFreeList->nextFree == NULL || headFreeList->nextFree->nextFree == NULL) {
+                sortFreeList(&headFreeList); //first have to sort the free list //TODO: optimize this statement!!! :)
+                worstFitReturn = headFreeList;
+            }
+            else {
+                cacheFreeList(&headFreeList);
+                worstFitReturn = worstFitFree(&headFreeList);
+            }
+        } else {
+            cacheFreeList(&headFreeList);
+            worstFitReturn = worstFitFree(&headFreeList);
+        }
     } else {
         //do nothing for this round, since we have already cached the list enough and no frees were made
         worstFitReturn = worstFitFree(&headFreeList);
