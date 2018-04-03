@@ -14,7 +14,7 @@
 int m_error;
 long howMuchUserHasLeftToRequest;
 long sizeOfList;
-boolean needGlobal;
+boolean lastWasGlobal;
 header *headMainList = NULL;
 header *headFreeList = NULL;
 
@@ -58,7 +58,7 @@ int Mem_Init(long sizeOfRegion) {
 
     //Setup Globals
     howMuchUserHasLeftToRequest = sizeOfRegion;
-    needGlobal = FALSE;
+    lastWasGlobal = FALSE;
     sizeOfList = amountToMmap;
 
     //return the appropriate value
@@ -84,7 +84,6 @@ void *Mem_Alloc(long size) {
 
     //search through the list to get the largest available
     header *worstFitReturn = worstFitFree(headFreeList);
-    //TODO: implement the updated ideas from Rachel (not needed with timing)
 
     if (worstFitReturn == NULL) {
         m_error = E_BAD_POINTER;
@@ -174,8 +173,9 @@ int Mem_Free(void *ptr, int coalesce) {
 
             //check if already free and if so, then don't add to free list, since it is already there
             if (((header *) (ptr - sizeof(header)))->free == 't') {
-                //do nothing, since it should not be added a second time
-                //TODO: determine if I should raise an error here like free does when trying to free already freed memory? (Ask Rachel) (yes, raise error here)
+                //do nothing and return an error, since the ptr should not be freed a second time
+                m_error = E_BAD_ARGS;
+                return ERROR;
             } else {
                 howMuchUserHasLeftToRequest += ((header *) (ptr - sizeof(header)))->amountAllocated;
                 ((header *) (ptr -
@@ -200,7 +200,8 @@ int Mem_Free(void *ptr, int coalesce) {
         } else {
             localCoalesceFree(&headFreeList, ((header *) (ptr - sizeof(header))));
         }
-        needGlobal = FALSE; //need a global coalesce next time //TODO: this is not necessarily true...need to fix this bug
+
+        lastWasGlobal = FALSE;
         return SUCCESS;
     } else {
         //do something here, now, since we are asked to coalesce
@@ -217,10 +218,12 @@ int Mem_Free(void *ptr, int coalesce) {
             }
         }
 
-        if (needGlobal || coalesce) {
+        //only coalesce if requested AND the last coalesce was local and not global
+        if (coalesce && !lastWasGlobal) {
             coalesceFreeList(headMainList);
         }
 
+        lastWasGlobal = TRUE;
         return SUCCESS;
     }
 
@@ -230,7 +233,7 @@ int Mem_Free(void *ptr, int coalesce) {
 
 void Mem_Dump() {
     printf("\n*****************\n*    GLOBALS    %d, %ld, %d, %p, %p*\n*****************\n", m_error,
-           howMuchUserHasLeftToRequest, needGlobal, headMainList, headFreeList);
+           howMuchUserHasLeftToRequest, lastWasGlobal, headMainList, headFreeList);
     printf("\n*****************\n*    FREE MEMORY    *\n*****************\n");
     header *currentHeader = headMainList;
     long location = 0;
