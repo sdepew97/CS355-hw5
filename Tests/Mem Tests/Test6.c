@@ -7,7 +7,7 @@
 
 /*
  * Testing for worst fit allocation
- * Expected Behavior: Should should memory allocated at the worst blocks in the printout of dumps
+ * Expected Behavior: Should see memory allocated at the worst blocks in the printout of dumps
  */
 int test_six() {
     if (Mem_Init(16) == ERROR) {
