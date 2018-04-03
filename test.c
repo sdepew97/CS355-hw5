@@ -25,7 +25,7 @@ int main(){
 
     strcpy(ptr, "Hello!");
 
-    printf("%s\n", ptr0);
+    printf("%s\n", ptr);
 
     printf("----------------Starts freeing--------------\n");
 
