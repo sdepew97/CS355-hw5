@@ -83,7 +83,7 @@ void *Mem_Alloc(long size) {
     long totalSought = sizeToWordSize + sizeof(header) + SIZEOFWORD;
 
     //search through the list to get the largest available
-    header *worstFitReturn = worstFitFree(headFreeList);
+    header *worstFitReturn = worstFitFree(&headFreeList);
 
     if (worstFitReturn == NULL) {
         m_error = E_BAD_POINTER;
@@ -179,8 +179,8 @@ int Mem_Free(void *ptr, int coalesce) {
             //check if already free and if so, then don't add to free list, since it is already there
             if (((header *) (ptr - sizeof(header)))->free == 't') {
                 //do nothing and return an error, since the ptr should not be freed a second time
-//                m_error = E_BAD_ARGS;
-//                return ERROR;
+                m_error = E_BAD_ARGS;
+                return ERROR;
             } else {
                 howMuchUserHasLeftToRequest += ((header *) (ptr - sizeof(header)))->amountAllocated;
                 ((header *) (ptr -

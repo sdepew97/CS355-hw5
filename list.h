@@ -31,7 +31,7 @@ int checkValidPtrMain(header *head, long sizeOfList, void *ptr);
 header *findPreviousMain(header *head, header *ptr);
 
 //methods specifically for free list
-header *worstFitFree(header *head);
+header *worstFitFree(header **head);
 void addHeaderFree(header **head, header *headerToRemove, header *previous);
 void removeHeaderFree(header **head, header *headerToRemove, header *previous);
 int sortFreeList (header **head);

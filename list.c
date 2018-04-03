@@ -71,9 +71,9 @@ header *findPreviousMain(header *head, header *ptr) {
 }
 
 //methods specifically for free list
-header *worstFitFree(header *head) {
+header *worstFitFree(header **head) {
     //assume that the free list is sorted
-    sortFreeList(&head); //first have to sort the free list
+    sortFreeList(head); //first have to sort the free list
     return head;
 }
 
@@ -95,6 +95,7 @@ void removeHeaderFree(header **head, header *headerToRemove, header *previous) {
     }
 }
 
+//TODO: debug this method, since it is deleting the head of the free list when sorting...
 int sortFreeList (header **head) {
     //Put the largest available node as the header of the list
     long worstFitValue = (*head)->amountAllocated;
@@ -105,7 +106,7 @@ int sortFreeList (header **head) {
     header *previousHeader = NULL;
 
     while (currentHeader != NULL) {
-        if(checkPadding(currentHeader) == FALSE) {
+        if (checkPadding(currentHeader) == FALSE) {
             return FALSE;
         }
 
