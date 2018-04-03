@@ -255,34 +255,34 @@ void *Mem_Alloc(long size) {
     if(headFreeList->nextFree == NULL || headFreeList->nextFree->nextFree == NULL || headFreeList->nextFree->nextFree->nextFree == NULL) {
         sortFreeList(&headFreeList); //first have to sort the free list //TODO: optimize this statement!!! :)
        //TODO: remove here
-        if(checkFreeList() == FALSE) {
-            return NULL;
-        }
+//        if(checkFreeList() == FALSE) {
+//            return NULL;
+//        }
         worstFitReturn = headFreeList;
     } else if(freeOccurred || (totalAllocs%2 == 0)){
         if(freeOccurred) {
             if(headFreeList->nextFree == NULL || headFreeList->nextFree->nextFree == NULL || headFreeList->nextFree->nextFree->nextFree == NULL) {
                 sortFreeList(&headFreeList); //first have to sort the free list //TODO: optimize this statement!!! :)
                 //TODO: remove here
-                if(checkFreeList() == FALSE) {
-                    return NULL;
-                }
+//                if(checkFreeList() == FALSE) {
+//                    return NULL;
+//                }
                 worstFitReturn = headFreeList;
             }
             else {
                 cacheFreeList(&headFreeList);
-                //TODO: remove here
-                if(checkFreeList() == FALSE) {
-                    return NULL;
-                }
+//                //TODO: remove here
+//                if(checkFreeList() == FALSE) {
+//                    return NULL;
+//                }
                 worstFitReturn = worstFitFree(&headFreeList);
             }
         } else {
             cacheFreeList(&headFreeList);
-            //TODO: remove here
-            if(checkFreeList() == FALSE) {
-                return NULL;
-            }
+//            //TODO: remove here
+//            if(checkFreeList() == FALSE) {
+//                return NULL;
+//            }
             worstFitReturn = worstFitFree(&headFreeList);
         }
     } else {
@@ -290,14 +290,15 @@ void *Mem_Alloc(long size) {
         worstFitReturn = worstFitFree(&headFreeList);
     }
 
-    if(headFreeList->nextFree == NULL || headFreeList->nextFree->nextFree == NULL || headFreeList->nextFree->nextFree->nextFree == NULL) {
-
-    } else {
-        if(checkFreeListCachedTotal() == FALSE) {
-            printf("Test failed\n");
-            return NULL;
-        }
-    }
+    //TODO: REMOVE
+//    if(headFreeList->nextFree == NULL || headFreeList->nextFree->nextFree == NULL || headFreeList->nextFree->nextFree->nextFree == NULL) {
+//
+//    } else {
+//        if(checkFreeListCachedTotal() == FALSE) {
+//            printf("Test failed\n");
+//            return NULL;
+//        }
+//    }
 
 
 //    printf("worst fit: %p\n", worstFitReturn);
