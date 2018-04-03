@@ -15,6 +15,8 @@ int m_error;
 long howMuchUserHasLeftToRequest;
 long sizeOfList;
 boolean lastWasGlobal;
+boolean freeOccurred;
+long totalAllocs = 0;
 header *headMainList = NULL;
 header *headFreeList = NULL;
 
@@ -59,6 +61,7 @@ int Mem_Init(long sizeOfRegion) {
     //Setup Globals
     howMuchUserHasLeftToRequest = sizeOfRegion;
     lastWasGlobal = FALSE;
+    freeOccurred = FALSE;
     sizeOfList = amountToMmap;
 
     //return the appropriate value
@@ -83,8 +86,18 @@ void *Mem_Alloc(long size) {
     long totalSought = sizeToWordSize + sizeof(header) + SIZEOFWORD;
 
     //search through the list to get the largest available
-//    sortFreeList(&headFreeList); //first have to sort the free list
-    header *worstFitReturn = worstFitFree(headFreeList);
+
+    //TODO: finish logic here
+    //check if there are enough nodes to need to cache
+    if(headFreeList->nextFree == NULL || headFreeList->nextFree->nextFree == NULL) {
+        sortFreeList(&headFreeList); //first have to sort the free list //TODO: optimize this statement!!! :)
+    } else if(freeOccurred || (totalAllocs%2 == 0)){
+        cacheFreeList(&headFreeList);
+    } else {
+        //do nothing for this round, since we have already cached the list enough and no frees were made
+    }
+
+    header *worstFitReturn = worstFitFree(&headFreeList);
 
     if (worstFitReturn == NULL) {
         m_error = E_BAD_POINTER;
@@ -109,6 +122,7 @@ void *Mem_Alloc(long size) {
 
         //update what the user may request
         howMuchUserHasLeftToRequest -= size;
+        totalAllocs++;
 
         return ((void *) worstFitReturn + sizeof(header));
     } else {
@@ -143,6 +157,7 @@ void *Mem_Alloc(long size) {
 
             //update what the user may request
             howMuchUserHasLeftToRequest -= size;
+            totalAllocs++;
 
             return (void *) worstFitReturn + sizeof(header); //this is the section where we made room for the memory! :)
         }
@@ -192,6 +207,8 @@ int Mem_Free(void *ptr, int coalesce) {
                 //WE ARE ASSUMING THAT THE HEAD OF THE LIST IS CHOSEN HERE for worstFitReturn
                 headFreeList = ((header *) (ptr -
                                             sizeof(header))); //TODO: why does this take so much time??? (because it adds to sort above...)
+
+                freeOccurred = TRUE;
             }
         } else {
             m_error = E_BAD_POINTER;

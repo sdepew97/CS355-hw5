@@ -71,9 +71,44 @@ header *findPreviousMain(header *head, header *ptr) {
 }
 
 //methods specifically for free list
-header *worstFitFree(header *head) {
+header *worstFitFree(header **head) {
     //assume that the free list is sorted
-    return head;
+    //now caching list, so look at first three for which to return, move to head of list, and return
+
+    //TODO: check I can assume presence of three nodes in free list??
+    long one = (*head)->amountAllocated;
+    long two = (*head)->nextFree->amountAllocated;
+    long three = (*head)->nextFree->nextFree->amountAllocated;
+
+    if (one > two && one > three) {
+        //do nothing, since largest already at head
+
+    } else if (two > one && two > three) {
+        //move second to head and return head
+        header *previous = (*head);
+        header *toRemove = (*head)->nextFree;
+        //remove worstFit node
+        removeHeaderFree(head, toRemove, previous);
+
+        //add it to the head
+        toRemove->nextFree = *head;
+        *head = toRemove;
+
+    } else if (three > one && three > two) {
+        //move third to head and return head
+
+        header *previous = (*head)->nextFree;
+        header *toRemove = (*head)->nextFree->nextFree;
+        //remove worstFit node
+        removeHeaderFree(head, toRemove, previous);
+
+        //add it to the head
+        toRemove->nextFree = *head;
+        *head = toRemove;
+
+    }
+
+    return (*head);
 }
 
 /*
@@ -138,6 +173,10 @@ int cacheFreeList (header **head) {
     header *worstFit = *head;
     header *worstFitPrevious = NULL;
 
+    long secondWorstFitValue = (*head)->nextFree->amountAllocated;
+    header *secondWorstFit = (*head)->nextFree;
+    header *secondWorstFitPrevious = (*head);
+
     header *currentHeader = *head;
     header *previousHeader = NULL;
 
@@ -146,25 +185,40 @@ int cacheFreeList (header **head) {
             return FALSE;
         }
 
+        if (currentHeader->amountAllocated > secondWorstFitValue && currentHeader->amountAllocated < worstFitValue) {
+            secondWorstFitValue = currentHeader->amountAllocated;
+            secondWorstFitPrevious = previousHeader;
+            secondWorstFit = currentHeader;
+        }
+
         if (currentHeader->amountAllocated > worstFitValue) {
+            //update second with prior value
+            secondWorstFitValue = worstFitValue;
+            secondWorstFitPrevious = worstFitPrevious;
+            secondWorstFit = worstFit;
+
             worstFitValue = currentHeader->amountAllocated;
             worstFitPrevious = previousHeader;
             worstFit = currentHeader;
         }
+
         previousHeader = currentHeader;
         currentHeader = currentHeader->nextFree;
     }
 
-    if (worstFitPrevious == NULL) {
-        //we are done, since our node is already the head
-    } else {
-        //remove worstFit node
-        removeHeaderFree(head, worstFit, worstFitPrevious);
+    //move second to head of list
+    removeHeaderFree(head, secondWorstFit, secondWorstFitPrevious);
 
-        //add it to the head
-        worstFit->nextFree = *head;
-        *head = worstFit;
-    }
+    //add it to the head
+    secondWorstFit->nextFree = *head;
+    *head = secondWorstFit;
+
+    //remove worstFit node
+    removeHeaderFree(head, worstFit, worstFitPrevious);
+
+    //add it to the head
+    worstFit->nextFree = *head;
+    *head = worstFit;
 
     return TRUE;
 }
