@@ -35,6 +35,7 @@ header *worstFitFree(header *head);
 void addHeaderFree(header **head, header *headerToRemove, header *previous);
 void removeHeaderFree(header **head, header *headerToRemove, header *previous);
 int sortFreeList (header **head);
+int cacheFreeList (header **head);
 int localCoalesceFree(header **head, header *ptr);
 void coalesceFreeList(header *head);
 header *findPreviousFree(header *head, header *ptr);

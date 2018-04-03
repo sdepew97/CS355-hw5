@@ -94,8 +94,45 @@ void removeHeaderFree(header **head, header *headerToRemove, header *previous) {
     }
 }
 
-//TODO: debug this method, since it is deleting the head of the free list when sorting...
 int sortFreeList (header **head) {
+    //Put the largest available node as the header of the list
+    long worstFitValue = (*head)->amountAllocated;
+    header *worstFit = *head;
+    header *worstFitPrevious = NULL;
+
+    header *currentHeader = *head;
+    header *previousHeader = NULL;
+
+    while (currentHeader != NULL) {
+        if (checkPadding(currentHeader) == FALSE) {
+            return FALSE;
+        }
+
+        if (currentHeader->amountAllocated > worstFitValue) {
+            worstFitValue = currentHeader->amountAllocated;
+            worstFitPrevious = previousHeader;
+            worstFit = currentHeader;
+        }
+        previousHeader = currentHeader;
+        currentHeader = currentHeader->nextFree;
+    }
+
+    if (worstFitPrevious == NULL) {
+        //we are done, since our node is already the head
+    } else {
+        //remove worstFit node
+        removeHeaderFree(head, worstFit, worstFitPrevious);
+
+        //add it to the head
+        worstFit->nextFree = *head;
+        *head = worstFit;
+    }
+
+    return TRUE;
+}
+
+//TODO: implement like Rachel told me in TA hours
+int cacheFreeList (header **head) {
     //Put the largest available node as the header of the list
     long worstFitValue = (*head)->amountAllocated;
     header *worstFit = *head;
