@@ -156,10 +156,10 @@ void *Mem_Alloc(long size) {
 }
 
 int Mem_Free(void *ptr, int coalesce) {
-    printf("%p\n", headFreeList);
-    if(headFreeList == NULL) {
-        return ERROR;
-    }
+//    printf("%p\n", headFreeList);
+//    if (headFreeList == NULL) {
+//        return ERROR;
+//    }
 
     if (coalesce > 1 || coalesce < 0) {
         m_error = E_BAD_ARGS;
@@ -170,97 +170,99 @@ int Mem_Free(void *ptr, int coalesce) {
         //don't mark anything as free, since ptr is NULL
     } else {
         //Mark as free and add to free list
-        if (checkValidPtrMain(headMainList, sizeOfList, ptr)) {
-            //check if the ptr has been overwritten
-            if (ptr != NULL && checkPadding((header *) (ptr - sizeof(header))) == FALSE) {
-                m_error = E_PADDING_OVERWRITTEN;
-                return ERROR;
-            }
-
-            //check if already free and if so, then don't add to free list, since it is already there
-            if (((header *) (ptr - sizeof(header)))->free == 't') {
-                //do nothing and return an error, since the ptr should not be freed a second time
-                //TODO: uncomment code here
-                m_error = E_BAD_ARGS;
-                return ERROR;
-            } else {
-                howMuchUserHasLeftToRequest += ((header *) (ptr - sizeof(header)))->amountAllocated;
-                ((header *) (ptr -
-                             sizeof(header)))->free = 't'; //was removed from list, since is false, so no circular linking is gonna happen here
-                ((header *) (ptr - sizeof(header)))->nextFree = headFreeList;
-                //WE ARE ASSUMING THAT THE HEAD OF THE LIST IS CHOSEN HERE for worstFitReturn
-                headFreeList = ((header *) (ptr - sizeof(header)));
-
-            }
-        } else {
-            m_error = E_BAD_POINTER;
+//        if (checkValidPtrMain(headMainList, sizeOfList, ptr)) {
+        //check if the ptr has been overwritten
+        if (ptr != NULL && checkPadding((header *) (ptr - sizeof(header))) == FALSE) {
+            m_error = E_PADDING_OVERWRITTEN;
             return ERROR;
         }
+
+        //check if already free and if so, then don't add to free list, since it is already there
+        if (((header *) (ptr - sizeof(header)))->free == 't') {
+            //do nothing and return an error, since the ptr should not be freed a second time
+            //TODO: uncomment code here
+            m_error = E_BAD_ARGS;
+            return ERROR;
+        } else {
+            howMuchUserHasLeftToRequest += ((header *) (ptr - sizeof(header)))->amountAllocated;
+            ((header *) (ptr -
+                         sizeof(header)))->free = 't'; //was removed from list, since is false, so no circular linking is gonna happen here
+            ((header *) (ptr - sizeof(header)))->nextFree = headFreeList;
+            //WE ARE ASSUMING THAT THE HEAD OF THE LIST IS CHOSEN HERE for worstFitReturn
+            headFreeList = ((header *) (ptr - sizeof(header)));
+
+        }
+//        } else {
+//            m_error = E_BAD_POINTER;
+//            return ERROR;
+//        }
     }
 
-    //check for coalesce, now
-    if (coalesce == FALSE) {
-        //TODO: fix current bug here that would cause coalesce to be called each time on mem_free(NULL, 0) call etc...add code to work on not calling a ton (do 2 million free(NULL, 1) in a row...only go over list once)
-        //false means don't want a global coalesce
-        if (ptr == NULL) {
-            if (localCoalesceFree(&headFreeList, NULL) == FALSE) {
-                m_error = E_PADDING_OVERWRITTEN;
-                return ERROR;
-            }
-        } else {
-            if (localCoalesceFree(&headFreeList, ((header *) (ptr - sizeof(header)))) == FALSE) {
-                m_error = E_PADDING_OVERWRITTEN;
-                return ERROR;
-            }
-        }
-
-        lastWasGlobal = FALSE;
-        return SUCCESS;
-    } else {
-        //do something here, now, since we are asked to coalesce
-        //go through the free list and combine memory sections
-        if (ptr == NULL) {
-            if (localCoalesceFree(&headFreeList, NULL) == FALSE) {
-                m_error = E_PADDING_OVERWRITTEN;
-                return ERROR;
-            }
-        } else {
-//            header *newPtr = findPreviousMain(headMainList, (header *) (ptr - sizeof(header)));
+//    //coalesce locally here
+//    if (ptr == NULL) {
+//        if (localCoalesceFree(&headFreeList, NULL) == FALSE) {
+//            m_error = E_PADDING_OVERWRITTEN;
+//            return ERROR;
+//        }
+//    } else {
+//        if (localCoalesceFree(&headFreeList, ((header *) (ptr - sizeof(header)))) == FALSE) {
+//            m_error = E_PADDING_OVERWRITTEN;
+//            return ERROR;
+//        }
+//    }
 //
-//            if (newPtr == NULL || newPtr->free == 'f') {
-//                //then ptr is first node and should not try to coalesce from that one
-//                newPtr = (header *) (ptr - sizeof(header));
-//            } else {
-//                //have to coalesce above...
-//                if (localCoalesceFree(&headFreeList, newPtr) == FALSE) {
-//                    m_error = E_PADDING_OVERWRITTEN;
-//                    return ERROR;
-//                }
-//            }
-
-//            //coalesce below...
-//            if (localCoalesceFree(&headFreeList, newPtr) == FALSE) {
-//                m_error = E_PADDING_OVERWRITTEN;
-//                return ERROR;
-//            }
-
-            //coalesce below
-            if (localCoalesceFree(&headFreeList, ((header *) (ptr - sizeof(header)))) == FALSE) {
-                m_error = E_PADDING_OVERWRITTEN;
-                return ERROR;
-            }
-        }
-
-        //only coalesce if requested AND the last coalesce was local and not global
-        //TODO: figure out how to tackle this one... perhaps count #frees??
-//        if (coalesce && !lastWasGlobal) {
-        if (coalesce) {
-            coalesceFreeList(headMainList);
-        }
-
-        lastWasGlobal = TRUE;
-        return SUCCESS;
-    }
+//    //check for global coalesce, now
+//    if (coalesce == FALSE) {
+//        //TODO: fix current bug here that would cause coalesce to be called each time on mem_free(NULL, 0) call etc...add code to work on not calling a ton (do 2 million free(NULL, 1) in a row...only go over list once)
+//        //false means don't want a global coalesce
+//        lastWasGlobal = FALSE;
+//
+//        return SUCCESS;
+//    } else {
+//        //do something here, now, since we are asked to coalesce
+//        //go through the free list and combine memory sections
+////        if (ptr == NULL) {
+////            if (localCoalesceFree(&headFreeList, NULL) == FALSE) {
+////                m_error = E_PADDING_OVERWRITTEN;
+////                return ERROR;
+////            }
+////        } else {
+//////            header *newPtr = findPreviousMain(headMainList, (header *) (ptr - sizeof(header)));
+//////
+//////            if (newPtr == NULL || newPtr->free == 'f') {
+//////                //then ptr is first node and should not try to coalesce from that one
+//////                newPtr = (header *) (ptr - sizeof(header));
+//////            } else {
+//////                //have to coalesce above...
+//////                if (localCoalesceFree(&headFreeList, newPtr) == FALSE) {
+//////                    m_error = E_PADDING_OVERWRITTEN;
+//////                    return ERROR;
+//////                }
+//////            }
+////
+//////            //coalesce below...
+//////            if (localCoalesceFree(&headFreeList, newPtr) == FALSE) {
+//////                m_error = E_PADDING_OVERWRITTEN;
+//////                return ERROR;
+//////            }
+////
+////            //coalesce below
+////            if (localCoalesceFree(&headFreeList, ((header *) (ptr - sizeof(header)))) == FALSE) {
+////                m_error = E_PADDING_OVERWRITTEN;
+////                return ERROR;
+////            }
+////        }
+//
+//        //only coalesce if requested AND the last coalesce was local and not global
+//        //TODO: figure out how to tackle this one... perhaps count #frees??
+////        if (coalesce && !lastWasGlobal) {
+//        if (coalesce) {
+//            coalesceFreeList(headMainList);
+//        }
+//
+//        lastWasGlobal = TRUE;
+//        return SUCCESS;
+//    }
 
     //default to return success
     return SUCCESS;
