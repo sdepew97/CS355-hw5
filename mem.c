@@ -162,10 +162,10 @@ int Mem_Free(void *ptr, int coalesce) {
 //        return ERROR;
 //    }
 
-//    if (coalesce > 1 || coalesce < 0) {
-//        m_error = E_BAD_ARGS;
-//        return ERROR;
-//    }
+    if (coalesce > 1 || coalesce < 0) {
+        m_error = E_BAD_ARGS;
+        return ERROR;
+    }
 //
 //    if (ptr == NULL) {
 //        //don't mark anything as free, since ptr is NULL
