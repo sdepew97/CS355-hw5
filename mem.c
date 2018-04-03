@@ -196,7 +196,10 @@ int Mem_Free(void *ptr, int coalesce) {
         //TODO: fix current bug here that would cause coalesce to be called each time on mem_free(NULL, 0) call etc...add code to work on not calling a ton (do 2 million free(NULL, 1) in a row...only go over list once)
         //false means don't want a global coalesce
         if (ptr == NULL) {
-            localCoalesceFree(&headFreeList, NULL);
+            if (localCoalesceFree(&headFreeList, NULL) == FALSE) {
+                m_error = E_PADDING_OVERWRITTEN;
+                return ERROR;
+            }
         } else {
             localCoalesceFree(&headFreeList, ((header *) (ptr - sizeof(header))));
         }
@@ -212,11 +215,17 @@ int Mem_Free(void *ptr, int coalesce) {
                 return ERROR;
             }
         } else {
-            //have to coalesce above...
             header *newPtr = findPreviousFree(headFreeList, (header *) (ptr - sizeof(header)));
-            if (localCoalesceFree(&headFreeList, newPtr) == FALSE) {
-                m_error = E_PADDING_OVERWRITTEN;
-                return ERROR;
+
+            if(newPtr == NULL) {
+                //then ptr is first node and should not try to coalesce from that one
+                newPtr = (header *) (ptr - sizeof(header));
+            } else {
+                //have to coalesce above...
+                if (localCoalesceFree(&headFreeList, newPtr) == FALSE) {
+                    m_error = E_PADDING_OVERWRITTEN;
+                    return ERROR;
+                }
             }
 
             //and below...
