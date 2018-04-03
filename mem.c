@@ -156,6 +156,7 @@ void *Mem_Alloc(long size) {
 }
 
 int Mem_Free(void *ptr, int coalesce) {
+    //TODO: remove when done debugging
 //    printf("%p\n", headFreeList);
 //    if (headFreeList == NULL) {
 //        return ERROR;
@@ -170,32 +171,32 @@ int Mem_Free(void *ptr, int coalesce) {
         //don't mark anything as free, since ptr is NULL
     } else {
         //Mark as free and add to free list
-//        if (checkValidPtrMain(headMainList, sizeOfList, ptr)) {
-        //check if the ptr has been overwritten
-//        if (ptr != NULL && checkPadding((header *) (ptr - sizeof(header))) == FALSE) {
-//            m_error = E_PADDING_OVERWRITTEN;
-//            return ERROR;
-//        }
+        if (checkValidPtrMain(headMainList, sizeOfList, ptr)) {
+            //check if the ptr has been overwritten
+            if (ptr != NULL && checkPadding((header *) (ptr - sizeof(header))) == FALSE) {
+                m_error = E_PADDING_OVERWRITTEN;
+                return ERROR;
+            }
 
-        //check if already free and if so, then don't add to free list, since it is already there
-        if (((header *) (ptr - sizeof(header)))->free == 't') {
-            //do nothing and return an error, since the ptr should not be freed a second time
-            //TODO: uncomment code here
-            m_error = E_BAD_ARGS;
-            return ERROR;
+            //check if already free and if so, then don't add to free list, since it is already there
+            if (((header *) (ptr - sizeof(header)))->free == 't') {
+                //do nothing and return an error, since the ptr should not be freed a second time
+                //TODO: uncomment code here
+                m_error = E_BAD_ARGS;
+                return ERROR;
+            } else {
+                howMuchUserHasLeftToRequest += ((header *) (ptr - sizeof(header)))->amountAllocated;
+                ((header *) (ptr -
+                             sizeof(header)))->free = 't'; //was removed from list, since is false, so no circular linking is gonna happen here
+                ((header *) (ptr - sizeof(header)))->nextFree = headFreeList;
+                //WE ARE ASSUMING THAT THE HEAD OF THE LIST IS CHOSEN HERE for worstFitReturn
+                headFreeList = ((header *) (ptr - sizeof(header)));
+
+            }
         } else {
-            howMuchUserHasLeftToRequest += ((header *) (ptr - sizeof(header)))->amountAllocated;
-            ((header *) (ptr -
-                         sizeof(header)))->free = 't'; //was removed from list, since is false, so no circular linking is gonna happen here
-            ((header *) (ptr - sizeof(header)))->nextFree = headFreeList;
-            //WE ARE ASSUMING THAT THE HEAD OF THE LIST IS CHOSEN HERE for worstFitReturn
-            headFreeList = ((header *) (ptr - sizeof(header)));
-
+            m_error = E_BAD_POINTER;
+            return ERROR;
         }
-//        } else {
-//            m_error = E_BAD_POINTER;
-//            return ERROR;
-//        }
     }
 
 //    //coalesce locally here
