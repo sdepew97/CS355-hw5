@@ -220,7 +220,7 @@ int Mem_Free(void *ptr, int coalesce) {
         } else {
             header *newPtr = findPreviousMain(headMainList, (header *) (ptr - sizeof(header)));
 
-            if (newPtr == NULL) {
+            if (newPtr == NULL || newPtr->free == 'f') {
                 //then ptr is first node and should not try to coalesce from that one
                 newPtr = (header *) (ptr - sizeof(header));
             } else {
