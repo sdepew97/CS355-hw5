@@ -31,7 +31,7 @@ void test_two_mil() {
     }
 
     for (int i = 0; i < NUM_ALLOC; i++) {
-        // printf("\n%d ",i);
+         printf("\n%d ",i);
 //        if (i % FREE_FREQ == FREE_FREQ - 1)
 //            Mem_Free(ptrs[i - FREE_FREQ + 1], i % COALESCE_FREQ == 0);
 
