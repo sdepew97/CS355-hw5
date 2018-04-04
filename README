@@ -2,7 +2,7 @@ Name: Sarah Depew
 
 Known Bugs and Limitations:
 I think I probably have a bug somewhere in my code relating to how I round up to page size. I end up allocating a lot of memory for this.
-Also, ____.
+Also, I think I may have a bug with list sorting. I seems like my methods are too fast, but I cannot figure out the issue and I do not crash.
 
 General Design Choices:
 I chose to have two singly-linked lists. One tracks all memory and is called Main. This list is sorted by memory ordering.
