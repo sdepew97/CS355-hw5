@@ -71,11 +71,13 @@ header *findPreviousMain(header *head, header *ptr) {
 }
 
 //methods specifically for free list
+
+/*
+ * Method to find the worst fit value in the list
+ */
 header *worstFitFree(header **head) {
     //assume that the free list is sorted
     //now caching list, so look at first three for which to return, move to head of list, and return
-
-    //TODO: check I can assume presence of three nodes in free list??
     long one = (*head)->amountAllocated;
     long two = (*head)->nextFree->amountAllocated;
     long three = (*head)->nextFree->nextFree->amountAllocated;
@@ -166,7 +168,6 @@ int sortFreeList (header **head) {
     return TRUE;
 }
 
-//TODO: implement like Rachel told me in TA hours
 int cacheFreeList (header **head) {
     //Put the largest available node as the header of the list
     long worstFitValue = (*head)->amountAllocated;
@@ -223,7 +224,6 @@ int cacheFreeList (header **head) {
     return TRUE;
 }
 
-//TODO: ask about if I have to keep coalescing down or just do direct neighbor? (no, not two adjacent)
 int localCoalesceFree(header **head, header *ptr) {
     if (checkPadding(ptr)) {
         if (ptr != NULL && ptr->free == 't') {
@@ -234,7 +234,6 @@ int localCoalesceFree(header **head, header *ptr) {
                                            roundToWord(ptr->nextHeader->amountAllocated);
 
                     //adjust both lists according to the local coalesce that just happened (need to remove ptr->nextHeader from free list and from other list, since it has been combined)
-                    //TODO: see if moving this to sort makes my code much faster?
                     if (ptr->nextHeader == headFreeList) {
                         removeHeaderFree(head, ptr->nextHeader, NULL);
                     } else {

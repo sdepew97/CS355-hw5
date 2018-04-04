@@ -1,12 +1,38 @@
-Design Choices:
+Name: Sarah Depew
+
+Known Bugs and Limitations:
+I think I probably have a bug somewhere in my code relating to _____. Also, ____.
+
+General Design Choices:
+I chose to have two singly-linked lists. One tracks all memory and is called Main. This list is sorted by memory ordering.
+The other list is Free. This list is cached either with the first node being the Worst Fit value or two of the first three nodes
+being the Worst Fit and second Worst Fit values. I have a list.h and list.c that implement needed list methods and a helper.h and helper.c
+that implement helper methods. Too, I have a boolean.h that defines my boolean type that I use.
+
+As previously mentioned, I keep my list partially cached.
 
 Parts Not Implemented:
+There are no parts I did not implement.
 
 Testing Results:
-* Dylan's Tests - no_space_left_to_allocate();, worst_fit();, misuses();, and odd_sized_allocations();
-* Eileen's Tests -
-* Jiaping's Tests -
-* Kellie's Tests -
+* Dylan's Tests - no_space_left_to_allocate();, worst_fit();, misuses();, and odd_sized_allocations(); all failed due to design differences.
+* Lizzie's tests failed due to design differences
+* Ziting's tests all passed. My tests all passed. An assortment of my other classmate's tests also passed.
 
+Globals Used (with justification):
+m_error - defined for me in mem.h
+howMuchUserHasLeftToRequest - used to throw out of memory errors and track how much memory the user has used
+sizeOfList - used to check if a pointer is valid in constant time
+lastWasGlobal and seeFreeOccurred - used for deciding if the global list needed to be traversed and coalesced
+freeOccurred, totalAllocs - used for determining whether or not to cache
+headMainList, headFreeList - used as pointers to the head of my singly-linked lists
 
-Globals Used:
+How To Compile:
+Simply typing make will make with a worst-case situation. make worstcase will make with a worst-case situation. make alignedcase will make with an aligned case.
+Finally, make averagecase will make with an average case situation. The macros are defined in list.h to let you know to what value they correspond.
+
+How to Run It:
+Use the library created or simply run code in the test.c file.
+
+Resources:
+Classmates (Dylan, Ziting, Kellie, Lizzie, and Eileen), Stack Overflow and Googling (all code was original), and Rachel's TA sessions

@@ -5,9 +5,21 @@
 #ifndef HW5_LIST_H
 #define HW5_LIST_H
 
-#define WORSTCASE (roundToPage((sizeOfRegion * SIZEOFWORD) + (sizeOfRegion * sizeof(header)) + sizeof(header)))
-#define ALIGNED (roundToPage((sizeOfRegion) + (sizeOfRegion/SIZEOFWORD * sizeof(header)) + sizeof(header)))
-#define AVERAGE (roundToPage((sizeOfRegion) + (sizeOfRegion/(2*SIZEOFWORD) * sizeof(header)) + sizeof(header)))
+#ifdef M
+#define METHOD (roundToPage((sizeOfRegion * SIZEOFWORD) + (sizeOfRegion * sizeof(header)) + sizeof(header)))
+#endif
+
+#ifdef WC
+#define METHOD (roundToPage((sizeOfRegion * SIZEOFWORD) + (sizeOfRegion * sizeof(header)) + sizeof(header)))
+#endif
+
+#ifdef AC
+#define METHOD (roundToPage((sizeOfRegion) + (sizeOfRegion/SIZEOFWORD * sizeof(header)) + sizeof(header)))
+#endif
+
+#ifdef ALC
+#define METHOD (roundToPage((sizeOfRegion) + (sizeOfRegion/(2*SIZEOFWORD) * sizeof(header)) + sizeof(header)))
+#endif
 
 typedef struct header {
     char checkSum; //unique value to check upon reading next area of memory

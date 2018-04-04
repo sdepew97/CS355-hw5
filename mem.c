@@ -33,10 +33,7 @@ int Mem_Init(long sizeOfRegion) {
     }
 
     //Request that much memory from mmap, uncomment whichever measure you'd like for conservation of assignment
-    long amountToMmap = WORSTCASE;
-//    long amountToMmap = AVERAGE;
-//    long amountToMmap = ALIGNED;
-
+    long amountToMmap = METHOD;
     void *mapReturn = mmap(NULL, amountToMmap, PROT_EXEC | PROT_READ | PROT_WRITE,
                            MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 
@@ -90,7 +87,6 @@ void *Mem_Alloc(long size) {
     long totalSought = sizeToWordSize + sizeof(header) + SIZEOFWORD;
 
     //search through the list to get the largest available (Worst Fit Algorithm)
-    //TODO: test here
     header *worstFitReturn;
     //check if there are enough nodes to need to cache
     if (headFreeList->nextFree == NULL || headFreeList->nextFree->nextFree == NULL ||
@@ -232,19 +228,6 @@ int Mem_Free(void *ptr, int coalesce) {
         }
     }
 
-    //coalesce locally here
-    if (ptr == NULL) {
-        if (localCoalesceFree(&headFreeList, NULL) == FALSE) {
-            m_error = E_PADDING_OVERWRITTEN;
-            return ERROR;
-        }
-    } else {
-        if (localCoalesceFree(&headFreeList, ((header *) (ptr - sizeof(header)))) == FALSE) {
-            m_error = E_PADDING_OVERWRITTEN;
-            return ERROR;
-        }
-    }
-
     //check for global coalesce, now
     if (coalesce == FALSE) {
         //false means don't want a global coalesce
@@ -252,9 +235,7 @@ int Mem_Free(void *ptr, int coalesce) {
         return SUCCESS;
     } else {
         //only coalesce if requested AND the last coalesce was local and not global
-        //TODO: figure out how to tackle this one... perhaps count #frees??
         if (coalesce && (!lastWasGlobal || seeFreeOccurred)) {
-//        if (coalesce) {
             coalesceFreeList(headMainList);
             seeFreeOccurred = FALSE;
         }
