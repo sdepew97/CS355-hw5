@@ -46,7 +46,7 @@ Test15:
 	gcc -g -ggdb -o Test15 Test15.c -L. -lmem
 
 mem: mem.o helper.o list.o
-	gcc -g -ggdb -o libmem.so mem.o helper.o list.o -shared
+	gcc -g DM -ggdb -o libmem.so mem.o helper.o list.o -shared
 
 mem.o: ../../mem.c ../../mem.h
 	gcc -g -ggdb -Wall -fpic -c ../../mem.c
