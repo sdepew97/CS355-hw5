@@ -1,7 +1,8 @@
 Name: Sarah Depew
 
 Known Bugs and Limitations:
-I think I probably have a bug somewhere in my code relating to _____. Also, ____.
+I think I probably have a bug somewhere in my code relating to how I round up to page size. I end up allocating a lot of memory for this.
+Also, ____.
 
 General Design Choices:
 I chose to have two singly-linked lists. One tracks all memory and is called Main. This list is sorted by memory ordering.
@@ -33,6 +34,7 @@ Finally, make averagecase will make with an average case situation. The macros a
 
 How to Run It:
 Use the library created or simply run code in the test.c file.
+Also, in my dump I show relevant global variable's values.
 
 If you'd like to remove test then make cleanFirst. If you'd like to remove other things, make cleanSecond.
 Resources:
