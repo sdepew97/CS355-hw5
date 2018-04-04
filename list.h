@@ -17,7 +17,7 @@
 #define METHOD (roundToPage((sizeOfRegion) + (sizeOfRegion/SIZEOFWORD * sizeof(header)) + sizeof(header)))
 #endif
 
-#ifdef ALC
+#ifdef AL
 #define METHOD (roundToPage((sizeOfRegion) + (sizeOfRegion/(2*SIZEOFWORD) * sizeof(header)) + sizeof(header)))
 #endif
 
