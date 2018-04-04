@@ -20,21 +20,21 @@ static void print_execution_time(clock_t begin, clock_t end) {
 
 void test_two_mil() {
     int result = Mem_Init(NUM_ALLOC * 40);
-    assert(result == 0);
-
-    void **ptrs = malloc(sizeof(void*) * NUM_ALLOC);
-
-    for (int i = 0; i < NUM_ALLOC; i++) {
-        ptrs[i] = Mem_Alloc(BYTE);
-        assert(ptrs[i] != NULL);
-
-        if (i % FREE_FREQ == FREE_FREQ - 1)
-            Mem_Free(ptrs[i-FREE_FREQ+1], i % COALESCE_FREQ == 0);
-
-    }
-    end = clock();
-    print_execution_time(begin, end);
-    free(ptrs);
+//    assert(result == 0);
+//
+//    void **ptrs = malloc(sizeof(void*) * NUM_ALLOC);
+//
+//    for (int i = 0; i < NUM_ALLOC; i++) {
+//        ptrs[i] = Mem_Alloc(BYTE);
+//        assert(ptrs[i] != NULL);
+//
+//        if (i % FREE_FREQ == FREE_FREQ - 1)
+//            Mem_Free(ptrs[i-FREE_FREQ+1], i % COALESCE_FREQ == 0);
+//
+//    }
+//    end = clock();
+//    print_execution_time(begin, end);
+//    free(ptrs);
 }
 
 
