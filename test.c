@@ -1,57 +1,44 @@
+#include "mem.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "list.h"
-#include "boolean.h"
-#include "helper.h"
-#include "mem.h"
+#include <time.h>
+#include <assert.h>
+#include <limits.h>
+#include <unistd.h>
 
-/*
- * Testing for coalescing of free space
- * Expected Behavior: Should should only one block of memory on dump at end
- */
-int test_seven() {
-    if (Mem_Init(16) == ERROR) {
-        return EXIT_FAILURE;
-    }
+#define NUM_ALLOC 2000000
+#define FREE_FREQ 100          // 1:100
+#define COALESCE_FREQ 100000   // 1:100000
+#define BYTE 8
 
-    Mem_Dump();
+clock_t begin, end;
 
-    void *allocated = Mem_Alloc(1);
-    if (allocated == NULL) {
-        return EXIT_FAILURE;
-    }
-
-    void *allocated2 = Mem_Alloc(7);
-    if (allocated2 == NULL) {
-        return EXIT_FAILURE;
-    }
-
-    void *allocated3 = Mem_Alloc(8);
-    if (allocated3 == NULL) {
-        return EXIT_FAILURE;
-    }
-
-    if (Mem_Free(allocated2, TRUE) == ERROR) {
-        return EXIT_FAILURE;
-    }
-    printf("after second freed\n");
-    Mem_Dump();
-
-    if (Mem_Free(allocated3, TRUE) == ERROR) {
-        return EXIT_FAILURE;
-    }
-    printf("after third freed\n");
-    Mem_Dump();
-
-    if (Mem_Free(allocated, TRUE) == ERROR) {
-        return EXIT_FAILURE;
-    }
-    printf("after first freed\n");
-    Mem_Dump();
-
-    return EXIT_SUCCESS;
+static void print_execution_time(clock_t begin, clock_t end) {
+    double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+    printf("Execution time: %.2f seconds\n", time_spent);
 }
 
+void test_two_mil() {
+    int result = Mem_Init(NUM_ALLOC * 40);
+    assert(result == 0);
+
+    void **ptrs = malloc(sizeof(void*) * NUM_ALLOC);
+
+    for (int i = 0; i < NUM_ALLOC; i++) {
+        ptrs[i] = Mem_Alloc(BYTE);
+        assert(ptrs[i] != NULL);
+
+        if (i % FREE_FREQ == FREE_FREQ - 1)
+            Mem_Free(ptrs[i-FREE_FREQ+1], i % COALESCE_FREQ == 0);
+
+    }
+    end = clock();
+    print_execution_time(begin, end);
+    free(ptrs);
+}
+
+
 int main() {
-    return (test_seven());
+    test_two_mil();
+    return EXIT_SUCCESS;
 }

@@ -34,5 +34,6 @@ Finally, make averagecase will make with an average case situation. The macros a
 How to Run It:
 Use the library created or simply run code in the test.c file.
 
+If you'd like to remove test then make cleanFirst. If you'd like to remove other things, make cleanSecond.
 Resources:
 Classmates (Dylan, Ziting, Kellie, Lizzie, and Eileen), Stack Overflow and Googling (all code was original), and Rachel's TA sessions
