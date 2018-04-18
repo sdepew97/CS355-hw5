@@ -78,7 +78,7 @@ void *Mem_Alloc(long size) {
 
     if (size > howMuchUserHasLeftToRequest) {
         //user requested more memory than they were allowed left
-        m_error = E_BAD_ARGS;
+        m_error = E_NO_SPACE; //TODO: fixed wrong error here
         return NULL;
     }
 
